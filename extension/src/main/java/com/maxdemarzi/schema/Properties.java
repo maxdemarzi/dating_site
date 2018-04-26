@@ -22,11 +22,16 @@ public final class Properties {
     public static final String HATED = "hated";
     public static final String HATED_TIME = "hated_time";
     public static final String HATES = "hates";
+    public static final String HAVE = "have";
+    public static final String HAVES = "haves";
     public static final String NAME = "name";
     public static final String PASSWORD = "password";
+    public static final String POSTS = "posts";
     public static final String USERNAME = "username";
     public static final String STATUS = "status";
     public static final String SHARED = "shared";
     public static final String TIME = "time";
+    public static final String WANT = "want";
+    public static final String WANTS = "wants";
 
 }

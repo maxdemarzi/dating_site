@@ -12,5 +12,6 @@ public enum RelationshipTypes implements RelationshipType {
     LIKES,
     LOW_FIVED,
     PART_OF,
-    REPLIED_TO
+    REPLIED_TO,
+    WANTS
 }

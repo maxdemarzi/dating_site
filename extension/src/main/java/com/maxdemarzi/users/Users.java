@@ -30,8 +30,13 @@ import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.EMAIL;
 import static com.maxdemarzi.schema.Properties.HASH;
+import static com.maxdemarzi.schema.Properties.HATES;
+import static com.maxdemarzi.schema.Properties.HIGH_FIVES;
+import static com.maxdemarzi.schema.Properties.LIKES;
+import static com.maxdemarzi.schema.Properties.LOW_FIVES;
 import static com.maxdemarzi.schema.Properties.NAME;
 import static com.maxdemarzi.schema.Properties.PASSWORD;
+import static com.maxdemarzi.schema.Properties.POSTS;
 import static com.maxdemarzi.schema.Properties.TIME;
 import static com.maxdemarzi.schema.Properties.USERNAME;
 
@@ -118,9 +123,15 @@ public class Users {
         results.remove(EMAIL);
         results.remove(PASSWORD);
         Integer likes = user.getDegree(RelationshipTypes.LIKES, Direction.OUTGOING);
-        Integer posts = user.getDegree(Direction.OUTGOING) - likes;
-        results.put("likes", likes);
-        results.put("posts", posts);
+        Integer hates = user.getDegree(RelationshipTypes.HATES, Direction.OUTGOING);
+        Integer highFives = user.getDegree(RelationshipTypes.HIGH_FIVED, Direction.OUTGOING);
+        Integer lowFives = user.getDegree(RelationshipTypes.LOW_FIVED, Direction.OUTGOING);
+        Integer posts = user.getDegree(Direction.OUTGOING) - likes - hates - highFives - lowFives;
+        results.put(LIKES, likes);
+        results.put(HATES, hates);
+        results.put(LOW_FIVES, lowFives);
+        results.put(HIGH_FIVES, highFives);
+        results.put(POSTS, posts);
         return results;
     }
 

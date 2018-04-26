@@ -30,6 +30,7 @@ public class AutoCompletes {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final HashSet<String> labels = new HashSet<String>() {{
+        add("Attribute");
         add("User");
         add("Tag");
         add("Thing");

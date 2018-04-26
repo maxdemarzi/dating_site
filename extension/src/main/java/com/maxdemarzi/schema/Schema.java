@@ -24,6 +24,16 @@ public class Schema {
         @Path("/create")
         public Response create(@Context GraphDatabaseService db) throws IOException {
             ArrayList<String> results = new ArrayList<>();
+            try (Transaction tx = db.beginTx()) {
+                org.neo4j.graphdb.schema.Schema schema = db.schema();
+                if (!schema.getConstraints(Labels.Attribute).iterator().hasNext()) {
+                    schema.constraintFor(Labels.Attribute)
+                            .assertPropertyIsUnique(NAME)
+                            .create();
+                    tx.success();
+                    results.add("(:Attribute {name}) constraint created");
+                }
+            }
 
             try (Transaction tx = db.beginTx()) {
                 org.neo4j.graphdb.schema.Schema schema = db.schema();
