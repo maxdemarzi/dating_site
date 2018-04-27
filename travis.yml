@@ -1,0 +1,10 @@
+sudo: required
+language: java
+jdk:
+- oraclejdk8
+env:
+  - TEST_DIR=extension
+  - TEST_DIR=website
+script: cd $TEST_DIR && mvn test -B -q  
+after_success:
+- mvn test jacoco:report coveralls:report

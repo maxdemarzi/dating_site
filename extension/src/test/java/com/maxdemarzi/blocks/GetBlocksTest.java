@@ -73,6 +73,9 @@ public class GetBlocksTest {
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("posts", 0);
             put("likes", 0);
+            put("hates", 0);
+            put("high_fives", 0);
+            put("low_fives", 0);
             put("time", 1490209400);
         }});
         add(new HashMap<String, Object>() {{
@@ -81,6 +84,9 @@ public class GetBlocksTest {
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("posts", 0);
             put("likes", 0);
+            put("hates", 0);
+            put("high_fives", 0);
+            put("low_fives", 0);
             put("time", 1490140299);
         }});
     }};

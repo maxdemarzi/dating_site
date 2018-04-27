@@ -72,6 +72,9 @@ public class GetProfileTest {
         put("name", "Max De Marzi");
         put("posts", 2);
         put("likes", 1);
+        put("hates", 0);
+        put("high_fives", 0);
+        put("low_fives", 0);
         put("hash", "0bd90aeb51d5982062f4f303a62df935");
     }};
 
@@ -80,6 +83,9 @@ public class GetProfileTest {
         put("name", "Max De Marzi");
         put("posts", 2);
         put("likes", 1);
+        put("hates", 0);
+        put("high_fives", 0);
+        put("low_fives", 0);
         put("hash", "0bd90aeb51d5982062f4f303a62df935");
     }};
 }
