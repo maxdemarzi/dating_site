@@ -1,0 +1,13 @@
+@import java.util.List
+@import com.maxdemarzi.models.Tag
+
+@args (List<Tag> trends)
+<div class="card">
+    <div class="card-block">
+        <h4>Trends</h4>
+        @for (it: trends) {
+        <a href="/tag/@it.getName()" style="font-size:small;">#@it.getName()</a> <br>
+        @it.getCount() Posts<br>
+        }
+    </div>
+</div>

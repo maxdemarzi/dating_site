@@ -1,0 +1,46 @@
+@import java.util.List
+@import com.maxdemarzi.models.User
+@import com.maxdemarzi.models.Post
+@import com.maxdemarzi.models.Tag
+
+@args (User authenticated, User user, List<Post> posts, List<Tag> trends)
+
+@views.main.template("Home", authenticated) -> {
+
+    <div class="container-fluid container pt-5">
+        <div class="row">
+            <div class="col-3">
+                @views.partials._user.template(user)
+                @views.partials._trends.template(trends)
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-block">
+                            <form id="status" action="/post" method="POST">
+                            <div class="input-group card-outline-info">
+                                <input name="status" type="text" class="form-control" placeholder="What's happening?" autofocus>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-secondary" type="submit">Post</button>
+                                </span>
+                            </div>
+                            </form>
+                            <br/>
+                            @for (it: posts) {
+                            <div class="card">
+                                <div class="card-block">
+                                    <a href="/user/@it.getUsername()"><img src="https://www.gravatar.com/avatar/@it.getHash()?s=48&d=retro" class="rounded" /></a>
+                                    @it.getName() <a href="/user/@it.getUsername()">@@@it.getUsername()</a> - @it.humanTime()<br>
+                                    @it.getStatus()<br>
+                                    <span class="post"><a href="/like/@it.getUsername()/@it.getTime()"><img src="/assets/img/1f497.png" height="16" width="16"> xxxxx</a></span>
+                                </div>
+                            </div>
+                            }
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+
+            </div>
+        </div>
+    </div>
+}
