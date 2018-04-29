@@ -34,15 +34,15 @@ public class Attributes {
     @GET
     @Path("/{name}")
     public Response getAttribute(@PathParam("name") final String name,
-                               @QueryParam("username2") final String username2,
+                               @QueryParam("username") final String username,
                                @Context GraphDatabaseService db) throws IOException {
         Map<String, Object> results;
         try (Transaction tx = db.beginTx()) {
             Node attribute = findAttribute(name, db);
             results = attribute.getAllProperties();
 
-            if (username2 != null) {
-                Node user = findUser(username2, db);
+            if (username != null) {
+                Node user = findUser(username, db);
                 results.put(HAVE, Has.userHasAttribute(user, attribute));
                 results.put(WANT, Wants.userWantsAttribute(user, attribute));
             }

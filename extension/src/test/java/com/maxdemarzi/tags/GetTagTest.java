@@ -73,6 +73,16 @@ public class GetTagTest {
         Assert.assertFalse(actual.containsKey(NAME));
         Assert.assertFalse(actual.containsKey(STATUS));
     }
+
+    @Test
+    public void shouldGetTags() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/tags").toString());
+        ArrayList<HashMap> actual  = response.content();
+        Assert.assertEquals(new ArrayList<>(), actual);
+    }
+
     private static final String FIXTURE =
             "CREATE (max:User {username:'maxdemarzi', " +
                     "email: 'max@neo4j.com', " +
