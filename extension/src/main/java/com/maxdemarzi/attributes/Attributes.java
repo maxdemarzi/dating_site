@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import static com.maxdemarzi.schema.Properties.HAVE;
-import static com.maxdemarzi.schema.Properties.HAVES;
+import static com.maxdemarzi.schema.Properties.HAS;
 import static com.maxdemarzi.schema.Properties.NAME;
 import static com.maxdemarzi.schema.Properties.WANT;
 import static com.maxdemarzi.schema.Properties.WANTS;
@@ -48,7 +48,7 @@ public class Attributes {
             }
 
             results.put(WANTS, attribute.getDegree(RelationshipTypes.WANTS, Direction.INCOMING));
-            results.put(HAVES, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
+            results.put(HAS, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
 
             tx.success();
         }

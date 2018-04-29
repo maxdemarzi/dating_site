@@ -1,4 +1,4 @@
-package com.maxdemarzi.likes;
+package com.maxdemarzi.has;
 
 import com.maxdemarzi.schema.Schema;
 import com.sun.jersey.api.client.UniformInterfaceException;
@@ -11,58 +11,58 @@ import org.neo4j.test.server.HTTP;
 
 import java.util.HashMap;
 
-public class RemoveLikeTest {
+public class RemoveHasTest {
     @Rule
     public Neo4jRule neo4j = new Neo4jRule()
             .withFixture(FIXTURE)
-            .withExtension("/v1", Likes.class)
+            .withExtension("/v1", Has.class)
             .withExtension("/v1", Schema.class);
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void shouldRemoveLike() {
+    public void shouldRemoveHas() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
         thrown.expect(UniformInterfaceException.class);
-        HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/maxdemarzi/likes/Neo4j").toString(), null);
+        HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/maxdemarzi/has/Fat").toString(), null);
     }
 
     @Test
-    public void shouldRemoveLike2() {
+    public void shouldRemoveHas2() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
         thrown.expect(UniformInterfaceException.class);
-        HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/maxdemarzi/likes/Java").toString(), null);
+        HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/maxdemarzi/has/Bald").toString(), null);
     }
 
     @Test
-    public void shouldNotRemoveLikeUserNotFound() {
+    public void shouldNotRemoveHasUserNotFound() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/max/likes/Neo4j").toString(), null);
+        HTTP.Response response = HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/max/has/Fat").toString(), null);
         HashMap actual  = response.content();
         Assert.assertEquals(400, response.status());
         Assert.assertEquals("User not Found.", actual.get("error"));
     }
 
     @Test
-    public void shouldNotRemoveLikeThingNotFound() {
+    public void shouldNotRemoveHasThingNotFound() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/maxdemarzi/likes/j4oeN").toString(), null);
+        HTTP.Response response = HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/maxdemarzi/has/Slim").toString(), null);
         HashMap actual  = response.content();
         Assert.assertEquals(400, response.status());
-        Assert.assertEquals("Thing not Found.", actual.get("error"));
+        Assert.assertEquals("Attribute not Found.", actual.get("error"));
     }
 
     @Test
-    public void shouldNotRemoveLikeNotFound() {
+    public void shouldNotRemoveHasNotFound() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/markhneedham/likes/Neo4j").toString(), null);
+        HTTP.Response response = HTTP.request("DELETE", neo4j.httpURI().resolve("/v1/users/markhneedham/has/Fat").toString(), null);
         HashMap actual  = response.content();
         Assert.assertEquals(400, response.status());
-        Assert.assertEquals("Not liking Thing.", actual.get("error"));
+        Assert.assertEquals("Not having Attribute.", actual.get("error"));
     }
 
     private static final String FIXTURE =
@@ -86,11 +86,11 @@ public class RemoveLikeTest {
                     "name: 'Mark Needham'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
                     "password: 'jellyfish'})" +
-                    "CREATE (neo4j:Thing {name:'Neo4j'})" +
-                    "CREATE (java:Thing {name:'Java'})" +
-                    "CREATE (jexp)-[:LIKES {time: 1490140299}]->(neo4j)" +
-                    "CREATE (jexp)-[:LIKES {time: 1490140299}]->(java)" +
-                    "CREATE (laeg)-[:HATES {time: 1490208700}]->(java)" +
-                    "CREATE (max)-[:LIKES {time: 1490209300 }]->(neo4j)" +
-                    "CREATE (max)-[:LIKES {time: 1490209400 }]->(java)";
+                    "CREATE (fat:Attribute {name:'Fat'})" +
+                    "CREATE (bald:Attribute {name:'Bald'})" +
+                    "CREATE (jexp)-[:HAS {time: 1490140299}]->(fat)" +
+                    "CREATE (jexp)-[:HAS {time: 1490140299}]->(bald)" +
+                    "CREATE (laeg)-[:WANTS {time: 1490208700}]->(bald)" +
+                    "CREATE (max)-[:HAS {time: 1490209300 }]->(fat)" +
+                    "CREATE (max)-[:HAS {time: 1490209400 }]->(bald)";
 }

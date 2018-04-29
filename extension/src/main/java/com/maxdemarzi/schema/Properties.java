@@ -19,11 +19,11 @@ public final class Properties {
     public static final String LOCATION = "location";
     public static final String LOW_FIVED = "low_fived";
     public static final String LOW_FIVES = "low_fives";
+    public static final String HAS = "has";
     public static final String HATED = "hated";
     public static final String HATED_TIME = "hated_time";
     public static final String HATES = "hates";
     public static final String HAVE = "have";
-    public static final String HAVES = "haves";
     public static final String NAME = "name";
     public static final String PASSWORD = "password";
     public static final String POSTS = "posts";

@@ -30,7 +30,7 @@ import java.util.Map;
 
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.HAVE;
-import static com.maxdemarzi.schema.Properties.HAVES;
+import static com.maxdemarzi.schema.Properties.HAS;
 import static com.maxdemarzi.schema.Properties.TIME;
 import static com.maxdemarzi.schema.Properties.WANT;
 import static com.maxdemarzi.schema.Properties.WANTS;
@@ -74,7 +74,7 @@ public class Has {
                     properties.put(HAVE, user2Has.contains(attribute));
                     properties.put(WANT, user2Wants.contains(attribute));
                     properties.put(WANTS, attribute.getDegree(RelationshipTypes.WANTS, Direction.INCOMING));
-                    properties.put(HAVES, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
+                    properties.put(HAS, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
                     results.add(properties);
                 }
             }
@@ -109,7 +109,7 @@ public class Has {
             results = attribute.getAllProperties();
             results.put(HAVE, true);
             results.put(WANT, Wants.userWantsAttribute(user, attribute));
-            results.put(HAVES, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
+            results.put(HAS, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
             results.put(WANTS, attribute.getDegree(RelationshipTypes.WANTS, Direction.INCOMING));
             tx.success();
         }

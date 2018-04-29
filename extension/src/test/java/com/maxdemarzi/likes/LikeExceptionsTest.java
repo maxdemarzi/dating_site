@@ -1,4 +1,4 @@
-package com.maxdemarzi.posts;
+package com.maxdemarzi.likes;
 
 import com.maxdemarzi.Exceptions;
 import com.maxdemarzi.TestThing;
@@ -8,7 +8,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 
-public class PostExceptionsTest {
+public class LikeExceptionsTest {
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -17,9 +17,9 @@ public class PostExceptionsTest {
     public void shouldHaveExceptions() {
         ArrayList<Exceptions> exceptions = new ArrayList<>();
 
-        exceptions.add(PostExceptions.missingStatusParameter);
-        exceptions.add(PostExceptions.emptyStatusParameter);
-        exceptions.add(PostExceptions.postNotFound);
+        exceptions.add(LikeExceptions.invalidInput);
+        exceptions.add(LikeExceptions.alreadyLikesThing);
+        exceptions.add(LikeExceptions.notLikingThing);
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);
