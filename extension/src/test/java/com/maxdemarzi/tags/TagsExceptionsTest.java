@@ -2,7 +2,6 @@ package com.maxdemarzi.tags;
 
 import com.maxdemarzi.Exceptions;
 import com.maxdemarzi.TestThing;
-import com.maxdemarzi.tags.TagExceptions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -18,6 +17,7 @@ public class TagsExceptionsTest {
         ArrayList<Exceptions> exceptions = new ArrayList<>();
 
         exceptions.add(TagExceptions.tagNotFound);
+        exceptions.add(new TagExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

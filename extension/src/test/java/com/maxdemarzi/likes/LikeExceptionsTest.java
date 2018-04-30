@@ -20,6 +20,7 @@ public class LikeExceptionsTest {
         exceptions.add(LikeExceptions.invalidInput);
         exceptions.add(LikeExceptions.alreadyLikesThing);
         exceptions.add(LikeExceptions.notLikingThing);
+        exceptions.add(new LikeExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

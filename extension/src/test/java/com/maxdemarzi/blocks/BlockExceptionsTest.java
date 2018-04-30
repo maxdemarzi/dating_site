@@ -20,6 +20,7 @@ public class BlockExceptionsTest {
         exceptions.add(BlockExceptions.alreadyBlockingUser);
         exceptions.add(BlockExceptions.notBlockingUser);
         exceptions.add(BlockExceptions.invalidInput);
+        exceptions.add(new BlockExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

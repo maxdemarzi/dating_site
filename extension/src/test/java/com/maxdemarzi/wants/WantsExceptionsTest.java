@@ -20,6 +20,7 @@ public class WantsExceptionsTest {
         exceptions.add(WantsExceptions.invalidInput);
         exceptions.add(WantsExceptions.alreadyWantsAttribute);
         exceptions.add(WantsExceptions.notWantingAttribute);
+        exceptions.add(new WantsExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

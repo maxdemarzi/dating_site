@@ -26,7 +26,7 @@ public class UserExceptionsTest {
         exceptions.add(UserExceptions.missingEmailParameter);
         exceptions.add(UserExceptions.missingUsernameParameter);
         exceptions.add(UserExceptions.userNotFound);
-
+        exceptions.add(new UserExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

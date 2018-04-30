@@ -20,6 +20,7 @@ public class HasExceptionsTest {
         exceptions.add(HasExceptions.invalidInput);
         exceptions.add(HasExceptions.alreadyHasAttribute);
         exceptions.add(HasExceptions.notHavingAttribute);
+        exceptions.add(new HasExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

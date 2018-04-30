@@ -20,6 +20,7 @@ public class HateExceptionsTest {
         exceptions.add(HateExceptions.invalidInput);
         exceptions.add(HateExceptions.alreadyHatesThing);
         exceptions.add(HateExceptions.notHatingThing);
+        exceptions.add(new HateExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

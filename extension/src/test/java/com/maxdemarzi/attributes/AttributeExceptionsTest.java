@@ -21,6 +21,7 @@ public class AttributeExceptionsTest {
         exceptions.add(AttributeExceptions.emptyNameParameter);
         exceptions.add(AttributeExceptions.missingNameParameter);
         exceptions.add(AttributeExceptions.attributeNotFound);
+        exceptions.add(new AttributeExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

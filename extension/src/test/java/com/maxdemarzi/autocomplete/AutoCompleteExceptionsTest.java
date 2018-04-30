@@ -1,8 +1,7 @@
-package com.maxdemarzi.autocompletes;
+package com.maxdemarzi.autocomplete;
 
 import com.maxdemarzi.Exceptions;
 import com.maxdemarzi.TestThing;
-import com.maxdemarzi.autocomplete.AutoCompleteExceptions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,6 +20,7 @@ public class AutoCompleteExceptionsTest {
         exceptions.add(AutoCompleteExceptions.invalidInput);
         exceptions.add(AutoCompleteExceptions.labelNotValid);
         exceptions.add(AutoCompleteExceptions.propertyNotValid);
+        exceptions.add(new AutoCompleteExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);

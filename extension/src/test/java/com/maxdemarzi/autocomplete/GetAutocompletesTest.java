@@ -1,6 +1,5 @@
-package com.maxdemarzi.autocompletes;
+package com.maxdemarzi.autocomplete;
 
-import com.maxdemarzi.autocomplete.AutoCompletes;
 import com.maxdemarzi.schema.Schema;
 import org.junit.Assert;
 import org.junit.Rule;

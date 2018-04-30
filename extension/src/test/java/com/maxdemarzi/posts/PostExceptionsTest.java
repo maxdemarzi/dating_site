@@ -20,6 +20,7 @@ public class PostExceptionsTest {
         exceptions.add(PostExceptions.missingStatusParameter);
         exceptions.add(PostExceptions.emptyStatusParameter);
         exceptions.add(PostExceptions.postNotFound);
+        exceptions.add(new PostExceptions(400, "new exception"));
 
         for (Exceptions exception : exceptions) {
             TestThing testThing = new TestThing(exception);
