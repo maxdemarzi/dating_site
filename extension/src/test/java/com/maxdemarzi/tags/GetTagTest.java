@@ -105,7 +105,6 @@ public class GetTagTest {
                     "CREATE (neo4j:Tag {name:'neo4j', time: 1490054400})" +
                     "CREATE (jexp)-[:POSTED_ON_2017_03_21 {time: 1490140299}]->(post1)" +
                     "CREATE (laeg)-[:POSTED_ON_2017_03_22 {time: 1490208700}]->(post2)" +
-                    "CREATE (laeg)-[:REPOSTED_ON_2017_03_22 {time: 1490208800}]->(post1)" +
                     "CREATE (max)-[:HIGH_FIVED {time: 1490209300 }]->(post1)" +
                     "CREATE (max)-[:LOW_FIVED {time: 1490209400 }]->(post2)" +
                     "CREATE (post1)-[:TAGGED_ON_2017_03_21 {time: 1490140299 }]->(neo4j)" +

@@ -81,7 +81,6 @@ public class GetTimelineTest {
             "CREATE (laeg)-[:POSTED_ON_2017_03_22 {time: 1490208700}]->(post2)" +
             "CREATE (max)-[:POSTED_ON_2017_03_22 {time: 1490208800}]->(post3)" +
             "CREATE (laeg)-[:LIKES {time:1490143299}]->(post1)" +
-            "CREATE (laeg)-[:REPOSTED_ON_2017_03_22 {time:1490208000}]->(post1)" +
             "CREATE (max)-[:LIKES {time: 1490214800}]->(post2)" ;
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{

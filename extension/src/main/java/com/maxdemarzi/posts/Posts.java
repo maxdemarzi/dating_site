@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -216,7 +215,6 @@ public class Posts {
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
     }
 
-
     public static Node getAuthor(Node post, Long time) {
         LocalDateTime postedDateTime = LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.UTC);
         RelationshipType original = RelationshipType.withName("POSTED_ON_" +
@@ -224,43 +222,4 @@ public class Posts {
         return post.getSingleRelationship(original, Direction.INCOMING).getStartNode();
     }
 
-    public static boolean userRepostedPost(Node user, Node post) {
-        boolean alreadyReposted = false;
-
-        if (post.getDegree(Direction.INCOMING) < 1000) {
-            for (Relationship r1 : post.getRelationships(Direction.INCOMING)) {
-                if (r1.getStartNode().equals(user) && r1.getType().name().startsWith("REPOSTED_ON_")) {
-                    alreadyReposted = true;
-                    break;
-                }
-            }
-        }
-
-        LocalDateTime now = LocalDateTime.now(utc);
-        LocalDateTime dateTime = LocalDateTime.ofEpochSecond((Long)post.getProperty(TIME), 0, ZoneOffset.UTC).truncatedTo(ChronoUnit.DAYS);
-
-        while (dateTime.isBefore(now) && !alreadyReposted) {
-            RelationshipType repostedOn = RelationshipType.withName("REPOSTED_ON_" +
-                    dateTime.format(dateFormatter));
-
-            if (user.getDegree(repostedOn, Direction.OUTGOING)
-                    < post.getDegree(repostedOn, Direction.INCOMING)) {
-                for (Relationship r1 : user.getRelationships(Direction.OUTGOING, repostedOn)) {
-                    if (r1.getEndNode().equals(post)) {
-                        alreadyReposted = true;
-                        break;
-                    }
-                }
-            } else {
-                for (Relationship r1 : post.getRelationships(Direction.INCOMING, repostedOn)) {
-                    if (r1.getStartNode().equals(user)) {
-                        alreadyReposted = true;
-                        break;
-                    }
-                }
-            }
-            dateTime = dateTime.plusDays(1);
-        }
-        return alreadyReposted;
-    }
 }

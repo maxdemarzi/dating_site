@@ -64,8 +64,7 @@ public class GetProfileTest {
             "CREATE (jexp)-[:POSTED_ON_2017_03_21]->(post1)" +
             "CREATE (max)-[:POSTED_ON_2017_03_22]->(post2)" +
             "CREATE (max)-[:POSTED_ON_2017_03_23]->(post3)" +
-            "CREATE (max)-[:LIKES]->(post1)" +
-            "CREATE (laeg)-[:REPOSTED_ON_2017_03_22]->(post1)";
+            "CREATE (max)-[:LIKES]->(post1)";
 
     private static final HashMap expected = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");

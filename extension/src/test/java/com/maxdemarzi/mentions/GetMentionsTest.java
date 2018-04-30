@@ -90,7 +90,6 @@ public class GetMentionsTest {
             "CREATE(post1)-[:MENTIONED_ON_2017_03_21 {time: 1490140299}]->(jexp)" +
             "CREATE(post2)-[:MENTIONED_ON_2017_03_22 {time: 1490208700}]->(jexp)" +
             "CREATE(post3)-[:MENTIONED_ON_2017_03_22 {time: 1490209400}]->(jexp)" +
-            "CREATE (laeg)-[:REPOSTED_ON_2017_03_22 {time: 1490208800}]->(post1)" +
             "CREATE (max)-[:LOW_FIVED {time: 1490208800 }]->(post2)" +
             "CREATE (jexp)-[:BLOCKS {time: 1490140200 }]->(mark)";
 
