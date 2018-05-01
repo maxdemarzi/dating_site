@@ -187,6 +187,75 @@ public class CreateUserTest {
     }
 
     @Test
+    public void shouldNotCreateUserMissingIs() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), missingIsInput);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Missing is Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+
+    @Test
+    public void shouldNotCreateUserEmptyIs() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), emptyIsInput);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Empty is Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+
+    @Test
+    public void shouldNotCreateUserMissingIsLookingFor() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), missingIsLookingForInput);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Missing is_looking_for Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+
+    @Test
+    public void shouldNotCreateUserEmptyIsLookingFor() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), emptyIsLookingForInput);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Empty is_looking_for Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+
+    @Test
+    public void shouldNotCreateUserEmptyIsLookingFor2() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), emptyIsLookingForInput2);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Empty is_looking_for Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+    @Test
     public void shouldNotCreateUserExistingUsername() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
@@ -266,6 +335,47 @@ public class CreateUserTest {
         put("username", "maxdemarzi");
         put("email", "maxdemarzi@hotmail.com");
         put("name", "");
+    }};
+
+    private static final HashMap missingIsInput = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "asdfasf");
+    }};
+
+    private static final HashMap emptyIsInput = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "asdfasf");
+        put("is", "");
+    }};
+
+    private static final HashMap missingIsLookingForInput = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "asdfasf");
+        put("is", "male");
+    }};
+
+    private static final HashMap emptyIsLookingForInput = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "asdfasf");
+        put("is", "male");
+        put("is_looking_for", new String[]{});
+    }};
+
+    private static final HashMap emptyIsLookingForInput2 = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "asdfasf");
+        put("is", "male");
+        put("is_looking_for", null);
     }};
 
     private static final HashMap missingPasswordInput = new HashMap<String, Object>() {{

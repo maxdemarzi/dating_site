@@ -85,6 +85,9 @@ public class UserValidator {
         if (!input.containsKey(IS_LOOKING_FOR)) {
             throw UserExceptions.missingIsLookingForParameter;
         } else {
+            if (input.get(IS_LOOKING_FOR) == null) {
+                throw UserExceptions.emptyIsLookingForParameter;
+            }
             ArrayList<String> isLookingFor = (ArrayList<String>) input.get(IS_LOOKING_FOR);
             if (isLookingFor.size() == 0) {
                 throw UserExceptions.emptyIsLookingForParameter;
