@@ -64,14 +64,27 @@ public class GetProfileTest {
             "CREATE (jexp)-[:POSTED_ON_2017_03_21]->(post1)" +
             "CREATE (max)-[:POSTED_ON_2017_03_22]->(post2)" +
             "CREATE (max)-[:POSTED_ON_2017_03_23]->(post3)" +
-            "CREATE (max)-[:LIKES]->(post1)";
+            "CREATE (neo4j:Thing {name:'Neo4j'})" +
+            "CREATE (java:Thing {name:'Java'})" +
+            "CREATE (jexp)-[:LIKES {time: 1490140299}]->(neo4j)" +
+            "CREATE (laeg)-[:HATES {time: 1490208700}]->(java)" +
+            "CREATE (max)-[:LIKES {time: 1490209300 }]->(neo4j)" +
+            "CREATE (max)-[:HATES {time: 1490209400 }]->(java)" +
+            "CREATE (fat:Attribute {name:'Fat'})" +
+            "CREATE (bald:Attribute {name:'Bald'})" +
+            "CREATE (jexp)-[:WANTS {time: 1490140299}]->(fat)" +
+            "CREATE (laeg)-[:HAS {time: 1490208700}]->(bald)" +
+            "CREATE (max)-[:WANTS {time: 1490209300 }]->(fat)" +
+            "CREATE (max)-[:HAS {time: 1490209400 }]->(bald)";
 
     private static final HashMap expected = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");
         put("name", "Max De Marzi");
         put("posts", 2);
         put("likes", 1);
-        put("hates", 0);
+        put("hates", 1);
+        put("has", 1);
+        put("wants", 1);
         put("high_fives", 0);
         put("low_fives", 0);
         put("hash", "0bd90aeb51d5982062f4f303a62df935");
@@ -82,7 +95,11 @@ public class GetProfileTest {
         put("name", "Max De Marzi");
         put("posts", 2);
         put("likes", 1);
-        put("hates", 0);
+        put("has", 1);
+        put("wants", 1);
+        put("hates", 1);
+        put("have", 1);
+        put("want", 1);
         put("high_fives", 0);
         put("low_fives", 0);
         put("hash", "0bd90aeb51d5982062f4f303a62df935");

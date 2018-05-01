@@ -6,9 +6,9 @@ import org.junit.Test;
 import org.neo4j.harness.junit.Neo4jRule;
 import org.neo4j.test.server.HTTP;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.maxdemarzi.schema.Properties.*;
 import static com.maxdemarzi.schema.Properties.EMAIL;
 import static com.maxdemarzi.schema.Properties.NAME;
 import static com.maxdemarzi.schema.Properties.PASSWORD;
@@ -225,6 +225,8 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "swordfish");
+        put("is", "man");
+        put("is_looking_for", new String[]{"woman"});
     }};
 
     private static final HashMap missingUsernameInput = new HashMap<String, Object>() {{
@@ -284,6 +286,8 @@ public class CreateUserTest {
         put("email", "michael@hotmail.com");
         put("name", "Michael Hunger");
         put("password", "password");
+        put("is", "man");
+        put("is_looking_for", new String[]{"woman"});
     }};
 
     private static final HashMap existingEmailInput = new HashMap<String, Object>() {{
@@ -291,6 +295,8 @@ public class CreateUserTest {
         put("email", "michael@neo4j.com");
         put("name", "Michael Hunger");
         put("password", "password");
+        put("is", "man");
+        put("is_looking_for", new String[]{"woman"});
     }};
 
     private static final HashMap expected = new HashMap<String, Object>() {{
@@ -299,5 +305,7 @@ public class CreateUserTest {
         put("name", "Max De Marzi");
         put("password", "swordfish");
         put("hash","58750f2179edbd650b471280aa66fee5");
+        put("is", "man");
+        put("is_looking_for", new ArrayList<String>(){{add("woman");}});
     }};
 }

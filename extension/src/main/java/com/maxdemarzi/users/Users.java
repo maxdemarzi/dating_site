@@ -24,14 +24,19 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.EMAIL;
+import static com.maxdemarzi.schema.Properties.HAS;
 import static com.maxdemarzi.schema.Properties.HASH;
 import static com.maxdemarzi.schema.Properties.HATES;
+import static com.maxdemarzi.schema.Properties.HAVE;
 import static com.maxdemarzi.schema.Properties.HIGH_FIVES;
+import static com.maxdemarzi.schema.Properties.IS;
+import static com.maxdemarzi.schema.Properties.IS_LOOKING_FOR;
 import static com.maxdemarzi.schema.Properties.LIKES;
 import static com.maxdemarzi.schema.Properties.LOW_FIVES;
 import static com.maxdemarzi.schema.Properties.NAME;
@@ -39,6 +44,8 @@ import static com.maxdemarzi.schema.Properties.PASSWORD;
 import static com.maxdemarzi.schema.Properties.POSTS;
 import static com.maxdemarzi.schema.Properties.TIME;
 import static com.maxdemarzi.schema.Properties.USERNAME;
+import static com.maxdemarzi.schema.Properties.WANT;
+import static com.maxdemarzi.schema.Properties.WANTS;
 
 @Path("/users")
 public class Users {
@@ -66,10 +73,30 @@ public class Users {
         try (Transaction tx = db.beginTx()) {
             Node user = findUser(username, db);
             results = getUserAttributes(user);
+            HashSet<Node> userHas = new HashSet<>();
+            HashSet<Node> userWants = new HashSet<>();
+
+            for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {
+                userHas.add(r1.getEndNode());
+            }
+            for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {
+                userWants.add(r1.getEndNode());
+            }
 
             if (username2 != null && !username.equals(username2)) {
                 Node user2 = findUser(username2, db);
-                // Calculate score
+
+                HashSet<Node> user2Has = new HashSet<>();
+                HashSet<Node> user2Wants = new HashSet<>();
+                for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {
+                    user2Has.add(r1.getEndNode());
+                }
+                for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {
+                    user2Wants.add(r1.getEndNode());
+                }
+
+                results.put(HAVE, userHas.stream().filter(user2Wants::contains).count());
+                results.put(WANT, userWants.stream().filter(user2Has::contains).count());
 
             }
 
@@ -92,6 +119,8 @@ public class Users {
                     user.setProperty(NAME, parameters.get(NAME));
                     user.setProperty(USERNAME, parameters.get(USERNAME));
                     user.setProperty(PASSWORD, parameters.get(PASSWORD));
+                    user.setProperty(IS, parameters.get(IS));
+                    user.setProperty(IS_LOOKING_FOR, parameters.get(IS_LOOKING_FOR));
                     user.setProperty(HASH, new Md5Hash(((String)parameters.get(EMAIL)).toLowerCase()).toString());
 
                     LocalDateTime dateTime = LocalDateTime.now(utc);
@@ -126,11 +155,15 @@ public class Users {
         Integer hates = user.getDegree(RelationshipTypes.HATES, Direction.OUTGOING);
         Integer highFives = user.getDegree(RelationshipTypes.HIGH_FIVED, Direction.OUTGOING);
         Integer lowFives = user.getDegree(RelationshipTypes.LOW_FIVED, Direction.OUTGOING);
-        Integer posts = user.getDegree(Direction.OUTGOING) - likes - hates - highFives - lowFives;
+        Integer has = user.getDegree(RelationshipTypes.HAS, Direction.OUTGOING);
+        Integer wants = user.getDegree(RelationshipTypes.WANTS, Direction.OUTGOING);
+        Integer posts = user.getDegree(Direction.OUTGOING) - likes - hates - highFives - lowFives - has - wants;
         results.put(LIKES, likes);
         results.put(HATES, hates);
         results.put(LOW_FIVES, lowFives);
         results.put(HIGH_FIVES, highFives);
+        results.put(HAS, has);
+        results.put(WANTS, wants);
         results.put(POSTS, posts);
         return results;
     }

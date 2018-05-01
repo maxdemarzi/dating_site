@@ -73,10 +73,12 @@ public class GetHasTest {
                     "password: 'cuddlefish'})" +
             "CREATE (fat:Attribute {name:'Fat'})" +
             "CREATE (bald:Attribute {name:'Bald'})" +
+            "CREATE (rich:Attribute {name:'Rich'})" +
             "CREATE (jexp)-[:HAS {time: 1490140299}]->(fat)" +
             "CREATE (laeg)-[:WANTS {time: 1490208700}]->(bald)" +
             "CREATE (max)-[:HAS {time: 1490209300 }]->(fat)" +
-            "CREATE (max)-[:HAS {time: 1490209400 }]->(bald)";
+            "CREATE (max)-[:HAS {time: 1490209400 }]->(bald)" +
+            "CREATE (max)-[:WANTS {time: 1490209500 }]->(rich)";
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{

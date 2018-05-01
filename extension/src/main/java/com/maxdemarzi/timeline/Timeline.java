@@ -86,6 +86,11 @@ public class Timeline {
                 lowFived.add(r1.getEndNode());
             }
 
+            HashSet<Node> blocked = new HashSet<>();
+            for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
+                blocked.add(r1.getEndNode());
+            }
+
             HashSet<Long> seen = new HashSet<>();
             HashSet<Node> locations = new HashSet<>();
 
@@ -123,7 +128,7 @@ public class Timeline {
                             String theyAre = (String) properties.get(IS);
                             HashSet<String> theyAreLookingFor = new HashSet<>(Arrays.asList((String[]) properties.get(IS_LOOKING_FOR)));
 
-                            if (theyAreLookingFor.contains(is) && isLookingFor.contains(theyAre)) {
+                            if (theyAreLookingFor.contains(is) && isLookingFor.contains(theyAre) && !blocked.contains(person)) {
 
                                 if (seen.add(post.getId())) {
                                     Long time = (Long) r1.getProperty("time");

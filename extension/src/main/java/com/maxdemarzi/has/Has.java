@@ -154,22 +154,22 @@ public class Has {
         return Response.noContent().build();
     }
 
-    public static boolean userHasAttribute(Node user, Node attribut) {
+    public static boolean userHasAttribute(Node user, Node attribute) {
         if (user == null) {
             return false;
         }
 
         boolean alreadyHave = false;
         if (user.getDegree(RelationshipTypes.HAS, Direction.OUTGOING)
-                < attribut.getDegree(RelationshipTypes.HAS, Direction.INCOMING) ) {
+                < attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING) ) {
             for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.HAS)) {
-                if (r1.getEndNode().equals(attribut)) {
+                if (r1.getEndNode().equals(attribute)) {
                     alreadyHave = true;
                     break;
                 }
             }
         } else {
-            for (Relationship r1 : attribut.getRelationships(Direction.INCOMING, RelationshipTypes.HAS)) {
+            for (Relationship r1 : attribute.getRelationships(Direction.INCOMING, RelationshipTypes.HAS)) {
                 if (r1.getStartNode().equals(user)) {
                     alreadyHave = true;
                     break;

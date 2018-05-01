@@ -74,6 +74,8 @@ public class GetBlocksTest {
             put("posts", 0);
             put("likes", 0);
             put("hates", 0);
+            put("wants", 0);
+            put("has", 0);
             put("high_fives", 0);
             put("low_fives", 0);
             put("time", 1490209400);
@@ -85,6 +87,8 @@ public class GetBlocksTest {
             put("posts", 0);
             put("likes", 0);
             put("hates", 0);
+            put("wants", 0);
+            put("has", 0);
             put("high_fives", 0);
             put("low_fives", 0);
             put("time", 1490140299);

@@ -20,6 +20,12 @@ import com.maxdemarzi.Exceptions;
      static final Exceptions missingPasswordParameter = new Exceptions(400, "Missing password Parameter.");
      static final Exceptions emptyPasswordParameter = new Exceptions(400, "Empty password Parameter.");
 
+     static final Exceptions missingIsParameter = new Exceptions(400, "Missing is Parameter.");
+     static final Exceptions emptyIsParameter = new Exceptions(400, "Empty is Parameter.");
+
+     static final Exceptions missingIsLookingForParameter = new Exceptions(400, "Missing is_looking_for Parameter.");
+     static final Exceptions emptyIsLookingForParameter = new Exceptions(400, "Empty is_looking_for Parameter.");
+
      static final Exceptions userNotFound = new Exceptions(400, "User not Found.");
 
     UserExceptions(int code, String error) {
