@@ -52,25 +52,11 @@ public class Cities {
 
     public static HashSet<Node> findCitiesNearby(Node city, Integer distance, @Context GraphDatabaseService db) {
         HashSet<Node> cities = new HashSet<>();
-        Result executionResult = db.execute("MATCH (c:City)-[:IN_LOCATION]->(s:State), (c2:City)" +
-                "WHERE ID(c) = $city" +
+        Result executionResult = db.execute(
+             "MATCH (c:City), (c2:City)" +
+                "WHERE ID(c) = $city " +
                 "  AND distance(c.location, c2.location) <= $distance " +
                 "RETURN c2", map("city", city.getId(), "distance", distance));
-        ResourceIterator<Node> resultIterator = executionResult.columnAs( "c2" );
-        while(resultIterator.hasNext()) {
-            cities.add(resultIterator.next());
-        }
-
-        return cities;
-    }
-
-    public static HashSet<Node> findCitiesNearby(String city, String state, Integer distance, @Context GraphDatabaseService db) {
-        HashSet<Node> cities = new HashSet<>();
-        Result executionResult = db.execute("MATCH (c:City)-[:IN_LOCATION]->(s:State), (c2:City)" +
-                "WHERE c.name = $city" +
-                "  AND s.name = $state" +
-                "  AND distance(c.location, c2.location) <= $distance " +
-                "RETURN c2", map("city", city, "state", state, distance, distance));
         ResourceIterator<Node> resultIterator = executionResult.columnAs( "c2" );
         while(resultIterator.hasNext()) {
             cities.add(resultIterator.next());
