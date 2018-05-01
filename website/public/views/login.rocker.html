@@ -3,66 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Five and Sex Login</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="/assets/login.css" rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="57x57" href="/assets/ico/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/assets/ico/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/assets/ico/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/assets/ico/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/assets/ico/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/assets/ico/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/assets/ico/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/assets/ico/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ico/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/ico/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/ico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/assets/ico/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/ico/favicon-16x16.png">
-    <link rel="manifest" href="/assets/ico/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/assets/ico/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="/assets/dist/toolkit.css" />
+    <link rel="stylesheet" href="/assets/custom.css" />
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/assets/ico/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/ico/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/ico/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/ico/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/ico/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/ico/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/ico/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/ico/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ico/apple-touch-icon-180x180.png" />
 </head>
 <body>
-<div class="container">
-    <nav class="navbar navbar-toggleable-md navbar-light justify-content-center">
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="navbar-brand" href="/">
-                    <img src="/assets/img/grittier-solid.svg" width="30" height="30" alt="">
-                    Five and Sex
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
-<br/>
-<div class="container">
-    <div class="row">
-        <div class="col-6 offset-3">
-            <div class="card">
-                <div class="card-block">
-                    <form class="form-signin" action="/callback?client_name=FormClient" method="POST">
-                        <h2 class="form-signin-heading">Please Log In</h2>
-                        <div class="form-group row">
-                            <label for="username" class="col-4 col-form-label">Username:</label>
-                            <div class="col-8">
-                                <input type="text" name="username" id="username" class="form-control" autofocus>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-4 col-form-label">Password:</label>
-                            <div class="col-8">
-                                <input type="password" name="password" id="password" class="form-control">
-                            </div>
+<div class="container-fluid container-fill-height">
+    <div class="container-content-middle">
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-4">
+                <br/><br/><br/><br/>
+                <p><i class="material-icons">face</i> <span class="align-top">No uglies and no hotties, just regular people like you.</span></p>
+                <p><i class="material-icons">thumb_up</i> <span class="align-top">Match people on things you like...</span></p>
+                <p><i class="material-icons">thumb_down</i> <span class="align-top">...as well as things you don't.</span></p>
+                <p><i class="material-icons">check_box_outline_blank</i> <span class="align-top">Pick what you need in a partner...</span></p>
+                <p><i class="material-icons">check_box</i> <span class="align-top">...and meet your partner's needs.</span></p>
+                <p><i class="material-icons">pan_tool</i> <span class="align-top">High Five the people you want to message.</span></p>
+                <p><i class="material-icons icon-upside-down">pan_tool</i> <span class="align-top">Low Five your competition.</span></p>
+            </div>
+            <div class="col-6">
+                <div class="container-content-middle">
+
+                    <form role="form" class="mx-auto app-login-form" action="/callback?client_name=FormClient" method="POST">
+                        <a href="/" class="app-brand mb-5">
+                            <img src="/assets/ico/apple-touch-icon-180x180.png" alt="brand">
+                        </a>
+
+                        <h1 class="cover-heading">Five and Sex</h1>
+                        <p class="lead">A new dating site for normal looking people.</p>
+
+                        <div class="form-group">
+                            <input type="text" placeholder="Username" name="username" id="username" class="form-control" autofocus>
                         </div>
 
-                        <button class="btn btn btn-primary" type="submit">Log In</button>
-                        <a href="/register" class="btn btn btn-secondary">Register</a>
+                        <div class="form-group mb-3">
+                            <input type="password" placeholder="Password" name="password" id="password" class="form-control">
+                        </div>
+
+                        <div class="mb-5">
+                            <button class="btn btn-primary">Log In</button>
+                            <button class="btn btn-secondary" formaction="/register" formmethod="get">Sign up</button>
+                        </div>
+
                     </form>
-                 </div>
+
+                </div>
             </div>
+
+
         </div>
     </div>
 </div>
