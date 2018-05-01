@@ -2,7 +2,6 @@ package com.maxdemarzi.timeline;
 
 import com.maxdemarzi.schema.Schema;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.neo4j.harness.junit.Neo4jRule;
@@ -18,7 +17,6 @@ public class GetTimelineTest {
             .withExtension("/v1", Timeline.class)
             .withExtension("/v1", Schema.class);
 
-    @Ignore
     @Test
     public void shouldGetTimeline() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
@@ -28,7 +26,6 @@ public class GetTimelineTest {
         Assert.assertEquals(expected, actual);
     }
 
-    @Ignore
     @Test
     public void shouldGetTimelineLimited() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
@@ -39,15 +36,33 @@ public class GetTimelineTest {
         Assert.assertEquals(expected.get(0), actual.get(0));
     }
 
-    @Ignore
     @Test
     public void shouldGetTimelineSince() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=1490140300").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=1525135308").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
-        Assert.assertEquals(unReposted, actual.get(0));
+        Assert.assertEquals(expected.get(0), actual.get(0));
+    }
+
+    @Test
+    public void shouldGetTimelineWithDistance() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?distance=15000").toString());
+        ArrayList<HashMap> actual  = response.content();
+        Assert.assertTrue(actual.size() == 1);
+        Assert.assertEquals(expected.get(0), actual.get(0));
+    }
+    @Test
+    public void shouldGetTimelineLocation() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?city=Chicago&state=Illinois").toString());
+        ArrayList<HashMap> actual  = response.content();
+        Assert.assertTrue(actual.size() == 1);
+        Assert.assertEquals(expected.get(0), actual.get(0));
     }
 
     private static final String FIXTURE =
@@ -55,72 +70,55 @@ public class GetTimelineTest {
                     "email: 'max@neo4j.com', " +
                     "hash: 'hash', " +
                     "name: 'Max De Marzi'," +
-                    "time: 1490054400," +
+                    "is: 'man'," +
+                    "is_looking_for: ['woman']," +
+                    "time: 1525048800," +
                     "password: 'swordfish'})" +
             "CREATE (jexp:User {username:'jexp', " +
-                    "email: 'michael@neo4j.com', " +
+                    "email: 'michaela@neo4j.com', " +
                     "hash: 'hash', " +
-                    "time: 1490054400," +
-                    "name: 'Michael Hunger'," +
+                    "time: 1525048800," +
+                    "name: 'Michaela Hunger'," +
+                    "is: 'woman'," +
+                    "is_looking_for: ['man']," +
                     "password: 'tunafish'})" +
             "CREATE (laeg:User {username:'laexample', " +
                     "email: 'luke@neo4j.com', " +
                     "hash: 'hash', " +
-                    "time: 1490054400," +
+                    "time: 1525048800," +
                     "name: 'Luke Gannon'," +
+                    "is: 'man'," +
+                    "is_looking_for: ['man', 'woman', 'complicated']," +
                     "password: 'cuddlefish'})" +
-            "CREATE (max)-[:FOLLOWS]->(jexp)" +
-            "CREATE (max)-[:FOLLOWS]->(laeg)" +
+            "CREATE (chicago:City {name:'Chicago'})" +
+            "CREATE (illinois:State {name:'Illinois'})" +
+            "CREATE (chicago)-[:IN_LOCATION]->(illinois)" +
+            "CREATE (max)-[:IN_LOCATION]->(chicago)" +
+            "CREATE (laeg)-[:IN_LOCATION]->(chicago)" +
+            "CREATE (jexp)-[:IN_LOCATION]->(chicago)" +
             "CREATE (post1:Post {status:'Hello World!', " +
                     "time: 1490140299})" +
             "CREATE (post2:Post {status:'How are you!', " +
                     "time: 1490208700})" +
             "CREATE (post3:Post {status:'Doing fine!', " +
                     "time: 1490208800})" +
-            "CREATE (jexp)-[:POSTED_ON_2017_03_21 {time: 1490140299}]->(post1)" +
-            "CREATE (laeg)-[:POSTED_ON_2017_03_22 {time: 1490208700}]->(post2)" +
-            "CREATE (max)-[:POSTED_ON_2017_03_22 {time: 1490208800}]->(post3)" +
-            "CREATE (laeg)-[:LIKES {time:1490143299}]->(post1)" +
-            "CREATE (max)-[:LIKES {time: 1490214800}]->(post2)" ;
+            "CREATE (jexp)-[:POSTED_ON_2018_05_01 {time: 1525135307}]->(post1)" +
+            "CREATE (laeg)-[:POSTED_ON_2018_05_01 {time: 1525135317}]->(post2)" +
+            "CREATE (max)-[:POSTED_ON_2018_04_30 {time: 1525048893}]->(post3)"  +
+            "CREATE (laeg)-[:LOW_FIVED {time: 1525135317}]->(post1)" +
+            "CREATE (max)-[:HIGH_FIVED {time: 1525135307}]->(post1)" ;
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
-            put("username", "maxdemarzi");
-            put("name", "Max De Marzi");
-            put("hash", "hash");
-            put("status", "Doing fine!");
-            put("time", 1490208800);
-            put("likes", 0);
-            put("reposts", 0);
-            put("liked", false);
-            put("reposted", false);
-
-        }});
-        add(new HashMap<String, Object>() {{
-            put("username", "laexample");
-            put("name", "Luke Gannon");
-            put("hash", "hash");
-            put("status", "How are you!");
-            put("time", 1490208700);
-            put("likes", 1);
-            put("reposts", 0);
-            put("liked", true);
-            put("reposted", false);
-        }});
-        add(new HashMap<String, Object>() {{
-            put("reposter_username", "laexample");
-            put("reposter_name", "Luke Gannon");
-            put("reposted_time",1490208000);
-            put("hash", "hash");
             put("username", "jexp");
-            put("name", "Michael Hunger");
+            put("name", "Michaela Hunger");
+            put("hash", "hash");
             put("status", "Hello World!");
-            put("time", 1490140299);
-            put("likes", 1);
-            put("reposts", 1);
-            put("liked", false);
-            put("reposted", false);
-
+            put("time", 1525135307);
+            put("high_fives", 1);
+            put("low_fives", 1);
+            put("high_fived", true);
+            put("low_fived", false);
         }});
     }};
 

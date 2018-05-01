@@ -60,7 +60,6 @@ public class AutoCompletes {
             }
 
             ResourceIterator<Node> nodes = db.findNodes(Label.label(label), property, query, StringSearchMode.PREFIX);
-
             nodes.forEachRemaining(node -> {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(ID, node.getId());

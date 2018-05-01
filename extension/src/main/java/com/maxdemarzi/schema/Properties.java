@@ -6,16 +6,21 @@ public final class Properties {
         throw new IllegalAccessError("Utility class");
     }
 
+    public static final String CITYANDSTATE = "city_and_state";
     public static final String COUNT = "count";
     public static final String EMAIL = "email";
     public static final String EXPIRES = "expires";
+    public static final String GEONAME_ID = "geoname_id";
     public static final String HASH = "hash";
     public static final String HIGH_FIVED = "high_fived";
     public static final String HIGH_FIVES = "high_fives";
     public static final String ID = "id";
+    public static final String IS = "is";
+    public static final String IS_LOOKING_FOR = "is_looking_for";
     public static final String LIKED = "liked";
     public static final String LIKED_TIME = "liked_time";
     public static final String LIKES = "likes";
+    public static final String LIVE_IN = "live_in";
     public static final String LOCATION = "location";
     public static final String LOW_FIVED = "low_fived";
     public static final String LOW_FIVES = "low_fives";
