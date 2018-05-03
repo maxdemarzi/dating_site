@@ -54,7 +54,8 @@ public class Timeline {
                              @QueryParam("since") final Long since,
                              @QueryParam("city") final String city,
                              @QueryParam("state") final String state,
-                             @QueryParam("distance") Integer distance,
+                             @QueryParam("distance") @DefaultValue("40000") Integer distance,
+                             @QueryParam("competition") @DefaultValue("false") Boolean competition,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
         LocalDateTime dateTime;
@@ -64,12 +65,6 @@ public class Timeline {
             dateTime = LocalDateTime.ofEpochSecond(since, 0, ZoneOffset.UTC);
         }
         Long latest = dateTime.toEpochSecond(ZoneOffset.UTC);
-
-        // 5 Miles = 8 Kilometers, 10 Miles = 16 Kilometers, 25 Miles = 40 Kilometers
-        // Number multiplied by 1000 because search is in meters.
-        if (distance == null) {
-            distance = 40000;
-        }
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
@@ -123,12 +118,20 @@ public class Timeline {
                         for (Relationship r1 : person.getRelationships(Direction.OUTGOING, posted)) {
                             Node post = r1.getEndNode();
 
-                            // Before adding post to timeline, check for compatibility
+                            // Before adding post to timeline, check for compatibility or competition
                             Map<String, Object> properties = person.getAllProperties();
                             String theyAre = (String) properties.get(IS);
                             HashSet<String> theyAreLookingFor = new HashSet<>(Arrays.asList((String[]) properties.get(IS_LOOKING_FOR)));
 
-                            if (theyAreLookingFor.contains(is) && isLookingFor.contains(theyAre) && !blocked.contains(person)) {
+                            boolean include;
+                            if (competition) {
+                                include = (theyAreLookingFor.stream().filter(isLookingFor::contains).count() > 0) &&
+                                        theyAre.equals(is);
+                            } else {
+                                include = theyAreLookingFor.contains(is) && isLookingFor.contains(theyAre);
+                            }
+
+                            if (include && !blocked.contains(person)) {
 
                                 if (seen.add(post.getId())) {
                                     Long time = (Long) r1.getProperty("time");

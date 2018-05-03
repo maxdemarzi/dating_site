@@ -32,10 +32,10 @@ A Neo4j Based Dating Site Backend
         :POST   /v1/users/{username}/posts/{username2}/{time}
         :GET    /v1/users/{username}/has
         :POST   /v1/users/{username}/has/{attribute}
-        :DELETE /v1/users/{username}/has/{atribute}
+        :DELETE /v1/users/{username}/has/{attribute}
         :GET    /v1/users/{username}/wants
         :POST   /v1/users/{username}/wants/{attribute}
-        :DELETE /v1/users/{username}/wants/{atribute}
+        :DELETE /v1/users/{username}/wants/{attribute}
         :GET    /v1/users/{username}/likes
         :POST   /v1/users/{username}/likes/{thing}
         :DELETE /v1/users/{username}/likes/{thing}
@@ -46,11 +46,16 @@ A Neo4j Based Dating Site Backend
         :POST   /v1/users/{username}/blocks/{username2}
         :DELETE /v1/users/{username}/blocks/{username2}
         :GET    /v1/users/{username}/mentions
-        :GET    /v1/users/{username}/timeline
+        :GET    /v1/users/{username}/timeline?city=x&state=y&distance=competition=false
         :GET    /v1/tags
         :GET    /v1/tags/{tag}
         :GET    /v1/things/{name}
         :GET    /v1/autocompletes/{label}/{property}/{query}
+        :GET    /v1/cities/{geoname_id}
+        :GET    /v1/cities/{city}/{state}
+        :GET    /v1/states/{code}/cities
+        :GET    /v1/countries
+        :GET    /v1/countries/{code}/states
         
 7. Query Parameters:
         
