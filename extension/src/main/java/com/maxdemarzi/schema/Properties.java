@@ -10,6 +10,7 @@ public final class Properties {
     public static final String COUNT = "count";
     public static final String EMAIL = "email";
     public static final String EXPIRES = "expires";
+    public static final String FULL_NAME = "full_name";
     public static final String GEONAME_ID = "geoname_id";
     public static final String HASH = "hash";
     public static final String HIGH_FIVED = "high_fived";

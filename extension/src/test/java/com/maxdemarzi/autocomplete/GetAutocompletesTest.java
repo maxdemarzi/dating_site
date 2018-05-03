@@ -22,7 +22,7 @@ public class GetAutocompletesTest {
     public void shouldAutocompleteThings() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/Thing/lowercase_name/neo").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/Thing/lowercase_name/neo?display_property=name").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertEquals(expected, actual);
     }
@@ -31,7 +31,7 @@ public class GetAutocompletesTest {
     public void shouldAutocompleteOneThing() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/Thing/lowercase_name/java").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/Thing/lowercase_name/java?display_property=name").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertEquals(expected2, actual);
     }

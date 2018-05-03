@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import static com.maxdemarzi.schema.Properties.ID;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.USERNAME;
 
 @Path("/autocompletes")
 public class AutoCompletes {
@@ -31,12 +29,14 @@ public class AutoCompletes {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final HashSet<String> labels = new HashSet<String>() {{
         add("Attribute");
+        add("City");
         add("User");
         add("Tag");
         add("Thing");
     }};
 
     private static final HashSet<String> properties = new HashSet<String>() {{
+        add("full_name");
         add("username");
         add("lowercase_name");
     }};
@@ -47,6 +47,7 @@ public class AutoCompletes {
                              @PathParam("property") final String property,
                              @PathParam("query") final String query,
                              @QueryParam("limit") @DefaultValue("25") final Integer limit,
+                             @QueryParam("display_property") final String displayProperty,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
 
@@ -63,12 +64,10 @@ public class AutoCompletes {
             nodes.forEachRemaining(node -> {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(ID, node.getId());
-                Map<String, Object> properties = node.getAllProperties();
-                if (properties.containsKey(USERNAME)) {
-                    map.put(USERNAME, properties.get(USERNAME));
-                }
-                if (properties.containsKey(NAME)) {
-                    map.put(NAME, properties.get(NAME));
+                if (displayProperty != null) {
+                    map.put(displayProperty, node.getProperty(displayProperty));
+                } else {
+                    map.put(property, node.getProperty(property));
                 }
                 results.add(map);
             });

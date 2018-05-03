@@ -104,4 +104,5 @@ public class Cities {
 
         throw CityExceptions.cityNotFound;
     }
+
 }
