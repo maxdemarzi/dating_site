@@ -37,6 +37,7 @@ public class AutoCompletes {
 
     private static final HashSet<String> properties = new HashSet<String>() {{
         add("full_name");
+        add("lowercase_full_name");
         add("username");
         add("lowercase_name");
     }};
