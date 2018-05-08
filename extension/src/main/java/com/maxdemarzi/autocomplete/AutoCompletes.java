@@ -76,6 +76,8 @@ public class AutoCompletes {
             tx.success();
         }
 
-        return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
+        return Response.ok().entity(objectMapper.writeValueAsString(
+                results.subList(0, Math.min(results.size(), limit))))
+                .build();
     }
 }

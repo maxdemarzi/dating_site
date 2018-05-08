@@ -3,79 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <title>Five and Sex Registration</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="/assets/login.css" rel="stylesheet">
-    <link rel="apple-touch-icon" sizes="57x57" href="/assets/ico/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/assets/ico/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/assets/ico/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/assets/ico/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/assets/ico/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/assets/ico/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/assets/ico/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/assets/ico/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ico/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/assets/ico/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/ico/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/assets/ico/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/ico/favicon-16x16.png">
-    <link rel="manifest" href="/assets/ico/manifest.json">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/assets/ico/ms-icon-144x144.png">
-    <meta name="theme-color" content="#ffffff"></head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    <link rel="stylesheet" href="/assets/dist/toolkit.css" />
+    <link rel="stylesheet" href="/assets/dist/jquery.typeahead.min.css" />
+    <link rel="stylesheet" href="/assets/custom.css" />
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/assets/ico/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/assets/ico/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/ico/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/assets/ico/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/ico/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/assets/ico/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/assets/ico/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/ico/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/ico/apple-touch-icon-180x180.png" />
 <body>
-
-<div class="container">
-    <nav class="navbar navbar-toggleable-md navbar-light justify-content-center">
-        <ul class="nav ">
-            <li class="nav-item">
-                <a class="navbar-brand" href="/">
-                    <img src="/assets/img/grittier-solid.svg" width="30" height="30" alt="">
-                    Five and Sex
-                </a>
-            </li>
-        </ul>
-    </nav>
-</div>
-<br/>
-<div class="container">
+<div class="container container-content-middle">
     <div class="row">
-        <div class="col-6 offset-3">
-            <div class="card">
-                <div class="card-block">
-                    <form class="form-signin" action=/register method="post">
-                        <h2 class="form-signin-heading">Please Register</h2>
-                        <div class="form-group row">
-                            <label for="name" class="col-4 col-form-label">Name:</label>
-                            <div class="col-8">
-                                <input type="text" name="name" id="name" class="form-control" required autofocus autocomplete="off">
+
+        <div class="col-4">
+        </div>
+        <div class="col-6">
+            <a href="/" class="mb-5">
+                <img src="/assets/ico/apple-touch-icon-180x180.png" alt="brand">
+            </a>
+
+            <h1 class="cover-heading">Five and Sex</h1>
+            <p class="lead">A new dating site for normal looking people.</p>
+
+            <div class="col-md-8 order-md-1" >
+                <form class="needs-validation" role="form" action="/register" method="POST">
+                    <div class="mb-3">
+                        <label for="username">Username</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">&commat;</span>
+                            </div>
+                            <input type="text" class="form-control" id="username" placeholder="Username" name="username">
+                            <div class="invalid-feedback" style="width: 100%;">
+                                A username is required.
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-4 col-form-label">Email:</label>
-                            <div class="col-8">
-                                <input type="email" name="email" id="email" class="form-control" required autocomplete="off">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="you&commat;example.com" name="email" required>
+                        <div class="invalid-feedback">
+                            Please enter a valid email address.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="your name" name="name" required>
+                        <div class="invalid-feedback">
+                            Please enter your name.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" placeholder="your password" name="password" required>
+                        <div class="invalid-feedback">
+                            Please enter your password.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="man">Identity</label><br/>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is" id="man" value="man">
+                            <label class="form-check-label" for="man">man</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is" id="woman" value="woman">
+                            <label class="form-check-label" for="woman">woman</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is" id="complicated" value="complicated">
+                            <label class="form-check-label" for="complicated">it's complicated</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lfman">Looking For</label><br/>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="lfman" value="man" name="is_looking_for">
+                            <label class="form-check-label" for="lfman">man</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="lfwoman" value="woman" name="is_looking_for">
+                            <label class="form-check-label" for="lfwoman">woman</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" id="lfcomplicated" value="complicated" name="is_looking_for">
+                            <label class="form-check-label" for="lfcomplicated">it's complicated</label>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="city">City</label>
+                        <div class="input-group">
+                            <div class="typeahead__container">
+                                <div class="typeahead__field">
+                                <span class="typeahead__query">
+                                    <input type="text" class="typeahead form-control" id="city" placeholder="City" name="city" autocomplete="off">
+                                </span>
+                                </div>
+                            </div>
+                            <div class="invalid-feedback" style="width: 100%;">
+                                A city is required.
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <label for="username" class="col-4 col-form-label">Username:</label>
-                            <div class="col-8">
-                                <input type="text" name="username" id="username" class="form-control" required autocomplete="off">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="password" class="col-4 col-form-label">Password:</label>
-                            <div class="col-8">
-                                <input type="password" name="password" id="password" class="form-control" required autocomplete="off">
-                            </div>
-                        </div>
-                        <button class="btn btn btn-primary" type="submit">Register</button>
-                        <a href="/login" class="btn btn btn-secondary" type="">Log In</a>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="mr-sm-2" for="distance">Distance</label>
+                        <select class="custom-select mr-sm-2" id="distance" name="distance">
+                            <option value="8000">5 Miles / 8 Kilometers</option>
+                            <option value="16000">10 Miles / 16 Kilometers</option>
+                            <option value="40000" selected>25 Miles / 40 Kilometers</option>
+                            <option value="80000">50 Miles / 80 Kilometers</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-5">
+                        <button class="btn btn-primary">Register</button>
+                        <button class="btn btn-secondary" formaction="/login" formmethod="get">Log In</button>
+                    </div>
+
+                    <!-- https://www.codexworld.com/dynamic-dependent-select-box-using-jquery-ajax-php/ -->
+
+                </form>
+
             </div>
         </div>
     </div>
+
 </div>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+<script src="/assets/dist/toolkit.min.js"></script>
+<script src="/assets/dist/jquery.typeahead.min.js"></script>
+<script src="/assets/dist/custom.js"></script>
 </body>
 </html>

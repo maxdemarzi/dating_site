@@ -1,5 +1,6 @@
 package com.maxdemarzi;
 
+import com.maxdemarzi.models.City;
 import com.maxdemarzi.models.Post;
 import com.maxdemarzi.models.Tag;
 import com.maxdemarzi.models.User;
@@ -92,6 +93,14 @@ public class App extends Jooby {
               throw new Err(Status.CONFLICT, "There was a problem with your registration.");
           }
       });
+      get("/autocomplete/city/{query}", req -> {
+         Response<List<City>> cityResponse = api.autoCompleteCity(req.param("query").value(), "full_name").execute();
+          if (cityResponse.isSuccessful()) {
+              return cityResponse.body();
+          }
+          throw new Err(Status.CONFLICT, "There was a problem autocompleting the city");
+      }).produces("json");
+
 
       use("*", (req, rsp, chain) -> {
           ProfileManager pm = require(ProfileManager.class);
@@ -101,25 +110,25 @@ public class App extends Jooby {
           chain.next(req, rsp);
       });
 
-      get("/user/{username}/likes", req -> {
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
-
-          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-          if (userResponse.isSuccessful()) {
-              User user = userResponse.body();
-
-              Response<List<Post>> timelineResponse = api.getLikes(req.param("username").value()).execute();
-              List<Post> posts = new ArrayList<>();
-              if (timelineResponse.isSuccessful()) {
-                  posts = timelineResponse.body();
-              }
-              return views.home.template(authenticated, user, posts, getTags());
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
+//      get("/user/{username}/likes", req -> {
+//          String requested_by = req.get("requested_by");
+//          if (requested_by.equals("anonymous")) requested_by = null;
+//          User authenticated = getUserProfile(requested_by);
+//
+//          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
+//          if (userResponse.isSuccessful()) {
+//              User user = userResponse.body();
+//
+//              Response<List<Thing>> timelineResponse = api.getLikes(req.param("username").value()).execute();
+//              List<Post> posts = new ArrayList<>();
+//              if (timelineResponse.isSuccessful()) {
+//                  posts = timelineResponse.body();
+//              }
+//              return views.home.template(authenticated, user, posts, getTags());
+//          } else {
+//              throw new Err(Status.BAD_REQUEST);
+//          }
+//      });
 
       get("/user/{username}", req -> {
           String requested_by = req.get("requested_by");

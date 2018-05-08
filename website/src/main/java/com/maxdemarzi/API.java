@@ -1,7 +1,11 @@
 package com.maxdemarzi;
 
+import com.maxdemarzi.models.Attribute;
+import com.maxdemarzi.models.City;
 import com.maxdemarzi.models.Post;
 import com.maxdemarzi.models.Tag;
+import com.maxdemarzi.models.Thing;
+import com.maxdemarzi.models.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
@@ -10,11 +14,14 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-import com.maxdemarzi.models.User;
 
 import java.util.List;
 
 public interface API {
+
+
+    @GET("attributes/{name}")
+    Call<Attribute> getAttribute(@Path("name") String name);
 
     @GET("users/{username}")
     Call<User> getUser(@Path("username") String username);
@@ -36,18 +43,70 @@ public interface API {
     Call<Post> updatePost(@Path("username") String username,
                           @Path("time") Long time);
 
+    @GET("users/{username}/has")
+    Call<List<Attribute>> getHas(@Path("username") String username);
+
+    @POST("users/{username}/has/{attribute}")
+    Call<List<Attribute>> createHas(@Path("username") String username,
+                                    @Path("attribute") String attribute);
+
+    @DELETE("users/{username}/has/{attribute}")
+    Call<List<Attribute>> deleteHas(@Path("username") String username,
+                                    @Path("attribute") String attribute);
+
+    @GET("users/{username}/wants")
+    Call<List<Attribute>> getWants(@Path("username") String username);
+
+    @POST("users/{username}/wants/{attribute}")
+    Call<List<Attribute>> createWants(@Path("username") String username,
+                                    @Path("attribute") String attribute);
+
+    @DELETE("users/{username}/wants/{attribute}")
+    Call<List<Attribute>> deleteWants(@Path("username") String username,
+                                    @Path("attribute") String attribute);
+
     @GET("users/{username}/likes")
-    Call<List<Post>> getLikes(@Path("username") String username);
+    Call<List<Thing>> getLikes(@Path("username") String username);
 
-    @POST("users/{username}/likes/{username2}/{time}")
-    Call<Post> createLikes(@Path("username") String username,
+    @POST("users/{username}/likes/{thing}/")
+    Call<Thing> createLikes(@Path("username") String username,
+                            @Path("thing") String thing);
+
+    @DELETE("users/{username}/likes/{thing}/")
+    Call<Thing> deleteLikes(@Path("username") String username,
+                           @Path("thing") String thing);
+
+    @GET("users/{username}/hates")
+    Call<List<Thing>> getHates(@Path("username") String username);
+
+    @POST("users/{username}/hates/{thing}/")
+    Call<Thing> createHates(@Path("username") String username,
+                            @Path("thing") String thing);
+
+    @DELETE("users/{username}/hates/{thing}/")
+    Call<Thing> deleteHates(@Path("username") String username,
+                            @Path("thing") String thing);
+
+
+    @POST("users/{username}/high_fives/{username2}/{time}")
+    Call<Post> createHighFive(@Path("username") String username,
                            @Path("username2") String username2,
                            @Path("time") Long time);
 
-    @DELETE("users/{username}/likes/{username2}/{time}")
-    Call<Post> removeLikes(@Path("username") String username,
+    @DELETE("users/{username}/high_fives/{username2}/{time}")
+    Call<Post> removeHighFive(@Path("username") String username,
                            @Path("username2") String username2,
                            @Path("time") Long time);
+
+    @POST("users/{username}/low_fives/{username2}/{time}")
+    Call<Post> createLowFive(@Path("username") String username,
+                              @Path("username2") String username2,
+                              @Path("time") Long time);
+
+    @DELETE("users/{username}/low_fives/{username2}/{time}")
+    Call<Post> removeLowFive(@Path("username") String username,
+                              @Path("username2") String username2,
+                              @Path("time") Long time);
 
     @GET("users/{username}/blocks")
     Call<List<Post>> getBlocks(@Path("username") String username);
@@ -72,6 +131,37 @@ public interface API {
     @GET("tags/{tag}")
     Call<List<Post>> getTag(@Path("tag") String tag,
                             @Query("username") String username);
+
+    @GET("things/{thing}")
+    Call<Thing> getThing(@Path("thing") String thing,
+                            @Query("username") String username);
+
+
+    @GET("autocompletes/City/lowercase_full_name/{query}")
+    Call<List<City>> autoCompleteCity(@Path("query") String query,
+                                @Query("display_property") String display_property);
+
+    @GET("autocompletes/{label}/{property}/{query}")
+    Call<Thing> getAutoCompletes(@Path("label") String label,
+                                 @Path("property") String property,
+                                 @Path("query") String query,
+                                 @Query("display_property") String display_property);
+
+    @GET("cities/{geoname_id}")
+    Call<City> getCity(@Path("thing") String geoname_id);
+
+    @GET("cities/{city}/{state}")
+    Call<City> getCityWithState(@Path("city") String city,
+                                @Path("state") String state);
+
+    @GET("state/{code}/cities")
+    Call<City> getCitiesFromState(@Path("code") String code);
+
+    @GET("countries/{code}/states")
+    Call<City> getStatesFromCountry(@Path("code") String code);
+
+    @GET("countries")
+    Call<City> getCountries();
 
     @GET("search")
     Call<List<Post>> getSearch(@Query("q") String q,
