@@ -6,8 +6,10 @@ public final class Properties {
         throw new IllegalAccessError("Utility class");
     }
 
+    public static final String CITY = "city";
     public static final String CODE = "code";
     public static final String COUNT = "count";
+    public static final String DISTANCE = "distance";
     public static final String EMAIL = "email";
     public static final String EXPIRES = "expires";
     public static final String FULL_NAME = "full_name";

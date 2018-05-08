@@ -287,7 +287,8 @@ public class CreateUserTest {
             "CREATE (max:User {username:'jexp', " +
                     "email: 'michael@neo4j.com', " +
                     "name: 'Michael Hunger'," +
-                    "password: 'tunafish'})";
+                    "password: 'tunafish'})" +
+            "CREATE (chicago:City {name:'Chicago', geoname_id:'1234', full_name:'Chicago, IL'})";
 
     private static final HashMap input = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");
@@ -296,6 +297,8 @@ public class CreateUserTest {
         put("password", "swordfish");
         put("is", "man");
         put("is_looking_for", new String[]{"woman"});
+        put("distance", 10000);
+        put("city", "Chicago, IL");
     }};
 
     private static final HashMap missingUsernameInput = new HashMap<String, Object>() {{
@@ -398,6 +401,8 @@ public class CreateUserTest {
         put("password", "password");
         put("is", "man");
         put("is_looking_for", new String[]{"woman"});
+        put("distance", 10000);
+        put("city", "Chicago, IL");
     }};
 
     private static final HashMap existingEmailInput = new HashMap<String, Object>() {{
@@ -407,6 +412,8 @@ public class CreateUserTest {
         put("password", "password");
         put("is", "man");
         put("is_looking_for", new String[]{"woman"});
+        put("distance", 10000);
+        put("city", "Chicago, IL");
     }};
 
     private static final HashMap expected = new HashMap<String, Object>() {{
@@ -417,5 +424,6 @@ public class CreateUserTest {
         put("hash","58750f2179edbd650b471280aa66fee5");
         put("is", "man");
         put("is_looking_for", new ArrayList<String>(){{add("woman");}});
+        put("distance", 10000);
     }};
 }

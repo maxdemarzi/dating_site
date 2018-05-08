@@ -14,6 +14,7 @@ import org.neo4j.graphdb.Transaction;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -29,7 +30,10 @@ import java.util.Map;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
+import static com.maxdemarzi.schema.Properties.CITY;
+import static com.maxdemarzi.schema.Properties.DISTANCE;
 import static com.maxdemarzi.schema.Properties.EMAIL;
+import static com.maxdemarzi.schema.Properties.FULL_NAME;
 import static com.maxdemarzi.schema.Properties.HAS;
 import static com.maxdemarzi.schema.Properties.HASH;
 import static com.maxdemarzi.schema.Properties.HATES;
@@ -126,6 +130,11 @@ public class Users {
                     LocalDateTime dateTime = LocalDateTime.now(utc);
                     user.setProperty(TIME, dateTime.truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC));
 
+                    user.setProperty(DISTANCE, parameters.get(DISTANCE));
+
+                    Node city = db.findNode(Labels.City, FULL_NAME, parameters.get(CITY));
+                    user.createRelationshipTo(city, RelationshipTypes.IN_LOCATION);
+
                     results = user.getAllProperties();
                 } else {
                     throw UserExceptions.existingEmailParameter;
@@ -138,6 +147,36 @@ public class Users {
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
     }
 
+    @PUT
+    public Response updateUser(String body, @Context GraphDatabaseService db) throws IOException {
+        HashMap parameters = UserValidator.update(body);
+        Map<String, Object> results;
+        try (Transaction tx = db.beginTx()) {
+            Node user = db.findNode(Labels.User, USERNAME, parameters.get(USERNAME));
+            if (user != null) {
+                if(parameters.containsKey(EMAIL)) { user.setProperty(EMAIL, parameters.get(EMAIL)); }
+                if(parameters.containsKey(NAME)) { user.setProperty(NAME, parameters.get(NAME)); }
+                if(parameters.containsKey(PASSWORD)) { user.setProperty(PASSWORD, parameters.get(PASSWORD)); }
+                if(parameters.containsKey(IS)) { user.setProperty(IS, parameters.get(IS)); }
+                if(parameters.containsKey(IS_LOOKING_FOR)) { user.setProperty(IS_LOOKING_FOR, parameters.get(IS_LOOKING_FOR)); }
+                if(parameters.containsKey(HASH)) { user.setProperty(HASH, new Md5Hash(((String)parameters.get(EMAIL)).toLowerCase()).toString()); }
+
+                if(parameters.containsKey(DISTANCE)) { user.setProperty(DISTANCE, parameters.get(DISTANCE)); }
+                if(parameters.containsKey(CITY)) {
+                    Node city = db.findNode(Labels.City, FULL_NAME, parameters.get(CITY));
+                    user.getSingleRelationship(RelationshipTypes.IN_LOCATION, Direction.OUTGOING).delete();
+                    user.createRelationshipTo(city, RelationshipTypes.IN_LOCATION);
+                }
+
+                results = user.getAllProperties();
+
+            } else {
+                throw UserExceptions.userNotFound;
+            }
+            tx.success();
+        }
+        return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
+    }
 
     public static Node findUser(String username, @Context GraphDatabaseService db) {
         if (username == null) { return null; }

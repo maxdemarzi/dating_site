@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.maxdemarzi.schema.Properties.CITY;
+import static com.maxdemarzi.schema.Properties.DISTANCE;
 import static com.maxdemarzi.schema.Properties.EMAIL;
 import static com.maxdemarzi.schema.Properties.IS;
 import static com.maxdemarzi.schema.Properties.IS_LOOKING_FOR;
@@ -58,8 +60,8 @@ public class UserValidator {
         if (!input.containsKey(NAME)) {
             throw UserExceptions.missingNameParameter;
         } else {
-            String email = (String) input.get(NAME);
-            if (email.equals("")) {
+            String name = (String) input.get(NAME);
+            if (name.equals("")) {
                 throw UserExceptions.emptyNameParameter;
             }
         }
@@ -67,8 +69,8 @@ public class UserValidator {
         if (!input.containsKey(PASSWORD)) {
             throw UserExceptions.missingPasswordParameter;
         } else {
-            String email = (String) input.get(PASSWORD);
-            if (email.equals("")) {
+            String password = (String) input.get(PASSWORD);
+            if (password.equals("")) {
                 throw UserExceptions.emptyPasswordParameter;
             }
         }
@@ -96,7 +98,110 @@ public class UserValidator {
             }
         }
 
+        if (!input.containsKey(DISTANCE)) {
+            throw UserExceptions.missingDistanceParameter;
+        } else {
+            if (input.get(DISTANCE) instanceof Number) {
+                Number distance = (Number)input.get(DISTANCE);
+                if (distance == null) {
+                    throw UserExceptions.emptyDistanceParameter;
+                }
+                input.put(DISTANCE, distance.longValue());
+            } else {
+                throw UserExceptions.invalidDistanceParameter;
+            }
+        }
+
+        if (!input.containsKey(CITY)) {
+            throw UserExceptions.missingCityParameter;
+        } else {
+            String city = (String) input.get(CITY);
+            if (city.equals("")) {
+                throw UserExceptions.emptyCityParameter;
+            }
+        }
+
         input.put(USERNAME, ((String) input.get(USERNAME)).toLowerCase());
+
+        return input;
+    }
+
+    public static HashMap update(String body) throws IOException {
+        HashMap<String, Object> input;
+
+        if (body == null) {
+            throw Exceptions.invalidInput;
+        }
+
+        // Parse the input
+        try {
+            input = objectMapper.readValue(body, HashMap.class);
+        } catch (Exception e) {
+            throw Exceptions.invalidInput;
+        }
+
+        if (input.containsKey(EMAIL)) {
+            String email = (String)input.get(EMAIL);
+            if (email.equals("")) {
+                input.remove(EMAIL);
+            } else if (!email.contains("@")) {
+                throw UserExceptions.invalidEmailParameter;
+            }
+        }
+
+        if (input.containsKey(NAME)) {
+            String name = (String) input.get(NAME);
+            if (name.equals("")) {
+                input.remove(NAME);
+            }
+        }
+
+        if (input.containsKey(PASSWORD)) {
+            String password = (String) input.get(PASSWORD);
+            if (password.equals("")) {
+                input.remove(PASSWORD);
+            }
+        }
+
+        if (input.containsKey(IS)) {
+            String is = (String) input.get(IS);
+            if (is.equals("")) {
+                input.remove(IS);
+            }
+        }
+
+        if (input.containsKey(IS_LOOKING_FOR)) {
+            ArrayList<String> isLookingFor = new ArrayList<>();
+            if (input.get(IS_LOOKING_FOR) == null) {
+                input.remove(IS_LOOKING_FOR);
+            } else {
+                isLookingFor = (ArrayList<String>) input.get(IS_LOOKING_FOR);
+            }
+            if (isLookingFor.size() == 0) {
+                input.remove(IS_LOOKING_FOR);
+            } else {
+                input.put(IS_LOOKING_FOR, isLookingFor.toArray(new String[]{}));
+            }
+        }
+
+        if (input.containsKey(DISTANCE)) {
+            if (input.get(DISTANCE) instanceof Number) {
+                Number distance = (Number)input.get(DISTANCE);
+                if (distance == null) {
+                    throw UserExceptions.emptyDistanceParameter;
+                }
+                input.put(DISTANCE, distance.longValue());
+            } else {
+                input.remove(DISTANCE);
+            }
+        }
+
+        if (input.containsKey(CITY)) {
+            String city = (String) input.get(CITY);
+            if (city.equals("")) {
+                input.remove(CITY);
+            }
+        }
 
         return input;
     }

@@ -26,6 +26,14 @@ import com.maxdemarzi.Exceptions;
      static final Exceptions missingIsLookingForParameter = new Exceptions(400, "Missing is_looking_for Parameter.");
      static final Exceptions emptyIsLookingForParameter = new Exceptions(400, "Empty is_looking_for Parameter.");
 
+     static final Exceptions missingDistanceParameter = new Exceptions(400, "Missing distance Parameter.");
+     static final Exceptions emptyDistanceParameter = new Exceptions(400, "Empty distance Parameter.");
+     static final Exceptions invalidDistanceParameter = new Exceptions(400, "Invalid distance Parameter.");
+
+     static final Exceptions missingCityParameter = new Exceptions(400, "Missing city Parameter.");
+     static final Exceptions emptyCityParameter = new Exceptions(400, "Empty city Parameter.");
+
+
      static final Exceptions userNotFound = new Exceptions(400, "User not Found.");
 
     UserExceptions(int code, String error) {
