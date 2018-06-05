@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import static com.maxdemarzi.schema.Properties.LOCATION;
+import static com.maxdemarzi.schema.Properties.LOWERCASE_NAME;
 import static com.maxdemarzi.schema.Properties.NAME;
 import static com.maxdemarzi.schema.Properties.USERNAME;
 
@@ -30,6 +31,10 @@ public class Schema {
                     schema.constraintFor(Labels.Attribute)
                             .assertPropertyIsUnique(NAME)
                             .create();
+                    schema.constraintFor(Labels.Attribute)
+                            .assertPropertyIsUnique(LOWERCASE_NAME)
+                            .create();
+
                     tx.success();
                     results.add("(:Attribute {name}) constraint created");
                 }

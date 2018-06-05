@@ -20,7 +20,11 @@ A Neo4j Based Dating Site Backend
 
         :POST /v1/schema/create
         
-6. API:
+6. Seed the data:
+
+        :POST /v1/seed/attributes        
+        
+7. API:
          
         :GET    /v1/attributes/{name}
         :GET    /v1/users/{username}   
@@ -57,7 +61,7 @@ A Neo4j Based Dating Site Backend
         :GET    /v1/countries
         :GET    /v1/countries/{code}/states
         
-7. Query Parameters:
+8. Query Parameters:
         
         username2=maxdemarzi or any valid username
         limit=25 or any whole number
