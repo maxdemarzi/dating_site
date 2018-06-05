@@ -22,61 +22,95 @@
     <link rel="apple-touch-icon" sizes="152x152" href="/assets/ico/apple-touch-icon-152x152.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/ico/apple-touch-icon-180x180.png" />
 </head>
-<body>
-<div class="container-fluid container">
-    <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-faded shadow">
-        <div class="container compress">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="/">
-                <img src="/assets/img/grittier-solid.svg" width="30" height="30" alt="">
-            </a>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/categories">Latest</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/categories">Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tags">Tags</a>
-                    </li>
 
-                </ul>
-                <form class="form-inline my-2 my-lg-0" action="/search" method="POST">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" name="q">
-                </form>
-                <ul class="navbar-nav">
-                    @if (user != null) {
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="https://www.gravatar.com/avatar/@user.getHash()?s=32&d=retro" class="rounded-circle" />
-                            @user.getUsername()
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="/user/@user.getUsername()">View Profile</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/user/@user.getUsername()/following">Following</a>
-                            <a class="dropdown-item" href="/user/@user.getUsername()/followers">Followers</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/logout">Log out</a>
-                        </div>
-                    </li>
-                    } else {
-                    <li><a class="btn btn-primary" href="/login" role="button">Login</a></li>
-                    <li>&nbsp;</li>
-                    <li><a class="btn btn-secondary" href="/register" role="button">Register</a></li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
+<body class="with-top-navbar">
+
+
+
+<div class="growl" id="app-growl"></div>
+
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-danger app-navbar">
+
+    <a class="navbar-brand" href="/home">
+        <img src="/assets/img/logo.png" alt="brand">
+    </a>
+
+    <button
+            class="navbar-toggler navbar-toggler-right d-md-none"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarResponsive"
+            aria-controls="navbarResponsive"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/home">Matches <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/competition">Competition</a>
+            </li>
+
+            @if (user != null) {
+                <li class="nav-item">
+                    <a class="nav-link" href="/high_fives">High Fives</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/low_fives">Low Fives</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="modal" href="#msgModal">Messages</a>
+                </li>
+                <li class="nav-item d-md-none">
+                    <a class="nav-link" href="/notifications">Notifications</a>
+                </li>
+                <li class="nav-item d-md-none">
+                    <a class="nav-link" data-action="growl">Growl</a>
+                </li>
+                <li class="nav-item d-md-none">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            } else {
+            <li><a class="btn btn-primary" href="/login" role="button">Login</a></li>
+            <li>&nbsp;</li>
+            <li><a class="btn btn-secondary" href="/register" role="button">Register</a></li>
+            }
+
+        </ul>
+
+        <form class="form-inline float-right d-none d-md-flex" action="/search" method="POST">
+            <input class="form-control" type="text" data-action="grow" placeholder="Search" name="q">
+        </form>
+        @if (user != null) {
+            <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-0 d-none d-md-flex">
+                <li class="nav-item">
+                    <a class="app-notifications nav-link" href="/notifications">
+                        <span class="icon icon-bell"></span>
+                    </a>
+                </li>
+                <li class="nav-item ml-2">
+                    <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover">
+                        <img class="rounded-circle" src="https://www.gravatar.com/avatar/@user.getHash()?s=32&d=retro" >
+                        @user.getUsername()
+                    </button>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav d-none" id="js-popoverContent">
+                <li class="nav-item"><a class="nav-link" href="#" data-action="growl">Growl</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+            </ul>
+        }
+    </div>
+</nav>
+
 <br/>
 @content
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

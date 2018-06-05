@@ -1,0 +1,11 @@
+@import com.maxdemarzi.models.Post
+
+@args (Post post)
+<div class="card">
+    <div class="card-block">
+        <a href="/user/@post.getUsername()"><img src="https://www.gravatar.com/avatar/@post.getHash()?s=48&d=retro" class="rounded" /></a>
+        @post.getName() <a href="/user/@post.getUsername()">@@@post.getUsername()</a> - @post.humanTime()<br>
+        @post.getStatus()<br>
+        <span class="post"><a href="/like/@post.getUsername()/@post.getTime()"><img src="/assets/img/1f497.png" height="16" width="16"> xxxxx</a></span>
+    </div>
+</div>

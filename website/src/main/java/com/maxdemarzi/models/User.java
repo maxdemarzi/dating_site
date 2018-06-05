@@ -2,8 +2,6 @@ package com.maxdemarzi.models;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -22,7 +20,11 @@ public class User {
     private Integer low_fives;
     private Integer high_fives;
     private Integer distance;
+    private Integer wants;
+    private Integer has;
+    private String city;
 
-    private ArrayList<HashMap<String, Object>> wants;
-    private ArrayList<HashMap<String, Object>> has;
+    public String IsLookingFor() {
+        return String.join(",", is_looking_for).replaceAll("man", "men");
+    }
 }

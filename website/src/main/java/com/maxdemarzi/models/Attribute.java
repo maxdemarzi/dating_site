@@ -7,6 +7,6 @@ public class Attribute {
     private String name;
     private Integer wants;
     private Integer has;
-    private boolean want;
-    private boolean have;
+    private Boolean want;
+    private Boolean have;
 }

@@ -3,21 +3,106 @@
 @args (User user)
 
 @if (user != null) {
-<div class="card">
-    <img class="card-img-top" src="/assets/img/card-top.png" height="85" alt="Card image cap">
-    <div class="card-block p-1">
-        <div class="d-flex flex-row">
-            <div class="p-1"><img src="https://www.gravatar.com/avatar/@user.getHash()?s=72&d=retro" class="rounded" /></div>
-            <div> <h5>@user.getName()</h5>
-                <a href="/user/@user.getUsername()" style="font-size:small;">@@@user.getUsername()</a>
-            </div>
+
+<div class="col-lg-3">
+    <div class="card card-profile mb-4">
+        <div class="card-header" style="background-image: url(/assets/img/iceland.jpg);"></div>
+        <div class="card-body text-center">
+            <a href="/user/@user.getUsername()">
+                <img
+                        class="card-profile-img"
+                        src="https://www.gravatar.com/avatar/@user.getHash()?s=72&d=retro">
+            </a>
+
+            <h6 class="card-title">
+                <a class="text-inherit" href="/user/@user.getUsername()">@user.getName() ( @@@user.getUsername() )</a>
+            </h6>
+
+            <p class="mb-4">@user.getIs() looking for @user.IsLookingFor() </p>
+
+            <ul class="card-menu">
+                <li class="card-menu-item">
+                    <a href="#userModal" class="text-inherit" data-toggle="modal">
+                        Posts
+                        <h6 class="my-0"><a href="/user/@user.getUsername()">@user.getPosts()</a></h6>
+                    </a>
+                </li>
+            </ul>
+            <ul class="card-menu">
+                <li class="card-menu-item">
+                    <a href="#userModal" class="text-inherit" data-toggle="modal">
+                        Has
+                        <h6 class="my-0"><a href="/user/@user.getUsername()/has">@user.getHas()</a></h6>
+                    </a>
+                </li>
+
+                <li class="card-menu-item">
+                    <a href="#userModal" class="text-inherit" data-toggle="modal">
+                        Wants
+                        <h6 class="my-0"><a href="/user/@user.getUsername()/wants">@user.getWants()</a></h6>
+                    </a>
+                </li>
+            </ul>
+            <ul class="card-menu">
+                <li class="card-menu-item">
+                    <a href="#userModal" class="text-inherit" data-toggle="modal">
+                        Likes
+                        <h6 class="my-0"><a href="/user/@user.getUsername()/likes">@user.getLikes()</a></h6>
+                    </a>
+                </li>
+
+                <li class="card-menu-item">
+                    <a href="#userModal" class="text-inherit" data-toggle="modal">
+                        Hates
+                        <h6 class="my-0"><a href="/user/@user.getUsername()/hates">@user.getHates()</a></h6>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="d-flex flex-row">
-            <div class="p-1"><span class="small"><a href="/user/@user.getUsername()">Posts</a></span>
-                <br><a href="/user/@user.getUsername()">@user.getPosts()</a>
+    </div>
+
+    <div class="card d-md-block d-lg-block mb-4">
+        <div class="card-body">
+            <h6 class="mb-3">About <small>· <a href="#">Edit</a></small></h6>
+            <ul class="list-unstyled list-spaced">
+                <li><span class="text-muted icon icon-calendar mr-3"></span>Went to <a href="#">Oh, Canada</a>
+                <li><span class="text-muted icon icon-users mr-3"></span>Became friends with <a href="#">Obama</a>
+                <li><span class="text-muted icon icon-github mr-3"></span>Worked at <a href="#">Github</a>
+                <li><span class="text-muted icon icon-home mr-3"></span>Lives in <a href="#">San Francisco, CA</a>
+                <li><span class="text-muted icon icon-location-pin mr-3"></span>From <a href="#">Seattle, WA</a>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card d-md-block d-lg-block mb-4">
+        <div class="card-body">
+            <h6 class="mb-3">Photos <small>· <a href="#">Edit</a></small></h6>
+            <div data-grid="images" data-target-height="150">
+                <div>
+                    <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_5.jpg">
+                </div>
+
+                <div>
+                    <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_6.jpg">
+                </div>
+
+                <div>
+                    <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_7.jpg">
+                </div>
+
+                <div>
+                    <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_8.jpg">
+                </div>
+
+                <div>
+                    <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_9.jpg">
+                </div>
+
+                <div>
+                    <img data-width="640" data-height="640" data-action="zoom" src="assets/img/instagram_10.jpg">
+                </div>
             </div>
         </div>
     </div>
 </div>
-<br/>
 }

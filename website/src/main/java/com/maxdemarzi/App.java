@@ -1,9 +1,6 @@
 package com.maxdemarzi;
 
-import com.maxdemarzi.models.City;
-import com.maxdemarzi.models.Post;
-import com.maxdemarzi.models.Tag;
-import com.maxdemarzi.models.User;
+import com.maxdemarzi.models.*;
 import com.typesafe.config.Config;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -94,7 +91,7 @@ public class App extends Jooby {
           }
       });
       get("/autocomplete/city/{query}", req -> {
-         Response<List<City>> cityResponse = api.autoCompleteCity(req.param("query").value(), "full_name").execute();
+         Response<List<City>> cityResponse = api.autoCompleteCity(req.param("query").value().toLowerCase(), "full_name").execute();
           if (cityResponse.isSuccessful()) {
               return cityResponse.body();
           }
@@ -193,6 +190,19 @@ public class App extends Jooby {
 
       });
 
+//      get("/attributes", req -> {
+//          String requested_by = req.get("requested_by");
+//          if (requested_by.equals("anonymous")) requested_by = null;
+//          User authenticated = getUserProfile(requested_by);
+//
+//          Response<List<Attribute>> attributesResponse = api.getAttributes(0, 25, authenticated.getUsername()).execute();
+//          List<Attribute> attributes = new ArrayList<>();
+//          if (attributesResponse.isSuccessful()) {
+//              attributes = attributesResponse.body();
+//          }
+//          return views.attributes.template();
+//      });
+
       use(new Pac4j().client(conf -> new FormClient("/login", new ServiceAuthenticator())));
 
       get("/home", req -> {
@@ -201,7 +211,22 @@ public class App extends Jooby {
           String username = profile.getUsername();
           User authenticated = getUserProfile(username);
 
-          Response<List<Post>> timelineResponse = api.getTimeline(username).execute();
+          Response<List<Post>> timelineResponse = api.getTimeline(username, false).execute();
+          List<Post> posts = new ArrayList<>();
+          if (timelineResponse.isSuccessful()) {
+              posts = timelineResponse.body();
+          }
+
+          return views.home.template(authenticated, authenticated, posts, getTags());
+      });
+
+      get("/competition", req -> {
+          // TODO: 4/27/18 Allow anonymous to view competition?
+          CommonProfile profile = require(CommonProfile.class);
+          String username = profile.getUsername();
+          User authenticated = getUserProfile(username);
+
+          Response<List<Post>> timelineResponse = api.getTimeline(username, true).execute();
           List<Post> posts = new ArrayList<>();
           if (timelineResponse.isSuccessful()) {
               posts = timelineResponse.body();

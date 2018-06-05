@@ -6,63 +6,13 @@
 @args (User authenticated, User user, List<Post> posts, List<Tag> trends)
 
 @views.main.template(user.getUsername(), authenticated) -> {
-<div class="container-fluid pt-5">
+    <div class="container-fluid container pt-5">
     <div class="row">
-        <div class="col-12">
-            <div class="jumbotron" style="background-color: #663366">
-                <h1 class="text-white">@@@user.getUsername()</h1>
-            </div>
+        @views.partials._user.template(user)
+        <div class="col-lg-6">
+
         </div>
-    </div>
-</div>
-
-<br/>
-    <div class="container-fluid container">
-        <div class="row">
-            <div class="col-3">
-                <div class="card">
-                    <div class="card-block">
-                        <h5>
-                            <img src="https://www.gravatar.com/avatar/@user.getHash()?s=72&d=retro" class="rounded" />
-                            @user.getName() <br>
-                        </h5>
-                        <a href="/user/@user.getUsername()" style="font-size:small;">@user.getUsername()</a><br>
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="card">
-                    <div class="card-block">
-                        <div class="card-outline-info">
-                            <table width="100%">
-                                <tr>
-                                    <td><span class="small"><a href="/user/@user.getUsername()">Posts</a></span></td>
-                                    <td><span class="small"><a href="/user/@user.getUsername()/likes">Likes</a></span></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="/user/@user.getUsername()">@user.getPosts()</a></td>
-                                    <td><a href="/user/@user.getUsername()/likes">@user.getLikes()</a></td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <br/>
-                        @for (it: posts) {
-                        <div class="card">
-                            <div class="card-block">
-                                <img src="https://www.gravatar.com/avatar/@it.getHash()?s=48&d=retro" class="rounded" />
-                                @it.getName() @@ @it.getUsername() - @it.humanTime()<br>
-                                @it.getStatus()<br>
-                                <span class="post"><a href="/like/@it.getUsername()/@it.getTime()"><img src="/assets/img/1f497.png" height="16" width="16"> xxxxx</a></span>
-                            </div>
-                        </div>
-                        }
-
-                    </div>
-                </div>
-            </div>
-            <div class="col-3">
+        <div class="col-lg-3">
                 @views.partials._trends.template(trends)
             </div>
         </div>

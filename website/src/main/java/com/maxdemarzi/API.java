@@ -19,6 +19,10 @@ import java.util.List;
 
 public interface API {
 
+    @GET("attributes")
+    Call<List<Attribute>> getAttributes(@Query("offset") Integer offset,
+                                        @Query("limit") Integer limit,
+                                        @Query("username") String username);
 
     @GET("attributes/{name}")
     Call<Attribute> getAttribute(@Path("name") String name);
@@ -123,7 +127,8 @@ public interface API {
     Call<List<Post>> getMentions(@Path("username") String username);
 
     @GET("users/{username}/timeline")
-    Call<List<Post>> getTimeline(@Path("username") String username);
+    Call<List<Post>> getTimeline(@Path("username") String username,
+                                 @Query("competition") Boolean competition);
 
     @GET("tags")
     Call<List<Tag>> getTags();
