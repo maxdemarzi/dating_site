@@ -30,6 +30,7 @@ import java.util.Map;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
+import static com.maxdemarzi.schema.Properties.BIO;
 import static com.maxdemarzi.schema.Properties.CITY;
 import static com.maxdemarzi.schema.Properties.DISTANCE;
 import static com.maxdemarzi.schema.Properties.EMAIL;
@@ -121,6 +122,7 @@ public class Users {
                     user = db.createNode(Labels.User);
                     user.setProperty(EMAIL, parameters.get(EMAIL));
                     user.setProperty(NAME, parameters.get(NAME));
+                    user.setProperty(BIO, parameters.get(BIO));
                     user.setProperty(USERNAME, parameters.get(USERNAME));
                     user.setProperty(PASSWORD, parameters.get(PASSWORD));
                     user.setProperty(IS, parameters.get(IS));

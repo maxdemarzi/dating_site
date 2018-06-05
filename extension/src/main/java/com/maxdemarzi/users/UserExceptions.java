@@ -20,6 +20,9 @@ import com.maxdemarzi.Exceptions;
      static final Exceptions missingPasswordParameter = new Exceptions(400, "Missing password Parameter.");
      static final Exceptions emptyPasswordParameter = new Exceptions(400, "Empty password Parameter.");
 
+     static final Exceptions missingBioParameter = new Exceptions(400, "Missing bio Parameter.");
+     static final Exceptions emptyBioParameter = new Exceptions(400, "Empty bio Parameter.");
+
      static final Exceptions missingIsParameter = new Exceptions(400, "Missing is Parameter.");
      static final Exceptions emptyIsParameter = new Exceptions(400, "Empty is Parameter.");
 
@@ -32,7 +35,6 @@ import com.maxdemarzi.Exceptions;
 
      static final Exceptions missingCityParameter = new Exceptions(400, "Missing city Parameter.");
      static final Exceptions emptyCityParameter = new Exceptions(400, "Empty city Parameter.");
-
 
      static final Exceptions userNotFound = new Exceptions(400, "User not Found.");
 

@@ -21,7 +21,7 @@ public class GetTimelineTest {
     public void shouldGetTimeline() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=1525135318").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertEquals(expected, actual);
     }
@@ -30,7 +30,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineLimited() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?limit=1").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?limit=1&since=1525135318").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -50,7 +50,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineWithDistance() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?distance=15000").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?distance=15000&since=1525135318").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -59,7 +59,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineLocation() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?city=Chicago&state=Illinois").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?city=Chicago&state=Illinois&since=1525135318").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -69,7 +69,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineCompetition() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?competition=true").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?competition=true&since=1525135318").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertEquals(competition, actual);
     }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.maxdemarzi.schema.Properties.BIO;
 import static com.maxdemarzi.schema.Properties.CITY;
 import static com.maxdemarzi.schema.Properties.DISTANCE;
 import static com.maxdemarzi.schema.Properties.EMAIL;
@@ -72,6 +73,15 @@ public class UserValidator {
             String password = (String) input.get(PASSWORD);
             if (password.equals("")) {
                 throw UserExceptions.emptyPasswordParameter;
+            }
+        }
+
+        if (!input.containsKey(BIO)) {
+            throw UserExceptions.missingBioParameter;
+        } else {
+            String name = (String) input.get(BIO);
+            if (name.equals("")) {
+                throw UserExceptions.emptyBioParameter;
             }
         }
 

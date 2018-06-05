@@ -187,6 +187,34 @@ public class CreateUserTest {
     }
 
     @Test
+    public void shouldNotCreateUserMissingBio() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), missingBioInput);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Missing bio Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+
+    @Test
+    public void shouldNotCreateUserEmptyBio() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users").toString(), emptyBioInput);
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Empty bio Parameter.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(USERNAME));
+        Assert.assertFalse(actual.containsKey(EMAIL));
+        Assert.assertFalse(actual.containsKey(NAME));
+        Assert.assertFalse(actual.containsKey(PASSWORD));
+    }
+
+    @Test
     public void shouldNotCreateUserMissingIs() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
@@ -295,6 +323,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "swordfish");
+        put("bio", "some bio");
         put("is", "man");
         put("is_looking_for", new String[]{"woman"});
         put("distance", 10000);
@@ -345,6 +374,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "asdfasf");
+        put("bio", "some bio");
     }};
 
     private static final HashMap emptyIsInput = new HashMap<String, Object>() {{
@@ -352,6 +382,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "asdfasf");
+        put("bio", "some bio");
         put("is", "");
     }};
 
@@ -360,6 +391,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "asdfasf");
+        put("bio", "some bio");
         put("is", "male");
     }};
 
@@ -368,6 +400,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "asdfasf");
+        put("bio", "some bio");
         put("is", "male");
         put("is_looking_for", new String[]{});
     }};
@@ -377,6 +410,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "asdfasf");
+        put("bio", "some bio");
         put("is", "male");
         put("is_looking_for", null);
     }};
@@ -394,11 +428,27 @@ public class CreateUserTest {
         put("password", "");
     }};
 
+    private static final HashMap missingBioInput = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "123");
+    }};
+
+    private static final HashMap emptyBioInput = new HashMap<String, Object>() {{
+        put("username", "maxdemarzi");
+        put("email", "maxdemarzi@hotmail.com");
+        put("name", "Max De Marzi");
+        put("password", "123");
+        put("bio", "");
+    }};
+
     private static final HashMap existingUsernameInput = new HashMap<String, Object>() {{
         put("username", "jexp");
         put("email", "michael@hotmail.com");
         put("name", "Michael Hunger");
         put("password", "password");
+        put("bio", "some bio");
         put("is", "man");
         put("is_looking_for", new String[]{"woman"});
         put("distance", 10000);
@@ -410,6 +460,7 @@ public class CreateUserTest {
         put("email", "michael@neo4j.com");
         put("name", "Michael Hunger");
         put("password", "password");
+        put("bio", "some bio");
         put("is", "man");
         put("is_looking_for", new String[]{"woman"});
         put("distance", 10000);
@@ -421,6 +472,7 @@ public class CreateUserTest {
         put("email", "maxdemarzi@hotmail.com");
         put("name", "Max De Marzi");
         put("password", "swordfish");
+        put("bio", "some bio");
         put("hash","58750f2179edbd650b471280aa66fee5");
         put("is", "man");
         put("is_looking_for", new ArrayList<String>(){{add("woman");}});
