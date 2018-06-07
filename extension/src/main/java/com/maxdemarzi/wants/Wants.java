@@ -58,7 +58,7 @@ public class Wants {
             HashSet<Node> user2Wants = new HashSet<>();
             if (username2 != null) {
                 user2 = Users.findUser(username2, db);
-                for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {
+                for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.HAS)) {
                     user2Has.add(r1.getEndNode());
                 }
                 for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {

@@ -104,7 +104,7 @@ public class GetWantsTest {
             put("has", 0);
             put("wants", 2);
             put("want", true);
-            put("have", true);
+            put("have", false);
         }});
     }};
 }
