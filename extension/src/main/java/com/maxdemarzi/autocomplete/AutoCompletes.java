@@ -39,6 +39,7 @@ public class AutoCompletes {
         add("full_name");
         add("lowercase_full_name");
         add("username");
+        add("name");
         add("lowercase_name");
     }};
 
