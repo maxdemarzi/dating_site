@@ -1,5 +1,6 @@
 package com.maxdemarzi.users;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.posts.PostExceptions;
 import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
@@ -55,7 +56,7 @@ import static com.maxdemarzi.schema.Properties.WANTS;
 @Path("/users")
 public class Users {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
 
     @GET
     @Path("/{username}")
