@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.maxdemarzi.schema.Properties.EMAIL;
 import static com.maxdemarzi.schema.Properties.LOCATION;
 import static com.maxdemarzi.schema.Properties.LOWERCASE_NAME;
 import static com.maxdemarzi.schema.Properties.NAME;
@@ -43,8 +44,12 @@ public class Schema {
                     schema.constraintFor(Labels.User)
                             .assertPropertyIsUnique(USERNAME)
                             .create();
+                    schema.constraintFor(Labels.User)
+                            .assertPropertyIsUnique(EMAIL)
+                            .create();
                     tx.success();
                     results.add("(:User {username}) constraint created");
+                    results.add("(:User {email}) constraint created");
                 }
             }
 

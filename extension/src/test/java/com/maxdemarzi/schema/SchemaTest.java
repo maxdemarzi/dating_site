@@ -23,6 +23,7 @@ public class SchemaTest {
     private static final ArrayList expected = new ArrayList<String>() {{
         add("(:Attribute {lowercase_name}) constraint created");
         add("(:User {username}) constraint created");
+        add("(:User {email}) constraint created");
         add("(:City {location}) index created");
         add("(:Tag {name}) constraint created");
         add("(:Thing {name}) constraint created");

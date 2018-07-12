@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.temporal.ChronoUnit;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -114,24 +114,23 @@ public class Users {
     public Response createUser(String body, @Context GraphDatabaseService db) throws IOException {
         HashMap parameters = UserValidator.validate(body);
         Map<String, Object> results;
+        String username = ((String)parameters.get(USERNAME)).toLowerCase();
+        String email = ((String)parameters.get(EMAIL)).toLowerCase();
         try (Transaction tx = db.beginTx()) {
-            Node user = db.findNode(Labels.User, USERNAME, parameters.get(USERNAME));
+            Node user = db.findNode(Labels.User, USERNAME, username);
             if (user == null) {
-                user = db.findNode(Labels.User, EMAIL, parameters.get(EMAIL));
+                user = db.findNode(Labels.User, EMAIL, email);
                 if (user == null) {
                     user = db.createNode(Labels.User);
-                    user.setProperty(EMAIL, parameters.get(EMAIL));
+                    user.setProperty(EMAIL, email);
                     user.setProperty(NAME, parameters.get(NAME));
                     user.setProperty(BIO, parameters.get(BIO));
-                    user.setProperty(USERNAME, parameters.get(USERNAME));
+                    user.setProperty(USERNAME, username);
                     user.setProperty(PASSWORD, parameters.get(PASSWORD));
                     user.setProperty(IS, parameters.get(IS));
                     user.setProperty(IS_LOOKING_FOR, parameters.get(IS_LOOKING_FOR));
-                    user.setProperty(HASH, new Md5Hash(((String)parameters.get(EMAIL)).toLowerCase()).toString());
-
-                    LocalDateTime dateTime = LocalDateTime.now(utc);
-                    user.setProperty(TIME, dateTime.truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC));
-
+                    user.setProperty(HASH, new Md5Hash(email).toString());
+                    user.setProperty(TIME, ZonedDateTime.now(utc));
                     user.setProperty(DISTANCE, parameters.get(DISTANCE));
 
                     Node city = db.findNode(Labels.City, FULL_NAME, parameters.get(CITY));
@@ -182,7 +181,7 @@ public class Users {
 
     public static Node findUser(String username, @Context GraphDatabaseService db) {
         if (username == null) { return null; }
-        Node user = db.findNode(Labels.User, USERNAME, username);
+        Node user = db.findNode(Labels.User, USERNAME, username.toLowerCase());
         if (user == null) { throw UserExceptions.userNotFound; }
         return user;
     }
