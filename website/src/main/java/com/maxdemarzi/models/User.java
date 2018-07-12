@@ -14,7 +14,7 @@ public class User {
     private String hash;
     private String is;
     private List<String> is_looking_for;
-    private Long time;
+    private String time;
     private Integer likes;
     private Integer hates;
     private Integer posts;

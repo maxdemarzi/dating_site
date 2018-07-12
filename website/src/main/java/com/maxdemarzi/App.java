@@ -1,6 +1,11 @@
 package com.maxdemarzi;
 
-import com.maxdemarzi.models.*;
+import com.maxdemarzi.models.Attribute;
+import com.maxdemarzi.models.Post;
+import com.maxdemarzi.models.Tag;
+import com.maxdemarzi.models.Thing;
+import com.maxdemarzi.models.User;
+import com.maxdemarzi.routes.AutoCompletes;
 import com.typesafe.config.Config;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -22,7 +27,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import views.index;
-import views.login;
 import views.register;
 
 import java.util.ArrayList;
@@ -33,11 +37,14 @@ import static java.lang.Thread.sleep;
 
 
 public class App extends Jooby {
-    static API api;
+    public static API api;
   {
 
       // Debug friendly error messages
       on("dev", () -> use(new Whoops()));
+
+      // Secure it
+      securePort(8443);
 
       // Configure Jackson
       use(new Jackson().doWith(mapper -> {
@@ -86,47 +93,23 @@ public class App extends Jooby {
 
       // Publicly Accessible
       get("/", index::template);
-      get("/login", login::template);
       get("/register", register::template);
       post("/register", (req, rsp) -> {
           User user = req.form(User.class);
           user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
           Response<User> response = api.createUser(user).execute();
           if (response.isSuccessful()) {
-              Results.redirect("/login");
+              Results.redirect("/");
           } else {
               throw new Err(Status.CONFLICT, "There was a problem with your registration.");
           }
       });
 
-      get("/autocomplete/city/{query}", req -> {
-         Response<List<City>> cityResponse = api.autoCompleteCity(req.param("query").value().toLowerCase(), "full_name").execute();
-          if (cityResponse.isSuccessful()) {
-              return cityResponse.body();
-          }
-          throw new Err(Status.CONFLICT, "There was a problem autocompleting the city");
-      }).produces("json");
-
-      get("/autocomplete/attribute/{query}", req -> {
-          Response<List<Attribute>> attributeResponse = api.autoCompleteAttribute(req.param("query").value().toLowerCase(), "name").execute();
-          if (attributeResponse.isSuccessful()) {
-              return attributeResponse.body();
-          }
-          throw new Err(Status.CONFLICT, "There was a problem autocompleting the attribute");
-      }).produces("json");
-
-
-      get("/autocomplete/thing/{query}", req -> {
-          Response<List<Thing>> thingResponse = api.autoCompleteThing(req.param("query").value().toLowerCase(), "name").execute();
-          if (thingResponse.isSuccessful()) {
-              return thingResponse.body();
-          }
-          throw new Err(Status.CONFLICT, "There was a problem autocompleting the thing");
-      }).produces("json");
+      use(new AutoCompletes());
 
       use("*", (req, rsp, chain) -> {
           ProfileManager pm = require(ProfileManager.class);
-          CommonProfile profile = (CommonProfile) pm.get(req.ifSession().isPresent()).orElseGet( () -> getAnonymous());
+          CommonProfile profile = (CommonProfile) pm.get(req.ifSession().isPresent()).orElseGet(this::getAnonymous);
 
           req.set("requested_by", profile.getUsername());
           chain.next(req, rsp);
@@ -292,7 +275,7 @@ public class App extends Jooby {
 //          return views.attributes.template();
 //      });
 
-      use(new Pac4j().client(conf -> new FormClient("/login", new ServiceAuthenticator())));
+      use(new Pac4j().client(conf -> new FormClient("/", new ServiceAuthenticator())));
 
       get("/home", req -> {
           // TODO: 4/27/18 Allow anonymous to view home?
