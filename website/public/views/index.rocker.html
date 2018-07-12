@@ -45,6 +45,20 @@
                             <h1 class="cover-heading">Five and Sex</h1>
                             <p class="lead">A new dating site for fives and sixes.</p>
 
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" id="credentials" style="display: none;">
+                                <strong>Wrong!</strong> Your username or password is incorrect.
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <script>
+                                if(window.location.search.includes("BadCredentialsException")) {
+                                    document.getElementById("credentials").style.display = "block";
+                                } else {
+                                    document.getElementById("credentials").style.display = "none";
+                                }
+                            </script>
+
                             <div class="form-group">
                                 <input type="text" placeholder="Username" name="username" id="username" class="form-control" autofocus>
                             </div>
