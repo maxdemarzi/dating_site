@@ -77,6 +77,14 @@ public class App extends Jooby {
       assets("/assets/**");
       assets("/favicon.ico", "/assets/favicon.ico");
 
+      // Footer Pages
+      get("/about", views.footer.about::template);
+      get("/cookies", views.footer.cookies::template);
+      get("/help", views.footer.help::template);
+      get("/privacy", views.footer.privacy::template);
+      get("/terms", views.footer.terms::template);
+
+      // Publicly Accessible
       get("/", index::template);
       get("/login", login::template);
       get("/register", register::template);
@@ -90,6 +98,7 @@ public class App extends Jooby {
               throw new Err(Status.CONFLICT, "There was a problem with your registration.");
           }
       });
+
       get("/autocomplete/city/{query}", req -> {
          Response<List<City>> cityResponse = api.autoCompleteCity(req.param("query").value().toLowerCase(), "full_name").execute();
           if (cityResponse.isSuccessful()) {
@@ -98,6 +107,22 @@ public class App extends Jooby {
           throw new Err(Status.CONFLICT, "There was a problem autocompleting the city");
       }).produces("json");
 
+      get("/autocomplete/attribute/{query}", req -> {
+          Response<List<Attribute>> attributeResponse = api.autoCompleteAttribute(req.param("query").value().toLowerCase(), "name").execute();
+          if (attributeResponse.isSuccessful()) {
+              return attributeResponse.body();
+          }
+          throw new Err(Status.CONFLICT, "There was a problem autocompleting the attribute");
+      }).produces("json");
+
+
+      get("/autocomplete/thing/{query}", req -> {
+          Response<List<Thing>> thingResponse = api.autoCompleteThing(req.param("query").value().toLowerCase(), "name").execute();
+          if (thingResponse.isSuccessful()) {
+              return thingResponse.body();
+          }
+          throw new Err(Status.CONFLICT, "There was a problem autocompleting the thing");
+      }).produces("json");
 
       use("*", (req, rsp, chain) -> {
           ProfileManager pm = require(ProfileManager.class);
@@ -106,26 +131,6 @@ public class App extends Jooby {
           req.set("requested_by", profile.getUsername());
           chain.next(req, rsp);
       });
-
-//      get("/user/{username}/likes", req -> {
-//          String requested_by = req.get("requested_by");
-//          if (requested_by.equals("anonymous")) requested_by = null;
-//          User authenticated = getUserProfile(requested_by);
-//
-//          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-//          if (userResponse.isSuccessful()) {
-//              User user = userResponse.body();
-//
-//              Response<List<Thing>> timelineResponse = api.getLikes(req.param("username").value()).execute();
-//              List<Post> posts = new ArrayList<>();
-//              if (timelineResponse.isSuccessful()) {
-//                  posts = timelineResponse.body();
-//              }
-//              return views.home.template(authenticated, user, posts, getTags());
-//          } else {
-//              throw new Err(Status.BAD_REQUEST);
-//          }
-//      });
 
       get("/user/{username}", req -> {
           String requested_by = req.get("requested_by");
@@ -143,6 +148,90 @@ public class App extends Jooby {
               }
 
               return views.user.template(authenticated, user, posts, getTags());
+          } else {
+              throw new Err(Status.BAD_REQUEST);
+          }
+      });
+
+      get("/user/{username}/has", req -> {
+          String requested_by = req.get("requested_by");
+          if (requested_by.equals("anonymous")) requested_by = null;
+          User authenticated = getUserProfile(requested_by);
+
+          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
+          if (userResponse.isSuccessful()) {
+              User user = userResponse.body();
+
+              Response<List<Attribute>> attributesResponse = api.getHas(user.getUsername(), requested_by).execute();
+              List<Attribute> attributes = new ArrayList<>();
+              if (attributesResponse.isSuccessful()) {
+                  attributes = attributesResponse.body();
+              }
+
+              return views.attributes.template(authenticated, user, attributes);
+          } else {
+              throw new Err(Status.BAD_REQUEST);
+          }
+      });
+
+      get("/user/{username}/wants", req -> {
+          String requested_by = req.get("requested_by");
+          if (requested_by.equals("anonymous")) requested_by = null;
+          User authenticated = getUserProfile(requested_by);
+
+          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
+          if (userResponse.isSuccessful()) {
+              User user = userResponse.body();
+
+              Response<List<Attribute>> attributesResponse = api.getWants(user.getUsername(), requested_by).execute();
+              List<Attribute> attributes = new ArrayList<>();
+              if (attributesResponse.isSuccessful()) {
+                  attributes = attributesResponse.body();
+              }
+
+              return views.attributes.template(authenticated, user, attributes);
+          } else {
+              throw new Err(Status.BAD_REQUEST);
+          }
+      });
+
+      get("/user/{username}/likes", req -> {
+          String requested_by = req.get("requested_by");
+          if (requested_by.equals("anonymous")) requested_by = null;
+          User authenticated = getUserProfile(requested_by);
+
+          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
+          if (userResponse.isSuccessful()) {
+              User user = userResponse.body();
+
+              Response<List<Thing>> thingsResponse = api.getLikes(user.getUsername(), requested_by).execute();
+              List<Thing> things = new ArrayList<>();
+              if (thingsResponse.isSuccessful()) {
+                  things = thingsResponse.body();
+              }
+
+              return views.things.template(authenticated, user, things);
+          } else {
+              throw new Err(Status.BAD_REQUEST);
+          }
+      });
+
+      get("/user/{username}/hates", req -> {
+          String requested_by = req.get("requested_by");
+          if (requested_by.equals("anonymous")) requested_by = null;
+          User authenticated = getUserProfile(requested_by);
+
+          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
+          if (userResponse.isSuccessful()) {
+              User user = userResponse.body();
+
+              Response<List<Thing>> thingsResponse = api.getHates(user.getUsername(), requested_by).execute();
+              List<Thing> things = new ArrayList<>();
+              if (thingsResponse.isSuccessful()) {
+                  things = thingsResponse.body();
+              }
+
+              return views.things.template(authenticated, user, things);
           } else {
               throw new Err(Status.BAD_REQUEST);
           }
@@ -240,10 +329,42 @@ public class App extends Jooby {
           CommonProfile profile = require(CommonProfile.class);
           String username = profile.getUsername();
 
-          Response<Post> response = api.createPost(post, username).execute();
+          Response<Post> response = api.createPost(username, post).execute();
           if (response.isSuccessful()) {
               sleep(1000);
               return Results.redirect("/home");
+          } else {
+              throw new Err(Status.BAD_REQUEST);
+          }
+      });
+
+      post("/attribute", req -> {
+          CommonProfile profile = require(CommonProfile.class);
+          String username = profile.getUsername();
+          Response<Attribute> response;
+          if (req.param("have_button").isSet()) {
+              response = api.createHas(username, req.param("attribute").value()).execute();
+          } else {
+              response = api.createWants(username, req.param("attribute").value()).execute();
+          }
+          if (response.isSuccessful()) {
+              return Results.redirect(req.header("Referer").value());
+          } else {
+              throw new Err(Status.BAD_REQUEST);
+          }
+      });
+
+      post("/thing", req -> {
+          CommonProfile profile = require(CommonProfile.class);
+          String username = profile.getUsername();
+          Response<Thing> response;
+          if (req.param("like_button").isSet()) {
+              response = api.createLikes(username, req.param("attribute").value()).execute();
+          } else {
+              response = api.createHates(username, req.param("attribute").value()).execute();
+          }
+          if (response.isSuccessful()) {
+              return Results.redirect(req.header("Referer").value());
           } else {
               throw new Err(Status.BAD_REQUEST);
           }

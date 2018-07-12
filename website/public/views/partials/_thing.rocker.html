@@ -1,29 +1,29 @@
-@import com.maxdemarzi.models.Attribute
+@import com.maxdemarzi.models.Thing
 
-@args (Attribute attribute)
+@args (Thing thing)
 <li class="media list-group-item p-4">
     <div class="media-body">
         <div class="media-body-text">
             <div class="media-heading">
-                <small class="float-right text-muted">added it on @attribute.when()</small>
-                <h6>@attribute.getName()</h6>
+                <small class="float-right text-muted">added it on @thing.when()</small>
+                <h6>@thing.getName()</h6>
             </div>
             <ul class="list-group">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Wants:
-                    <span class="badge badge-primary badge-pill">@attribute.getWants()</span>
+                    Likes:
+                    <span class="badge badge-primary badge-pill">@thing.getLikes()</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Has:
-                    <span class="badge badge-primary badge-pill">@attribute.getHas()</span>
+                    Hates:
+                    <span class="badge badge-primary badge-pill">@thing.getHates()</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Want:
-                    <span class="badge badge-primary badge-pill">@attribute.getWant()</span>
+                    Liked:
+                    <span class="badge badge-primary badge-pill">@thing.getLiked()</span>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Have:
-                    <span class="badge badge-primary badge-pill">@attribute.getHave()</span>
+                    Hated:
+                    <span class="badge badge-primary badge-pill">@thing.getHated()</span>
                 </li>
             </ul>
         </div>

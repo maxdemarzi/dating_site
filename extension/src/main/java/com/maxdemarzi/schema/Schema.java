@@ -29,14 +29,11 @@ public class Schema {
                 org.neo4j.graphdb.schema.Schema schema = db.schema();
                 if (!schema.getConstraints(Labels.Attribute).iterator().hasNext()) {
                     schema.constraintFor(Labels.Attribute)
-                            .assertPropertyIsUnique(NAME)
-                            .create();
-                    schema.constraintFor(Labels.Attribute)
                             .assertPropertyIsUnique(LOWERCASE_NAME)
                             .create();
 
                     tx.success();
-                    results.add("(:Attribute {name}) constraint created");
+                    results.add("(:Attribute {lowercase_name}) constraint created");
                 }
             }
 

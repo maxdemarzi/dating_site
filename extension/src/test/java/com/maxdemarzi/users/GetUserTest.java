@@ -22,6 +22,7 @@ public class GetUserTest {
         HashMap actual  = response.content();
         Assert.assertEquals(expected, actual);
     }
+
     private static final String FIXTURE =
             "CREATE (max:User {username:'maxdemarzi', " +
                     "email: 'maxdemarzi@hotmail.com', " +

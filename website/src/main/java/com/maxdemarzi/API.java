@@ -31,7 +31,8 @@ public interface API {
     Call<User> getUser(@Path("username") String username);
 
     @GET("users/{username}/profile")
-    Call<User> getProfile(@Path("username") String username, @Query("username2") String username2);
+    Call<User> getProfile(@Path("username") String username,
+                          @Query("username2") String username2);
 
     @POST("users")
     Call<User> createUser(@Body User user);
@@ -40,37 +41,40 @@ public interface API {
     Call<List<Post>> getPosts(@Path("username") String username);
 
     @POST("users/{username}/posts")
-    Call<Post> createPost(@Body Post post,
-                          @Path("username") String username);
+    Call<Post> createPost(@Path("username") String username,
+                          @Body Post post);
 
     @PUT("users/{username}/posts/{time}")
     Call<Post> updatePost(@Path("username") String username,
                           @Path("time") Long time);
 
     @GET("users/{username}/has")
-    Call<List<Attribute>> getHas(@Path("username") String username);
+    Call<List<Attribute>> getHas(@Path("username") String username,
+                                 @Query("username2") String username2);
 
     @POST("users/{username}/has/{attribute}")
-    Call<List<Attribute>> createHas(@Path("username") String username,
+    Call<Attribute> createHas(@Path("username") String username,
                                     @Path("attribute") String attribute);
 
     @DELETE("users/{username}/has/{attribute}")
-    Call<List<Attribute>> deleteHas(@Path("username") String username,
+    Call<Attribute> deleteHas(@Path("username") String username,
                                     @Path("attribute") String attribute);
 
     @GET("users/{username}/wants")
-    Call<List<Attribute>> getWants(@Path("username") String username);
+    Call<List<Attribute>> getWants(@Path("username") String username,
+                                   @Query("username2") String username2);
 
     @POST("users/{username}/wants/{attribute}")
-    Call<List<Attribute>> createWants(@Path("username") String username,
+    Call<Attribute> createWants(@Path("username") String username,
                                     @Path("attribute") String attribute);
 
     @DELETE("users/{username}/wants/{attribute}")
-    Call<List<Attribute>> deleteWants(@Path("username") String username,
+    Call<Attribute> deleteWants(@Path("username") String username,
                                     @Path("attribute") String attribute);
 
     @GET("users/{username}/likes")
-    Call<List<Thing>> getLikes(@Path("username") String username);
+    Call<List<Thing>> getLikes(@Path("username") String username,
+                               @Query("username2") String username2);
 
     @POST("users/{username}/likes/{thing}/")
     Call<Thing> createLikes(@Path("username") String username,
@@ -81,7 +85,8 @@ public interface API {
                            @Path("thing") String thing);
 
     @GET("users/{username}/hates")
-    Call<List<Thing>> getHates(@Path("username") String username);
+    Call<List<Thing>> getHates(@Path("username") String username,
+                               @Query("username2") String username2);
 
     @POST("users/{username}/hates/{thing}/")
     Call<Thing> createHates(@Path("username") String username,
@@ -145,6 +150,14 @@ public interface API {
     @GET("autocompletes/City/lowercase_full_name/{query}")
     Call<List<City>> autoCompleteCity(@Path("query") String query,
                                 @Query("display_property") String display_property);
+
+    @GET("autocompletes/Attribute/lowercase_name/{query}")
+    Call<List<Attribute>> autoCompleteAttribute(@Path("query") String query,
+                                      @Query("display_property") String display_property);
+
+    @GET("autocompletes/Thing/lowercase_name/{query}")
+    Call<List<Thing>> autoCompleteThing(@Path("query") String query,
+                                                @Query("display_property") String display_property);
 
     @GET("autocompletes/{label}/{property}/{query}")
     Call<Thing> getAutoCompletes(@Path("label") String label,

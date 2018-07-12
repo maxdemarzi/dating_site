@@ -1,0 +1,73 @@
+<ul class="graph-diagram-markup" data-internal-scale="1.78" data-external-scale="1">
+  <li class="node" data-node-id="0" data-x="-174.15730337078637" data-y="-137.65545105666246">
+    <span class="caption">User</span><dl class="properties"><dt>username</dt><dd>String</dd></dl></li>
+  <li class="node" data-node-id="1" data-x="137.5568710498595" data-y="-137.65545105666246">
+    <span class="caption">Thing</span><dl class="properties"><dt>name</dt><dd>String</dd></dl></li>
+  <li class="node" data-node-id="2" data-x="137.5568710498595" data-y="13.857202422752803">
+    <span class="caption">Thing</span>
+  </li>
+  <li class="node" data-node-id="3" data-x="501.8341242758075" data-y="-137.65545105666246">
+    <span class="caption">User</span>
+  </li>
+  <li class="node" data-node-id="4" data-x="-452.8623413771725" data-y="232.68247454353917">
+    <span class="caption">User</span>
+  </li>
+  <li class="node" data-node-id="5" data-x="-473.4667660145279" data-y="-561.7068776334268">
+    <span class="caption">Conversation</span>
+  </li>
+  <li class="node" data-node-id="6" data-x="788.5095746329663" data-y="520.1658784673452"></li>
+  <li class="node" data-node-id="7" data-x="-647.5803246658855" data-y="-165.4543255152326">
+    <span class="caption">Message</span><dl class="properties"><dt>text</dt><dd>String</dd><dt>date</dt><dd>Date</dd><dt>username</dt><dd>String</dd></dl></li>
+  <li class="node" data-node-id="8" data-x="-174.15730337078637" data-y="-439.45642749914964">
+    <span class="caption">User</span>
+  </li>
+  <li class="node" data-node-id="9" data-x="104.01044867011919" data-y="-594.8653424723764">
+    <span class="caption">City</span><dl class="properties"><dt>name</dt><dd>String</dd></dl></li>
+  <li class="node" data-node-id="10" data-x="391.8631854968111" data-y="-439.45642749914964">
+    <span class="caption">State</span>
+  </li>
+  <li class="node" data-node-id="11" data-x="-746.4122658365227" data-y="-751.0428462135654"></li>
+  <li class="node" data-node-id="12" data-x="137.5568710498595" data-y="308.45796177896136">
+    <span class="caption">Post</span><dl class="properties"><dt>status</dt><dd>String</dd></dl></li>
+  <li class="node" data-node-id="13" data-x="59.60790398415537" data-y="-313.4827404236529">
+    <span class="caption">Country</span><dl class="properties"><dt>name</dt><dd>String</dd></dl></li>
+  <li class="relationship" data-from="0" data-to="1">
+    <span class="type">LIKES</span>
+  </li>
+  <li class="relationship" data-from="0" data-to="2">
+    <span class="type">HATES</span>
+  </li>
+  <li class="relationship" data-from="3" data-to="1">
+    <span class="type">LIKES</span>
+  </li>
+  <li class="relationship" data-from="3" data-to="2">
+    <span class="type">HATES</span>
+  </li>
+  <li class="relationship" data-from="4" data-to="5">
+    <span class="type">PART_OF</span>
+  </li>
+  <li class="relationship" data-from="0" data-to="5">
+    <span class="type">PART_OF</span>
+  </li>
+  <li class="relationship" data-from="0" data-to="8">
+    <span class="type">BLOCKS</span>
+  </li>
+  <li class="relationship" data-from="5" data-to="7">
+    <span class="type">HAS</span>
+  </li>
+  <li class="relationship" data-from="0" data-to="12">
+    <span class="type">ON_2018_05_03</span>
+  </li>
+  <li class="relationship" data-from="3" data-to="12">
+    <span class="type">LOW_FIVE</span><dl class="properties"><dt>expires</dt><dd>Date</dd></dl></li>
+  <li class="relationship" data-from="4" data-to="12">
+    <span class="type">HIGH_FIVE</span><dl class="properties"><dt>expires</dt><dd>Date</dd></dl></li>
+  <li class="relationship" data-from="8" data-to="9">
+    <span class="type">IN_LOCATION</span>
+  </li>
+  <li class="relationship" data-from="9" data-to="10">
+    <span class="type">IN_LOCATION</span><dl class="properties"><dt>name</dt><dd>String</dd></dl></li>
+  <li class="relationship" data-from="10" data-to="13">
+    <span class="type">IN_LOCATION</span>
+  </li>
+</ul>

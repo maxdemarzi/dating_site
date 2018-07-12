@@ -6,15 +6,38 @@
 @args (User authenticated, User user, List<Post> posts, List<Tag> trends)
 
 @views.main.template(user.getUsername(), authenticated) -> {
-    <div class="container-fluid container pt-5">
-    <div class="row">
-        @views.partials._user.template(user)
-        <div class="col-lg-6">
-
-        </div>
-        <div class="col-lg-3">
-                @views.partials._trends.template(trends)
+    <div class="profile-header" style="background-image: url(/assets/img/iceland.jpg);">
+        <div class="container">
+            <div class="container-inner">
+                <img class="rounded-circle media-object" src="https://www.gravatar.com/avatar/@user.getHash()?s=200&d=retro">
+                <h3 class="profile-header-user">@user.getName()</h3>
+                <p class="profile-header-bio">@user.getBio()</p>
             </div>
         </div>
+
+        <nav class="profile-header-nav">
+            <ul class="nav nav-tabs justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/user/@user.getUsername()">Posts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()/has">Has</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()/wants">Wants</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()/likes">Likes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()/hates">Hates</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="container my-4">
+        @for (post: posts) {
+            @views.partials._post.template(post)
+        }
     </div>
 }

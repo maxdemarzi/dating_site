@@ -97,8 +97,8 @@
                 </li>
                 <li class="nav-item ml-2">
                     <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover">
-                        <img class="rounded-circle" src="https://www.gravatar.com/avatar/@user.getHash()?s=32&d=retro" >
-                        @user.getUsername()
+                        <img class="rounded-circle" src="https://www.gravatar.com/avatar/@user.getHash()?s=64&d=retro" >
+                        <span class="text-light"> @user.getUsername()</span>
                     </button>
                 </li>
             </ul>
@@ -113,10 +113,24 @@
 
 <br/>
 @content
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+<div class="card card-link-list">
+    <div class="card-body">
+        © 2018 Five and Sex
+
+        <a href="/about">About</a>
+        <a href="/help">Help</a>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/cookies">Cookies</a>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
 <script src="/assets/dist/toolkit.min.js"></script>
 <script src="/assets/dist/jquery.typeahead.min.js"></script>
+<script src="/assets/dist/autocompletes.js"></script>
 <script src="/assets/dist/custom.js"></script>
 </body>
 </html>
