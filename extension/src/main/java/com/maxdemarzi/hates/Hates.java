@@ -1,5 +1,6 @@
 package com.maxdemarzi.hates;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.likes.Likes;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.things.Things;
@@ -23,6 +24,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -40,14 +42,14 @@ import static java.util.Collections.reverseOrder;
 @Path("/users/{username}/hates")
 public class Hates {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
     private static final Comparator<Map<String, Object>> sharedComparator = Comparator.comparing(m -> (Boolean)m.get(SHARED));
-    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (Long) m.get(TIME), reverseOrder());
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
 
     @GET
     public Response getHates(@PathParam("username") final String username,
                              @QueryParam("limit") @DefaultValue("25") final Integer limit,
-                             @QueryParam("since") @DefaultValue("0")  final Long since,
+                             @QueryParam("offset") @DefaultValue("0")  final Integer offset,
                              @QueryParam("username2") final String username2,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
@@ -65,25 +67,28 @@ public class Hates {
             for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.HATES)) {
                 Node thing = r1.getEndNode();
                 Map<String, Object> properties = thing.getAllProperties();
-                Long time = (Long)r1.getProperty("time");
-                if(time >= since) {
-                    properties.put(TIME, time);
-                    properties.put(SHARED, user2Hates.contains(thing));
-                    properties.put(LIKED, Likes.userLikesThing(user2, thing));
-                    properties.put(HATED, Hates.userHatesThing(user2, thing));
-                    properties.put(LIKES, thing.getDegree(RelationshipTypes.LIKES, Direction.INCOMING));
-                    properties.put(HATES, thing.getDegree(RelationshipTypes.HATES, Direction.INCOMING));
-                    results.add(properties);
-                }
+                properties.put(TIME, r1.getProperty("time"));
+                properties.put(SHARED, user2Hates.contains(thing));
+                properties.put(LIKED, Likes.userLikesThing(user2, thing));
+                properties.put(HATED, Hates.userHatesThing(user2, thing));
+                properties.put(LIKES, thing.getDegree(RelationshipTypes.LIKES, Direction.INCOMING));
+                properties.put(HATES, thing.getDegree(RelationshipTypes.HATES, Direction.INCOMING));
+                results.add(properties);
             }
             tx.success();
         }
 
         results.sort(sharedComparator.thenComparing(timedComparator));
 
-        return Response.ok().entity(objectMapper.writeValueAsString(
-                results.subList(0, Math.min(results.size(), limit))))
-                .build();
+        if (offset > results.size()) {
+            return Response.ok().entity(objectMapper.writeValueAsString(
+                    results.subList(0, 0)))
+                    .build();
+        } else {
+            return Response.ok().entity(objectMapper.writeValueAsString(
+                    results.subList(offset, Math.min(results.size(), limit + offset))))
+                    .build();
+        }
     }
 
     @POST
@@ -103,7 +108,7 @@ public class Hates {
 
             Relationship hate = user.createRelationshipTo(thing, RelationshipTypes.HATES);
             LocalDateTime dateTime = LocalDateTime.now(utc);
-            hate.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+            hate.setProperty(TIME, ZonedDateTime.now(utc));
             results = thing.getAllProperties();
             results.put(HATED, true);
             results.put(LIKED, Likes.userLikesThing(user, thing));

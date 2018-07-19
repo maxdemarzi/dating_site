@@ -32,9 +32,12 @@ public class Schema {
                     schema.constraintFor(Labels.Attribute)
                             .assertPropertyIsUnique(LOWERCASE_NAME)
                             .create();
-
+                    schema.constraintFor(Labels.Attribute)
+                            .assertPropertyIsUnique(NAME)
+                            .create();
                     tx.success();
                     results.add("(:Attribute {lowercase_name}) constraint created");
+                    results.add("(:Attribute {name}) constraint created");
                 }
             }
 

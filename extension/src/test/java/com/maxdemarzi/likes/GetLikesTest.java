@@ -46,13 +46,13 @@ public class GetLikesTest {
     }
 
     @Test
-    public void shouldGetLikesSince() {
+    public void shouldGetLikesOffset() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/likes?since=1490209400").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/likes?offset=1").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
-        Assert.assertEquals(expected.get(0), actual.get(0));
+        Assert.assertEquals(expected.get(1), actual.get(0));
     }
 
     private static final String FIXTURE =
@@ -73,15 +73,15 @@ public class GetLikesTest {
                     "password: 'cuddlefish'})" +
             "CREATE (neo4j:Thing {name:'Neo4j'})" +
             "CREATE (java:Thing {name:'Java'})" +
-            "CREATE (jexp)-[:LIKES {time: 1490140299}]->(neo4j)" +
-            "CREATE (laeg)-[:HATES {time: 1490208700}]->(java)" +
-            "CREATE (max)-[:LIKES {time: 1490209300 }]->(neo4j)" +
-            "CREATE (max)-[:LIKES {time: 1490209400 }]->(java)";
+            "CREATE (jexp)-[:LIKES {time: datetime('2018-07-19T17:12:56Z')}]->(neo4j)" +
+            "CREATE (laeg)-[:HATES {time: datetime('2018-07-19T17:38:57Z')}]->(java)" +
+            "CREATE (max)-[:LIKES {time: datetime('2018-07-19T18:33:51Z') }]->(neo4j)" +
+            "CREATE (max)-[:LIKES {time: datetime('2018-07-19T19:41:23Z') }]->(java)";
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("name", "Java");
-            put("time", 1490209400);
+            put("time", "2018-07-19T19:41:23Z");
             put("likes", 1);
             put("hates", 1);
             put("liked", false);
@@ -90,7 +90,7 @@ public class GetLikesTest {
         }});
         add(new HashMap<String, Object>() {{
             put("name", "Neo4j");
-            put("time", 1490209300);
+            put("time", "2018-07-19T18:33:51Z");
             put("likes", 2);
             put("hates", 0);
             put("liked", false);
@@ -102,7 +102,7 @@ public class GetLikesTest {
     private static final ArrayList<HashMap<String, Object>> expected2 = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("name", "Neo4j");
-            put("time", 1490140299);
+            put("time", "2018-07-19T17:12:56Z");
             put("likes", 2);
             put("hates", 0);
             put("liked", true);

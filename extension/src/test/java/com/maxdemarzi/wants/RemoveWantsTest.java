@@ -88,9 +88,9 @@ public class RemoveWantsTest {
                     "password: 'jellyfish'})" +
                     "CREATE (fat:Attribute {name:'Fat'})" +
                     "CREATE (bald:Attribute {name:'Bald'})" +
-                    "CREATE (jexp)-[:WANTS {time: 1490140299}]->(fat)" +
-                    "CREATE (jexp)-[:WANTS {time: 1490140299}]->(bald)" +
-                    "CREATE (laeg)-[:HAS {time: 1490208700}]->(bald)" +
-                    "CREATE (max)-[:WANTS {time: 1490209300 }]->(fat)" +
-                    "CREATE (max)-[:WANTS {time: 1490209400 }]->(bald)";
+                    "CREATE (jexp)-[:WANTS {time: datetime('2018-07-19T17:12:56Z')}]->(fat)" +
+                    "CREATE (jexp)-[:WANTS {time: datetime('2018-07-19T17:12:56Z')}]->(bald)" +
+                    "CREATE (laeg)-[:HAS {time: datetime('2018-07-19T17:12:56Z')}]->(bald)" +
+                    "CREATE (max)-[:WANTS {time: datetime('2018-07-19T17:12:56Z') }]->(fat)" +
+                    "CREATE (max)-[:WANTS {time: datetime('2018-07-19T17:12:56Z') }]->(bald)";
 }

@@ -50,6 +50,8 @@ public interface API {
 
     @GET("users/{username}/has")
     Call<List<Attribute>> getHas(@Path("username") String username,
+                                 @Query("limit") Integer limit,
+                                 @Query("offset") Integer offset,
                                  @Query("username2") String username2);
 
     @POST("users/{username}/has/{attribute}")
@@ -62,6 +64,8 @@ public interface API {
 
     @GET("users/{username}/wants")
     Call<List<Attribute>> getWants(@Path("username") String username,
+                                   @Query("limit") Integer limit,
+                                   @Query("offset") Integer offset,
                                    @Query("username2") String username2);
 
     @POST("users/{username}/wants/{attribute}")

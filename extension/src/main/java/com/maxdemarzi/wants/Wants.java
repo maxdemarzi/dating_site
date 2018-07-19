@@ -1,5 +1,6 @@
 package com.maxdemarzi.wants;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.attributes.Attributes;
 import com.maxdemarzi.has.Has;
 import com.maxdemarzi.schema.RelationshipTypes;
@@ -23,6 +24,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -39,14 +41,14 @@ import static java.util.Collections.reverseOrder;
 @Path("/users/{username}/wants")
 public class Wants {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
     private static final Comparator<Map<String, Object>> sharedComparator = Comparator.comparing(m -> (Boolean)m.get(HAVE));
-    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (Long) m.get(TIME), reverseOrder());
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
 
     @GET
     public Response getWants(@PathParam("username") final String username,
                              @QueryParam("limit") @DefaultValue("25") final Integer limit,
-                             @QueryParam("since") @DefaultValue("0")  final Long since,
+                             @QueryParam("offset") @DefaultValue("0")  final Integer offset,
                              @QueryParam("username2") final String username2,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
@@ -68,24 +70,27 @@ public class Wants {
             for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.WANTS)) {
                 Node attribute = r1.getEndNode();
                 Map<String, Object> properties = attribute.getAllProperties();
-                Long time = (Long)r1.getProperty("time");
-                if(time >= since) {
-                    properties.put(TIME, time);
-                    properties.put(HAVE, user2Has.contains(attribute));
-                    properties.put(WANT, user2Wants.contains(attribute));
-                    properties.put(WANTS, attribute.getDegree(RelationshipTypes.WANTS, Direction.INCOMING));
-                    properties.put(HAS, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
-                    results.add(properties);
-                }
+                properties.put(TIME, r1.getProperty("time"));
+                properties.put(HAVE, user2Has.contains(attribute));
+                properties.put(WANT, user2Wants.contains(attribute));
+                properties.put(WANTS, attribute.getDegree(RelationshipTypes.WANTS, Direction.INCOMING));
+                properties.put(HAS, attribute.getDegree(RelationshipTypes.HAS, Direction.INCOMING));
+                results.add(properties);
             }
             tx.success();
         }
 
         results.sort(sharedComparator.thenComparing(timedComparator));
 
-        return Response.ok().entity(objectMapper.writeValueAsString(
-                results.subList(0, Math.min(results.size(), limit))))
-                .build();
+        if (offset > results.size()) {
+            return Response.ok().entity(objectMapper.writeValueAsString(
+                    results.subList(0, 0)))
+                    .build();
+        } else {
+            return Response.ok().entity(objectMapper.writeValueAsString(
+                    results.subList(offset, Math.min(results.size(), limit + offset))))
+                    .build();
+        }
     }
 
     @POST
@@ -103,9 +108,8 @@ public class Wants {
                 throw WantsExceptions.alreadyWantsAttribute;
             }
 
-            Relationship like = user.createRelationshipTo(attribute, RelationshipTypes.WANTS);
-            LocalDateTime dateTime = LocalDateTime.now(utc);
-            like.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+            Relationship want = user.createRelationshipTo(attribute, RelationshipTypes.WANTS);
+            want.setProperty(TIME, ZonedDateTime.now(utc));
             results = attribute.getAllProperties();
             results.put(HAVE, Has.userHasAttribute(user, attribute));
             results.put(WANT, true);

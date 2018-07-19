@@ -46,13 +46,13 @@ public class GetWantsTest {
     }
 
     @Test
-    public void shouldGetWantsSince() {
+    public void shouldGetWantsOffset() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/wants?since=1490209400").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/wants?offset=1").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
-        Assert.assertEquals(expected.get(0), actual.get(0));
+        Assert.assertEquals(expected.get(1), actual.get(0));
     }
 
     private static final String FIXTURE =
@@ -73,15 +73,15 @@ public class GetWantsTest {
                     "password: 'cuddlefish'})" +
             "CREATE (fat:Attribute {name:'Fat'})" +
             "CREATE (bald:Attribute {name:'Bald'})" +
-            "CREATE (jexp)-[:WANTS {time: 1490140299}]->(fat)" +
-            "CREATE (laeg)-[:HAS {time: 1490208700}]->(bald)" +
-            "CREATE (max)-[:WANTS {time: 1490209300 }]->(fat)" +
-            "CREATE (max)-[:WANTS {time: 1490209400 }]->(bald)";
+            "CREATE (jexp)-[:WANTS {time: datetime('2018-07-19T17:12:56Z')}]->(fat)" +
+            "CREATE (laeg)-[:HAS {time: datetime('2018-07-19T17:38:57Z')}]->(bald)" +
+            "CREATE (max)-[:WANTS {time: datetime('2018-07-19T18:33:51Z') }]->(fat)" +
+            "CREATE (max)-[:WANTS {time: datetime('2018-07-19T19:41:23Z') }]->(bald)";
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("name", "Bald");
-            put("time", 1490209400);
+            put("time", "2018-07-19T19:41:23Z");
             put("has", 1);
             put("wants", 1);
             put("have", false);
@@ -89,7 +89,7 @@ public class GetWantsTest {
         }});
         add(new HashMap<String, Object>() {{
             put("name", "Fat");
-            put("time", 1490209300);
+            put("time", "2018-07-19T18:33:51Z");
             put("has", 0);
             put("wants", 2);
             put("want", false);
@@ -100,7 +100,7 @@ public class GetWantsTest {
     private static final ArrayList<HashMap<String, Object>> expected2 = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("name", "Fat");
-            put("time", 1490140299);
+            put("time", "2018-07-19T17:12:56Z");
             put("has", 0);
             put("wants", 2);
             put("want", true);

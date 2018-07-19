@@ -144,8 +144,10 @@ public class App extends Jooby {
           Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
           if (userResponse.isSuccessful()) {
               User user = userResponse.body();
+              Integer limit = req.param("limit").intValue(25);
+              Integer offset = req.param("offset").intValue(0);
 
-              Response<List<Attribute>> attributesResponse = api.getHas(user.getUsername(), requested_by).execute();
+              Response<List<Attribute>> attributesResponse = api.getHas(user.getUsername(), limit, offset, requested_by).execute();
               List<Attribute> attributes = new ArrayList<>();
               if (attributesResponse.isSuccessful()) {
                   attributes = attributesResponse.body();
@@ -165,8 +167,10 @@ public class App extends Jooby {
           Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
           if (userResponse.isSuccessful()) {
               User user = userResponse.body();
+              Integer limit = req.param("limit").intValue(25);
+              Integer offset = req.param("offset").intValue(0);
 
-              Response<List<Attribute>> attributesResponse = api.getWants(user.getUsername(), requested_by).execute();
+              Response<List<Attribute>> attributesResponse = api.getWants(user.getUsername(), limit, offset, requested_by).execute();
               List<Attribute> attributes = new ArrayList<>();
               if (attributesResponse.isSuccessful()) {
                   attributes = attributesResponse.body();
