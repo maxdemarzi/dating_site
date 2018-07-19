@@ -22,7 +22,7 @@ public class UpdatePostTest {
     public void shouldUpdatePost() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.request("PUT", neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/1490140299").toString(), input);
+        HTTP.Response response = HTTP.request("PUT", neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/2018-07-19T17:12:56Z").toString(), input);
         HashMap actual  = response.content();
         Assert.assertEquals(expected, actual);
     }
@@ -42,15 +42,15 @@ public class UpdatePostTest {
                     "password: 'cuddlefish'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'})" +
             "CREATE (post:Post {status:'Hello World!', " +
-                    "time: 1490140299})" +
-            "CREATE (max)-[:POSTED_ON_2017_03_21]->(post)" +
-            "CREATE (lage)-[:LOW_FIVED {time: 1490209400 }]->(post)";
+                    "time: datetime('2018-07-19T17:12:56Z') })" +
+            "CREATE (max)-[:POSTED_ON_2018_07_19]->(post)" +
+            "CREATE (lage)-[:LOW_FIVED {time: datetime('2018-07-19T18:33:51Z') }]->(post)";
 
     private static final HashMap<String, Object> expected = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");
         put("name", "Max De Marzi");
         put("status", "Hello Again!");
-        put("time", 1490140299);
+        put("time", "2018-07-19T17:12:56Z");
         put("high_fived", false);
         put("low_fived", false);
         put("high_fives", 0);

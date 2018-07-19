@@ -73,8 +73,8 @@ public class GetLikesTest {
                     "password: 'cuddlefish'})" +
             "CREATE (neo4j:Thing {name:'Neo4j'})" +
             "CREATE (java:Thing {name:'Java'})" +
-            "CREATE (jexp)-[:LIKES {time: datetime('2018-07-19T17:12:56Z')}]->(neo4j)" +
-            "CREATE (laeg)-[:HATES {time: datetime('2018-07-19T17:38:57Z')}]->(java)" +
+            "CREATE (jexp)-[:LIKES {time: datetime('2018-07-19T17:12:56Z') }]->(neo4j)" +
+            "CREATE (laeg)-[:HATES {time: datetime('2018-07-19T17:38:57Z') }]->(java)" +
             "CREATE (max)-[:LIKES {time: datetime('2018-07-19T18:33:51Z') }]->(neo4j)" +
             "CREATE (max)-[:LIKES {time: datetime('2018-07-19T19:41:23Z') }]->(java)";
 

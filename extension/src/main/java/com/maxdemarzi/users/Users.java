@@ -209,10 +209,9 @@ public class Users {
         return results;
     }
 
-    public static Node getPost(Node author, Long time) {
-        LocalDateTime postedDateTime = LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.UTC);
+    public static Node getPost(Node author, ZonedDateTime time) {
         RelationshipType original = RelationshipType.withName("POSTED_ON_" +
-                postedDateTime.format(dateFormatter));
+                time.format(dateFormatter));
         Node post = null;
         for(Relationship r1 : author.getRelationships(Direction.OUTGOING, original)) {
             Node potential = r1.getEndNode();

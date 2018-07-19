@@ -1,5 +1,6 @@
 package com.maxdemarzi.mentions;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -48,22 +50,26 @@ public class Mentions {
 
     private static final Pattern mentionsPattern = Pattern.compile("@(\\S+)");
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
+
 
     @GET
     public Response getMentions(@PathParam("username") final String username,
                                 @QueryParam("limit") @DefaultValue("25") final Integer limit,
-                                @QueryParam("since") final Long since,
+                                @QueryParam("since") final String since,
                                 @QueryParam("username2") final String username2,
                                 @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        LocalDateTime dateTime;
+        ZonedDateTime dateTime;
+        ZonedDateTime latest;
         if (since == null) {
-            dateTime = LocalDateTime.now(utc);
+            latest = ZonedDateTime.now(utc);
+            dateTime = ZonedDateTime.now(utc);
         } else {
-            dateTime = LocalDateTime.ofEpochSecond(since, 0, ZoneOffset.UTC);
+            latest = ZonedDateTime.parse(since);
+            dateTime = ZonedDateTime.parse(since);
         }
-        Long latest = dateTime.toEpochSecond(ZoneOffset.UTC);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
@@ -86,7 +92,7 @@ public class Mentions {
             for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
                 blocked.add(r1.getEndNode());
             }
-            LocalDateTime earliest = LocalDateTime.ofEpochSecond((Long)user.getProperty(TIME), 0, ZoneOffset.UTC);
+            ZonedDateTime earliest = (ZonedDateTime)user.getProperty(TIME);
             int count = 0;
             while (count < limit && (dateTime.isAfter(earliest))) {
                 RelationshipType relType = RelationshipType.withName("MENTIONED_ON_" +
@@ -95,8 +101,8 @@ public class Mentions {
                 for (Relationship r1 : user.getRelationships(Direction.INCOMING, relType)) {
                     Node post = r1.getStartNode();
                     Map<String, Object> result = post.getAllProperties();
-                    Long time = (Long)r1.getProperty("time");
-                    if(time < latest) {
+                    ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
+                    if(time.isBefore(latest)) {
                         Node author = getAuthor(post, time);
                         if (!blocked.contains(author)) {
                             result.put(TIME, time);
@@ -118,12 +124,14 @@ public class Mentions {
             tx.success();
         }
 
-        results.sort(Comparator.comparing(m -> (Long) m.get(TIME), reverseOrder()));
+        results.sort(timedComparator);
 
-        return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
+        return Response.ok().entity(objectMapper.writeValueAsString(
+                results.subList(0, Math.min(results.size(), limit))))
+                .build();
     }
 
-    public static void createMentions(Node post, HashMap<String, Object> input, LocalDateTime dateTime, GraphDatabaseService db) {
+    public static void createMentions(Node post, HashMap<String, Object> input, ZonedDateTime dateTime, GraphDatabaseService db) {
         Matcher mat = mentionsPattern.matcher(((String)input.get("status")).toLowerCase());
 
         for (Relationship r1 : post.getRelationships(Direction.OUTGOING, RelationshipType.withName("MENTIONED_ON_" +
@@ -138,7 +146,7 @@ public class Mentions {
             if (user != null && !mentioned.contains(user)) {
                 Relationship r1 = post.createRelationshipTo(user, RelationshipType.withName("MENTIONED_ON_" +
                         dateTime.format(dateFormatter)));
-                r1.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+                r1.setProperty(TIME, dateTime);
                 mentioned.add(user);
             }
         }

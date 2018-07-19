@@ -49,7 +49,7 @@ public class GetMentionsTest {
     public void shouldGetMentionsSince() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/jexp/mentions?since=1490208600").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/jexp/mentions?since=2018-07-19T17:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(1), actual.get(0));
@@ -65,7 +65,7 @@ public class GetMentionsTest {
                     "email: 'michael@neo4j.com', " +
                     "name: 'Michael Hunger'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
-                    "time: 1490054400," +
+                    "time: datetime('2018-07-19T03:43:22Z')," +
                     "password: 'tunafish'})" +
             "CREATE (laeg:User {username:'laexample', " +
                     "email: 'luke@neo4j.com', " +
@@ -78,20 +78,20 @@ public class GetMentionsTest {
                     "name: 'Mark Needham'," +
                     "password: 'jellyfish'})" +
             "CREATE (post1:Post {status:'Hello @jexp', " +
-                    "time: 1490140299})" +
+                    "time: datetime('2018-07-19T17:12:56Z')})" +
             "CREATE (post2:Post {status:'Hi @jexp', " +
-                    "time: 1490208700})" +
+                    "time: datetime('2018-07-19T17:38:57Z')})" +
             "CREATE (post3:Post {status:'Stalking @jexp', " +
-                    "time: 1490209400})" +
+                    "time: datetime('2018-07-19T19:41:23Z')})" +
 
-            "CREATE (max)-[:POSTED_ON_2017_03_21 {time: 1490140299}]->(post1)" +
-            "CREATE (laeg)-[:POSTED_ON_2017_03_22 {time: 1490208700}]->(post2)" +
-            "CREATE (mark)-[:POSTED_ON_2017_03_22 {time: 1490209400}]->(post3)" +
-            "CREATE(post1)-[:MENTIONED_ON_2017_03_21 {time: 1490140299}]->(jexp)" +
-            "CREATE(post2)-[:MENTIONED_ON_2017_03_22 {time: 1490208700}]->(jexp)" +
-            "CREATE(post3)-[:MENTIONED_ON_2017_03_22 {time: 1490209400}]->(jexp)" +
-            "CREATE (max)-[:LOW_FIVED {time: 1490208800 }]->(post2)" +
-            "CREATE (jexp)-[:BLOCKS {time: 1490140200 }]->(mark)";
+            "CREATE (max)-[:POSTED_ON_2018_07_19 {time: datetime('2018-07-19T17:12:56Z')}]->(post1)" +
+            "CREATE (laeg)-[:POSTED_ON_2018_07_19 {time: datetime('2018-07-19T17:38:57Z')}]->(post2)" +
+            "CREATE (mark)-[:POSTED_ON_2018_07_19 {time: datetime('2018-07-19T19:41:23Z')}]->(post3)" +
+            "CREATE(post1)-[:MENTIONED_ON_2018_07_19 {time: datetime('2018-07-19T17:12:56Z')}]->(jexp)" +
+            "CREATE(post2)-[:MENTIONED_ON_2018_07_19 {time: datetime('2018-07-19T17:38:57Z')}]->(jexp)" +
+            "CREATE(post3)-[:MENTIONED_ON_2018_07_19 {time: datetime('2018-07-19T19:41:23Z')}]->(jexp)" +
+            "CREATE (max)-[:LOW_FIVED {time: datetime('2018-07-19T17:58:57Z') }]->(post2)" +
+            "CREATE (jexp)-[:BLOCKS {time: datetime('2018-07-19T19:44:23Z') }]->(mark)";
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
@@ -99,7 +99,7 @@ public class GetMentionsTest {
             put("name", "Luke Gannon");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "Hi @jexp");
-            put("time", 1490208700);
+            put("time", "2018-07-19T17:38:57Z");
             put("high_fived", false);
             put("low_fived", false);
             put("high_fives", 0);
@@ -110,7 +110,7 @@ public class GetMentionsTest {
             put("name", "Max De Marzi");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "Hello @jexp");
-            put("time", 1490140299);
+            put("time", "2018-07-19T17:12:56Z");
             put("high_fived", false);
             put("low_fived", false);
             put("high_fives", 0);
@@ -124,7 +124,7 @@ public class GetMentionsTest {
             put("name", "Luke Gannon");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "Hi @jexp");
-            put("time", 1490208700);
+            put("time", "2018-07-19T17:38:57Z");
             put("high_fived", false);
             put("low_fived", true);
             put("high_fives", 0);
@@ -135,7 +135,7 @@ public class GetMentionsTest {
             put("name", "Max De Marzi");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "Hello @jexp");
-            put("time", 1490140299);
+            put("time", "2018-07-19T17:12:56Z");
             put("high_fived", false);
             put("low_fived", false);
             put("high_fives", 0);

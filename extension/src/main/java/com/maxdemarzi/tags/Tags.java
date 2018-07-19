@@ -2,6 +2,7 @@ package com.maxdemarzi.tags;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
@@ -24,6 +25,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -56,7 +58,8 @@ public class Tags {
 
     private static final Pattern hashtagPattern = Pattern.compile("#(\\S+)");
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
     private static GraphDatabaseService db;
 
     public Tags(@Context GraphDatabaseService graphDatabaseService) {
@@ -97,17 +100,19 @@ public class Tags {
     @Path("/{hashtag}")
     public Response getTags(@PathParam("hashtag") final String hashtag,
                              @QueryParam("limit") @DefaultValue("25") final Integer limit,
-                             @QueryParam("since") final Long since,
+                             @QueryParam("since") final String since,
                              @QueryParam("username") final String username,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        LocalDateTime dateTime;
+        ZonedDateTime dateTime;
+        ZonedDateTime latest;
         if (since == null) {
-            dateTime = LocalDateTime.now(utc);
+            latest = ZonedDateTime.now(utc);
+            dateTime = ZonedDateTime.now(utc);
         } else {
-            dateTime = LocalDateTime.ofEpochSecond(since, 0, ZoneOffset.UTC);
+            latest = ZonedDateTime.parse(since);
+            dateTime = ZonedDateTime.parse(since);
         }
-        Long latest = dateTime.toEpochSecond(ZoneOffset.UTC);
 
         try (Transaction tx = db.beginTx()) {
             Node user;
@@ -125,7 +130,7 @@ public class Tags {
 
             Node tag = db.findNode(Labels.Tag, NAME, hashtag.toLowerCase());
             if (tag != null) {
-                LocalDateTime earliestTag = LocalDateTime.ofEpochSecond((Long) tag.getProperty(TIME), 0, ZoneOffset.UTC);
+                ZonedDateTime earliestTag = (ZonedDateTime)tag.getProperty(TIME);
 
                 int count = 0;
                 while (count < limit && (dateTime.isAfter(earliestTag))) {
@@ -135,9 +140,9 @@ public class Tags {
                     for (Relationship r1 : tag.getRelationships(Direction.INCOMING, relType)) {
                         Node post = r1.getStartNode();
                         Map<String, Object> result = post.getAllProperties();
-                        Long time = (Long) result.get("time");
+                        ZonedDateTime time = (ZonedDateTime) result.get("time");
 
-                        if (count < limit && time < latest) {
+                        if (count < limit && time.isBefore(latest) ) {
                             Node author = getAuthor(post, time);
                             Map userProperties = author.getAllProperties();
                             result.put(USERNAME, userProperties.get(USERNAME));
@@ -154,7 +159,7 @@ public class Tags {
                     dateTime = dateTime.minusDays(1);
                 }
                 tx.success();
-                results.sort(Comparator.comparing(m -> (Long) m.get(TIME), reverseOrder()));
+                results.sort(timedComparator);
             } else {
                 throw TagExceptions.tagNotFound;
             }
@@ -162,7 +167,7 @@ public class Tags {
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
     }
 
-    public static void createTags(Node post, HashMap<String, Object> input, LocalDateTime dateTime, GraphDatabaseService db) {
+    public static void createTags(Node post, HashMap<String, Object> input, ZonedDateTime dateTime, GraphDatabaseService db) {
         Matcher mat = hashtagPattern.matcher(((String)input.get(STATUS)).toLowerCase());
         for (Relationship r1 : post.getRelationships(Direction.OUTGOING, RelationshipType.withName("TAGGED_ON_" +
                 dateTime.format(dateFormatter)))) {
@@ -175,7 +180,7 @@ public class Tags {
             if (hashtag == null) {
                 hashtag = db.createNode(Labels.Tag);
                 hashtag.setProperty(NAME, tag);
-                hashtag.setProperty(TIME, dateTime.truncatedTo(ChronoUnit.DAYS).toEpochSecond(ZoneOffset.UTC));
+                hashtag.setProperty(TIME, dateTime);
             }
             if (!tagged.contains(hashtag)) {
                 post.createRelationshipTo(hashtag, RelationshipType.withName("TAGGED_ON_" +
@@ -190,6 +195,7 @@ public class Tags {
         List<Map<String, Object>> results;
         try (Transaction tx = db.beginTx()) {
             results = trends.get("trends");
+            tx.success();
         }
 
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();

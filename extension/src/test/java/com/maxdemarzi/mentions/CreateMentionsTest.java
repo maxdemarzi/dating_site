@@ -33,7 +33,7 @@ public class CreateMentionsTest {
         HashMap actual  = response.content();
         Assert.assertEquals(expected.get(STATUS), actual.get(STATUS));
         Assert.assertTrue(actual.containsKey(TIME));
-        sleep(1000); // Needed due to artifact in testing
+        //sleep(1000); // Needed due to artifact in testing
         response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/jexp/mentions").toString());
         ArrayList<HashMap> actual2  = response.content();
         expected2.get(0).put(TIME, actual2.get(0).get(TIME));
@@ -49,13 +49,13 @@ public class CreateMentionsTest {
                     "email: 'maxdemarzi@hotmail.com', " +
                     "name: 'Max De Marzi'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
-                    "time: 1490054400," +
+                    "time: datetime('2018-07-19T17:12:56Z')," +
                     "password: 'swordfish'})" +
             "CREATE (jexp:User {username:'jexp', " +
                     "email: 'michael@neo4j.com', " +
                     "name: 'Michael Hunger'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
-                    "time: 1490054400," +
+                    "time: datetime('2018-07-19T17:12:56Z')," +
                     "password: 'tunafish'})";
 
     private static final HashMap input = new HashMap<String, Object>() {{

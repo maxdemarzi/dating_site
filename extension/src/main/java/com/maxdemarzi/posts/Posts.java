@@ -1,5 +1,6 @@
 package com.maxdemarzi.posts;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.mentions.Mentions;
 import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -48,26 +50,29 @@ import static java.util.Collections.reverseOrder;
 @Path("/users/{username}/posts")
 public class Posts {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
 
     @GET
     public Response getPosts(@PathParam("username") final String username,
                              @QueryParam("limit") @DefaultValue("25") final Integer limit,
-                             @QueryParam("since") final Long since,
+                             @QueryParam("since") final String since,
                              @QueryParam("username2") final String username2,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        LocalDateTime dateTime;
+        ZonedDateTime dateTime;
+        ZonedDateTime latest;
         if (since == null) {
-            dateTime = LocalDateTime.now(utc);
+            latest = ZonedDateTime.now(utc);
+            dateTime = ZonedDateTime.now(utc);
         } else {
-            dateTime = LocalDateTime.ofEpochSecond(since, 0, ZoneOffset.UTC);
+            latest = ZonedDateTime.parse(since);
+            dateTime = ZonedDateTime.parse(since);
         }
-        Long latest = dateTime.toEpochSecond(ZoneOffset.UTC);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
-            Node user2 = null;
+            Node user2;
             HashSet<Node> highFived = new HashSet<>();
             HashSet<Node> lowFived = new HashSet<>();
             if (username2 != null) {
@@ -82,7 +87,7 @@ public class Posts {
 
 
             Map userProperties = user.getAllProperties();
-            LocalDateTime earliest = LocalDateTime.ofEpochSecond((Long)userProperties.get(TIME), 0, ZoneOffset.UTC);
+            ZonedDateTime earliest = (ZonedDateTime)userProperties.get(TIME);
             int count = 0;
             while (count < limit && (dateTime.isAfter(earliest))) {
                 RelationshipType relType = RelationshipType.withName("POSTED_ON_" +
@@ -91,8 +96,8 @@ public class Posts {
                 for (Relationship r1 : user.getRelationships(Direction.OUTGOING, relType)) {
                     Node post = r1.getEndNode();
                     Map<String, Object> result = post.getAllProperties();
-                    Long time = (Long)r1.getProperty("time");
-                    if(time < latest) {
+                    ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
+                    if(time.isBefore(latest)) {
                         result.put(TIME, time);
                         result.put(USERNAME, username);
                         result.put(NAME, userProperties.get(NAME));
@@ -111,9 +116,11 @@ public class Posts {
             tx.success();
         }
 
-        results.sort(Comparator.comparing(m -> (Long) m.get(TIME), reverseOrder()));
+        results.sort(timedComparator);
 
-        return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
+        return Response.ok().entity(objectMapper.writeValueAsString(
+                results.subList(0, Math.min(results.size(), limit))))
+                .build();
     }
 
     @POST
@@ -121,7 +128,7 @@ public class Posts {
                                @Context GraphDatabaseService db) throws IOException {
         Map<String, Object> results;
         HashMap<String, Object> input = PostValidator.validate(body);
-        LocalDateTime dateTime = LocalDateTime.now(utc);
+        ZonedDateTime dateTime = ZonedDateTime.now(utc);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
@@ -140,13 +147,13 @@ public class Posts {
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
     }
 
-    private Node createPost(@Context GraphDatabaseService db, HashMap input, Node user, LocalDateTime dateTime) {
+    private Node createPost(@Context GraphDatabaseService db, HashMap input, Node user, ZonedDateTime dateTime) {
         Node post = db.createNode(Labels.Post);
         post.setProperty(STATUS, input.get("status"));
-        post.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+        post.setProperty(TIME, dateTime);
         Relationship r1 = user.createRelationshipTo(post, RelationshipType.withName("POSTED_ON_" +
                         dateTime.format(dateFormatter)));
-        r1.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+        r1.setProperty(TIME, dateTime);
         Tags.createTags(post, input, dateTime, db);
         Mentions.createMentions(post, input, dateTime, db);
         return post;
@@ -157,16 +164,16 @@ public class Posts {
     @Path("/{time}")
     public Response updatePost(String body,
                                @PathParam("username") final String username,
-                               @PathParam("time") final Long time,
+                               @PathParam("time") final String time,
                                @Context GraphDatabaseService db) throws IOException {
         Map<String, Object> results;
         HashMap<String, Object> input = PostValidator.validate(body);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
-            Node post = getPost(user, time);
+            Node post = getPost(user, ZonedDateTime.parse(time));
             post.setProperty(STATUS, input.get(STATUS));
-            LocalDateTime dateTime = LocalDateTime.ofEpochSecond((Long)post.getProperty(TIME), 0, ZoneOffset.UTC);
+            ZonedDateTime dateTime = (ZonedDateTime)post.getProperty(TIME);
             Tags.createTags(post, input, dateTime, db);
             Mentions.createMentions(post, input, dateTime, db);
             results = post.getAllProperties();
@@ -186,18 +193,18 @@ public class Posts {
     @Path("/{username2}/{time}/reply")
     public Response createReply(String body, @PathParam("username") final String username,
                                 @PathParam("username2") final String username2,
-                                @PathParam("time") final Long time,
+                                @PathParam("time") final String time,
                                 @Context GraphDatabaseService db) throws IOException {
 
         Map<String, Object> results;
         HashMap input = PostValidator.validate(body);
-        LocalDateTime dateTime = LocalDateTime.now(utc);
+        ZonedDateTime dateTime = ZonedDateTime.now(utc);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
             Node post = createPost(db, input, user, dateTime);
             results = post.getAllProperties();
-            results.put(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+            results.put(TIME, dateTime);
             results.put(USERNAME, username);
             results.put(NAME, user.getProperty(NAME));
             results.put(HIGH_FIVED, false);
@@ -206,19 +213,18 @@ public class Posts {
             results.put(LOW_FIVES, 0);
 
             Node user2 = Users.findUser(username2, db);
-            Node post2 = getPost(user2, time);
+            Node post2 = getPost(user2, ZonedDateTime.parse(time));
             Relationship r2 = post.createRelationshipTo(post2, RelationshipTypes.REPLIED_TO);
-            r2.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+            r2.setProperty(TIME, dateTime);
 
             tx.success();
         }
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
     }
 
-    public static Node getAuthor(Node post, Long time) {
-        LocalDateTime postedDateTime = LocalDateTime.ofEpochSecond(time, 0, ZoneOffset.UTC);
+    public static Node getAuthor(Node post, ZonedDateTime time) {
         RelationshipType original = RelationshipType.withName("POSTED_ON_" +
-                postedDateTime.format(dateFormatter));
+                time.format(dateFormatter));
         return post.getSingleRelationship(original, Direction.INCOMING).getStartNode();
     }
 

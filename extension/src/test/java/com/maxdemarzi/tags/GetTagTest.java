@@ -54,7 +54,7 @@ public class GetTagTest {
     public void shouldGetTagSince() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/tags/neo4j?since=1490208700").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/tags/neo4j?since=2018-07-19T17:38:57Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(1), actual.get(0));
@@ -80,7 +80,7 @@ public class GetTagTest {
 
         HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/tags").toString());
         ArrayList<HashMap> actual  = response.content();
-        Assert.assertEquals(new ArrayList<>(), actual);
+        Assert.assertEquals(expected3, actual);
     }
 
     private static final String FIXTURE =
@@ -99,16 +99,16 @@ public class GetTagTest {
                     "password: 'cuddlefish'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'})" +
                     "CREATE (post1:Post {status:'Hello World! #neo4j', " +
-                    "time: 1490140299})" +
+                    "time: datetime('2018-07-19T17:12:56Z')})" +
                     "CREATE (post2:Post {status:'How are you! #neo4j', " +
-                    "time: 1490208700})" +
-                    "CREATE (neo4j:Tag {name:'neo4j', time: 1490054400})" +
-                    "CREATE (jexp)-[:POSTED_ON_2017_03_21 {time: 1490140299}]->(post1)" +
-                    "CREATE (laeg)-[:POSTED_ON_2017_03_22 {time: 1490208700}]->(post2)" +
-                    "CREATE (max)-[:HIGH_FIVED {time: 1490209300 }]->(post1)" +
-                    "CREATE (max)-[:LOW_FIVED {time: 1490209400 }]->(post2)" +
-                    "CREATE (post1)-[:TAGGED_ON_2017_03_21 {time: 1490140299 }]->(neo4j)" +
-                    "CREATE (post2)-[:TAGGED_ON_2017_03_21 {time: 1490208700 }]->(neo4j)" ;
+                    "time: datetime('2018-07-19T17:38:57Z')})" +
+                    "CREATE (neo4j:Tag {name:'neo4j', time: datetime('2018-06-01T10:33:11Z')})" +
+                    "CREATE (jexp)-[:POSTED_ON_2018_07_19 {time: datetime('2018-07-19T17:12:56Z')}]->(post1)" +
+                    "CREATE (laeg)-[:POSTED_ON_2018_07_19 {time: datetime('2018-07-19T17:38:57Z')}]->(post2)" +
+                    "CREATE (max)-[:HIGH_FIVED {time: datetime('2018-07-19T18:33:51Z') }]->(post1)" +
+                    "CREATE (max)-[:LOW_FIVED {time: datetime('2018-07-19T19:41:23Z') }]->(post2)" +
+                    "CREATE (post1)-[:TAGGED_ON_2018_07_19 {time: datetime('2018-07-19T17:12:56Z') }]->(neo4j)" +
+                    "CREATE (post2)-[:TAGGED_ON_2018_07_19 {time: datetime('2018-07-19T17:38:57Z') }]->(neo4j)" ;
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
@@ -116,7 +116,7 @@ public class GetTagTest {
             put("name", "Luke Gannon");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "How are you! #neo4j");
-            put("time", 1490208700);
+            put("time", "2018-07-19T17:38:57Z");
             put("high_fived", false);
             put("low_fived", false);
             put("high_fives", 0);
@@ -127,7 +127,7 @@ public class GetTagTest {
             put("name", "Michael Hunger");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "Hello World! #neo4j");
-            put("time", 1490140299);
+            put("time", "2018-07-19T17:12:56Z");
             put("high_fived", false);
             put("low_fived", false);
             put("high_fives", 1);
@@ -141,7 +141,7 @@ public class GetTagTest {
             put("name", "Luke Gannon");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "How are you! #neo4j");
-            put("time", 1490208700);
+            put("time", "2018-07-19T17:38:57Z");
             put("high_fived", false);
             put("low_fived", true);
             put("high_fives", 0);
@@ -153,7 +153,7 @@ public class GetTagTest {
             put("name", "Michael Hunger");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
             put("status", "Hello World! #neo4j");
-            put("time", 1490140299);
+            put("time", "2018-07-19T17:12:56Z");
             put("high_fived", true);
             put("low_fived", false);
             put("high_fives", 1);
@@ -161,4 +161,10 @@ public class GetTagTest {
         }});
     }};
 
+    private static final ArrayList<HashMap<String, Object>> expected3 = new ArrayList<HashMap<String, Object>>() {{
+            add(new HashMap<String, Object>() {{
+                put("name", "neo4j");
+                put("count", 2);
+            }});
+        }};
 }

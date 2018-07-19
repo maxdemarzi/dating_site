@@ -22,7 +22,7 @@ public class CreateReplyTest {
     public void shouldCreateReply() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/jexp/1490140299/reply").toString(), input);
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/jexp/2018-07-19T17:12:56Z/reply").toString(), input);
         HashMap actual  = response.content();
         expected.put("time", actual.get("time"));
         Assert.assertEquals(expected, actual);
@@ -38,10 +38,10 @@ public class CreateReplyTest {
                     "name: 'Michael Hunger'," +
                     "password: 'tunafish'})" +
                     "CREATE (post1:Post {status:'Hello World!', " +
-                    "time: 1490140299})" +
+                    "time: datetime('2018-07-19T17:12:56Z')})" +
                     "CREATE (post2:Post {status:'How are you!', " +
-                    "time: 1490208700})" +
-                    "CREATE (jexp)-[:POSTED_ON_2017_03_21]->(post1)" ;
+                    "time: datetime('2018-07-19T17:38:57Z')})" +
+                    "CREATE (jexp)-[:POSTED_ON_2018_07_19]->(post1)" ;
 
     private static final HashMap input = new HashMap<String, Object>() {{
         put(STATUS, "How are you!");
