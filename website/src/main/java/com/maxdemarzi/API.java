@@ -78,6 +78,8 @@ public interface API {
 
     @GET("users/{username}/likes")
     Call<List<Thing>> getLikes(@Path("username") String username,
+                               @Query("limit") Integer limit,
+                               @Query("offset") Integer offset,
                                @Query("username2") String username2);
 
     @POST("users/{username}/likes/{thing}/")
@@ -90,6 +92,8 @@ public interface API {
 
     @GET("users/{username}/hates")
     Call<List<Thing>> getHates(@Path("username") String username,
+                               @Query("limit") Integer limit,
+                               @Query("offset") Integer offset,
                                @Query("username2") String username2);
 
     @POST("users/{username}/hates/{thing}/")

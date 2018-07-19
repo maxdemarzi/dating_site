@@ -190,8 +190,11 @@ public class App extends Jooby {
           Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
           if (userResponse.isSuccessful()) {
               User user = userResponse.body();
+              Integer limit = req.param("limit").intValue(25);
+              Integer offset = req.param("offset").intValue(0);
 
-              Response<List<Thing>> thingsResponse = api.getLikes(user.getUsername(), requested_by).execute();
+
+              Response<List<Thing>> thingsResponse = api.getLikes(user.getUsername(), limit, offset, requested_by).execute();
               List<Thing> things = new ArrayList<>();
               if (thingsResponse.isSuccessful()) {
                   things = thingsResponse.body();
@@ -211,8 +214,10 @@ public class App extends Jooby {
           Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
           if (userResponse.isSuccessful()) {
               User user = userResponse.body();
+              Integer limit = req.param("limit").intValue(25);
+              Integer offset = req.param("offset").intValue(0);
 
-              Response<List<Thing>> thingsResponse = api.getHates(user.getUsername(), requested_by).execute();
+              Response<List<Thing>> thingsResponse = api.getHates(user.getUsername(), limit, offset, requested_by).execute();
               List<Thing> things = new ArrayList<>();
               if (thingsResponse.isSuccessful()) {
                   things = thingsResponse.body();
