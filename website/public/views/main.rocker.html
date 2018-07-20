@@ -63,9 +63,6 @@
                     <a class="nav-link" href="/low_fives">Low Fives</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/@user.getUsername()">Profile</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" data-toggle="modal" href="#msgModal">Messages</a>
                 </li>
                 <li class="nav-item d-md-none">
@@ -84,7 +81,6 @@
             }
 
         </ul>
-
         <form class="form-inline float-right d-none d-md-flex" action="/search" method="POST">
             <input class="form-control" type="text" data-action="grow" placeholder="Search" name="q">
         </form>
@@ -104,7 +100,9 @@
             </ul>
 
             <ul class="nav navbar-nav d-none" id="js-popoverContent">
-                <li class="nav-item"><a class="nav-link" href="#" data-action="growl">Growl</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()">Profile</a>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
             </ul>
         }

@@ -1,11 +1,33 @@
 @import com.maxdemarzi.models.Post
 
 @args (Post post)
-<div class="card">
-    <div class="card-block">
-        <a href="/user/@post.getUsername()"><img src="https://www.gravatar.com/avatar/@post.getHash()?s=48&d=retro" class="rounded" /></a>
-        @post.getName() <a href="/user/@post.getUsername()">@@@post.getUsername()</a> - @post.humanTime()<br>
-        @post.getStatus()<br>
-        <span class="post"><a href="/like/@post.getUsername()/@post.getTime()"><img src="/assets/img/1f497.png" height="16" width="16"> xxxxx</a></span>
+
+<li class="media list-group-item p-4">
+    <a href="/user/@post.getUsername()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@post.getHash()?s=200&d=retro"></a>
+    <div class="media-body">
+        <div class="media-body-text">
+            <div class="media-heading">
+                <small class="float-right text-muted">@post.humanTime()</small>
+                <h6><a href="/user/@post.getUsername()">@post.getName()</a> <a href="/user/@post.getUsername()">@@@post.getUsername()</a></h6>
+            </div>
+            <p>
+                @post.getStatus()
+            </p>
+            <form id="high_five" action="/five" method="POST" style="display: inline-block;">
+                <button class="btn btn-outline-danger btn-sm" type="submit" name="high_five_button" value="high_five">
+                    <i class="material-icons">pan_tool</i> High Five
+                </button>
+                <button class="btn btn-outline-danger btn-sm" type="submit" name="low_five_button" value="low_five">
+                    <i class="material-icons icon-upside-down">pan_tool</i> Low Five
+                </button>
+            </form>
+            <form id="block" action="/block" method="POST" style="display: inline-block;">
+                <button class="btn btn-outline-danger btn-sm" type="submit" name="block_user_button" value="block_user">
+                    <i class="material-icons">highlight_off</i> Block User
+                </button>
+            </form>
+        </div>
     </div>
-</div>
+</li>
+
+

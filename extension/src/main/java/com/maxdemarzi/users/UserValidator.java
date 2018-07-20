@@ -2,20 +2,14 @@ package com.maxdemarzi.users;
 
 import com.maxdemarzi.Exceptions;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.maxdemarzi.schema.Properties.BIO;
-import static com.maxdemarzi.schema.Properties.CITY;
-import static com.maxdemarzi.schema.Properties.DISTANCE;
-import static com.maxdemarzi.schema.Properties.EMAIL;
-import static com.maxdemarzi.schema.Properties.IS;
-import static com.maxdemarzi.schema.Properties.IS_LOOKING_FOR;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.PASSWORD;
-import static com.maxdemarzi.schema.Properties.USERNAME;
+import static com.maxdemarzi.schema.Properties.*;
 
 
 public class UserValidator {
@@ -44,6 +38,8 @@ public class UserValidator {
                 throw UserExceptions.emptyUsernameParameter;
             } else if (!username.matches(usernamePattern)) {
                 throw UserExceptions.invalidUsernameParameter;
+            } else {
+                input.put(USERNAME, Jsoup.clean(username, Whitelist.none()).toLowerCase());
             }
         }
 
@@ -55,6 +51,8 @@ public class UserValidator {
                 throw UserExceptions.emptyEmailParameter;
             } else if (!email.contains("@")) {
                 throw UserExceptions.invalidEmailParameter;
+            } else {
+                input.put(EMAIL, Jsoup.clean(email, Whitelist.none()));
             }
         }
 
@@ -64,6 +62,8 @@ public class UserValidator {
             String name = (String) input.get(NAME);
             if (name.equals("")) {
                 throw UserExceptions.emptyNameParameter;
+            } else {
+                input.put(NAME, Jsoup.clean(name, Whitelist.none()));
             }
         }
 
@@ -79,9 +79,11 @@ public class UserValidator {
         if (!input.containsKey(BIO)) {
             throw UserExceptions.missingBioParameter;
         } else {
-            String name = (String) input.get(BIO);
-            if (name.equals("")) {
+            String bio = (String) input.get(BIO);
+            if (bio.equals("")) {
                 throw UserExceptions.emptyBioParameter;
+            } else{
+                input.put(BIO, Jsoup.clean(bio, Whitelist.none()));
             }
         }
 
@@ -91,6 +93,8 @@ public class UserValidator {
             String is = (String) input.get(IS);
             if (is.equals("")) {
                 throw UserExceptions.emptyIsParameter;
+            } else {
+                input.put(IS, Jsoup.clean(is, Whitelist.none()));
             }
         }
 
@@ -100,11 +104,16 @@ public class UserValidator {
             if (input.get(IS_LOOKING_FOR) == null) {
                 throw UserExceptions.emptyIsLookingForParameter;
             }
-            ArrayList<String> isLookingFor = (ArrayList<String>) input.get(IS_LOOKING_FOR);
+            ArrayList<String> isLookingFor = (ArrayList<String>)input.get(IS_LOOKING_FOR);
+
             if (isLookingFor.size() == 0) {
                 throw UserExceptions.emptyIsLookingForParameter;
             } else {
-                input.put(IS_LOOKING_FOR, isLookingFor.toArray(new String[]{}));
+                ArrayList<String> cleanIsLookingFor = new ArrayList<>();
+                for (String item : isLookingFor) {
+                    cleanIsLookingFor.add(Jsoup.clean(item, Whitelist.none()));
+                }
+                input.put(IS_LOOKING_FOR, cleanIsLookingFor.toArray(new String[]{}));
             }
         }
 
@@ -128,10 +137,10 @@ public class UserValidator {
             String city = (String) input.get(CITY);
             if (city.equals("")) {
                 throw UserExceptions.emptyCityParameter;
+            } else {
+                input.put(CITY, Jsoup.clean(city, Whitelist.none()));
             }
         }
-
-        input.put(USERNAME, ((String) input.get(USERNAME)).toLowerCase());
 
         return input;
     }
@@ -156,6 +165,8 @@ public class UserValidator {
                 input.remove(EMAIL);
             } else if (!email.contains("@")) {
                 throw UserExceptions.invalidEmailParameter;
+            } else {
+                input.put(EMAIL, Jsoup.clean(email, Whitelist.none()));
             }
         }
 
@@ -163,6 +174,8 @@ public class UserValidator {
             String name = (String) input.get(NAME);
             if (name.equals("")) {
                 input.remove(NAME);
+            } else {
+                input.put(NAME, Jsoup.clean(name, Whitelist.none()));
             }
         }
 
@@ -177,6 +190,8 @@ public class UserValidator {
             String is = (String) input.get(IS);
             if (is.equals("")) {
                 input.remove(IS);
+            } else {
+                input.put(IS, Jsoup.clean(is, Whitelist.none()));
             }
         }
 
@@ -190,7 +205,11 @@ public class UserValidator {
             if (isLookingFor.size() == 0) {
                 input.remove(IS_LOOKING_FOR);
             } else {
-                input.put(IS_LOOKING_FOR, isLookingFor.toArray(new String[]{}));
+                ArrayList<String> cleanIsLookingFor = new ArrayList<>();
+                for (String item : isLookingFor) {
+                    cleanIsLookingFor.add(Jsoup.clean(item, Whitelist.none()));
+                }
+                input.put(IS_LOOKING_FOR, cleanIsLookingFor.toArray(new String[]{}));
             }
         }
 
@@ -210,6 +229,8 @@ public class UserValidator {
             String city = (String) input.get(CITY);
             if (city.equals("")) {
                 input.remove(CITY);
+            } else {
+                input.put(CITY, Jsoup.clean(city, Whitelist.none()));
             }
         }
 

@@ -60,12 +60,13 @@ public class GetMentionsTest {
                     "email: 'max@neo4j.com', " +
                     "name: 'Max De Marzi'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
+                    "time: datetime('2018-07-15T03:43:22Z')," +
                     "password: 'swordfish'})" +
             "CREATE (jexp:User {username:'jexp', " +
                     "email: 'michael@neo4j.com', " +
                     "name: 'Michael Hunger'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
-                    "time: datetime('2018-07-19T03:43:22Z')," +
+                    "time: datetime('2018-07-15T03:43:22Z')," +
                     "password: 'tunafish'})" +
             "CREATE (laeg:User {username:'laexample', " +
                     "email: 'luke@neo4j.com', " +

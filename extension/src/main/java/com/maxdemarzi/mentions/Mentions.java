@@ -73,7 +73,7 @@ public class Mentions {
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
-            Node user2 = null;
+            Node user2;
             HashSet<Node> highFived = new HashSet<>();
             HashSet<Node> lowFived = new HashSet<>();
 

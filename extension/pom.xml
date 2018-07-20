@@ -9,10 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <neo4j.version>3.4.0-rc01</neo4j.version>
+        <neo4j.version>3.4.1</neo4j.version>
         <junit.version>4.12</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jacoco.version>0.7.9</jacoco.version>
+        <jsoup.version>1.11.3</jsoup.version>
+
     </properties>
 
     <dependencies>
@@ -30,6 +32,11 @@
             <groupId>org.neo4j.app</groupId>
             <artifactId>neo4j-server</artifactId>
             <version>${neo4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup.version}</version>
         </dependency>
         <dependency>
             <groupId>org.neo4j</groupId>
@@ -93,6 +100,66 @@
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- This generates a jar-file with our procedure code,
+                     plus any dependencies marked as `compile` scope.
+                     This should then be deployed in the `plugins` directory
+                     of each Neo4j instance in your deployment.
+                     After a restart, the procedure is available for calling. -->
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.neo4j:*</exclude>
+                                    <exclude>org.neo4j.app:*</exclude>
+                                    <exclude>org.neo4j.client:*</exclude>
+                                    <exclude>org.neo4j.3rdparty.*:*</exclude>
+                                    <exclude>org.apache.lucene:*</exclude>
+                                    <exclude>io.netty:*</exclude>
+                                    <exclude>net.jpountz.lz4:*</exclude>
+                                    <exclude>com.hazelcast:*</exclude>
+                                    <exclude>io.dropwizard.metrics:*</exclude>
+                                    <exclude>org.slf4j:*</exclude>
+                                    <exclude>io.prometheus:*</exclude>
+                                    <exclude>org.apache.shiro:*</exclude>
+                                    <exclude>commons-beanutils:*</exclude>
+                                    <exclude>commons-collections:*</exclude>
+                                    <exclude>com.github.ben-manes.caffeine:*</exclude>
+                                    <exclude>org.codehaus.jackson:*</exclude>
+                                    <exclude>commons-configuration:*</exclude>
+                                    <exclude>commons-lang:*</exclude>
+                                    <exclude>commons-logging:*</exclude>
+                                    <exclude>org.jprocesses:*</exclude>
+                                    <exclude>com.profesorfalken:*</exclude>
+                                    <exclude>org.apache.commons:*</exclude>
+                                    <exclude>org.objenesis:*</exclude>
+                                    <exclude>org.scala-lang:*</exclude>
+                                    <exclude>org.ow2.asm:*</exclude>
+                                    <exclude>com.googlecode.concurrentlinkedhashmap:*</exclude>
+                                    <exclude>org.parboiled:*</exclude>
+                                    <exclude>net.sf.opencsv:*</exclude>
+                                    <exclude>jline:*</exclude>
+                                    <exclude>org.eclipse.jetty:*</exclude>
+                                    <exclude>javax.servlet:*</exclude>
+                                    <exclude>com.sun.jersey:*</exclude>
+                                    <exclude>commons-io:*</exclude>
+                                    <exclude>org.mozilla:*</exclude>
+                                    <exclude>org.bouncycastle:*</exclude>
+                                    <exclude>junit:*</exclude>
+                                    <exclude>org.hamcrest:*</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

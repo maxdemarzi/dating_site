@@ -60,13 +60,13 @@ public class GetPostsTest {
                     "email: 'max@neo4j.com', " +
                     "hash: 'hash', " +
                     "name: 'Max De Marzi'," +
-                    "time: datetime('2018-07-19T11:41:23Z')," +
+                    "time: datetime('2018-07-15T11:41:23Z')," +
                     "password: 'swordfish'})" +
             "CREATE (jexp:User {username:'jexp', " +
                     "email: 'michael@neo4j.com', " +
                     "name: 'Michael Hunger'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
-                    "time: datetime('2018-07-19T19:41:23Z')," +
+                    "time: datetime('2018-07-15T19:41:23Z')," +
                     "password: 'tunafish'})" +
             "CREATE (post1:Post {status:'Hello World!', " +
                     "time: datetime('2018-07-19T17:12:56Z') })" +

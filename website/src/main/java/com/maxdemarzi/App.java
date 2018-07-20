@@ -323,7 +323,6 @@ public class App extends Jooby {
 
           Response<Post> response = api.createPost(username, post).execute();
           if (response.isSuccessful()) {
-              sleep(1000);
               return Results.redirect("/home");
           } else {
               throw new Err(Status.BAD_REQUEST);

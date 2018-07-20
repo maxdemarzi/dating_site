@@ -85,7 +85,6 @@ public class Posts {
                 }
             }
 
-
             Map userProperties = user.getAllProperties();
             ZonedDateTime earliest = (ZonedDateTime)userProperties.get(TIME);
             int count = 0;

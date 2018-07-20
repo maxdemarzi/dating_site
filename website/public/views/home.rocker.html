@@ -11,22 +11,13 @@
         <div class="row">
                 @views.partials._user.template(user)
             <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-block">
-                            <form id="status" action="/post" method="POST">
-                            <div class="input-group card-outline-info">
-                                <input name="status" type="text" class="form-control" placeholder="What's happening?" autofocus>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-secondary" type="submit">Post</button>
-                                </span>
-                            </div>
-                            </form>
-                            <br/>
-                            @for (post: posts) {
-                                @views.partials._post.template(post)
-                            }
-                    </div>
-                </div>
+                <ul class="list-group media-list media-list-stream mb-4">
+                    @views.partials._new_post.template()
+
+                    @for (post: posts) {
+                        @views.partials._post.template(post)
+                    }
+                </ul>
             </div>
             <div class="col-lg-3">
 

@@ -67,7 +67,7 @@ public class Tags {
     }
 
     // Cache
-    private static LoadingCache<String, List<Map<String, Object>>> trends = Caffeine.newBuilder()
+    public static LoadingCache<String, List<Map<String, Object>>> trends = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.DAYS)
             .refreshAfterWrite(5, TimeUnit.MINUTES)
             .build(Tags::getTrends);

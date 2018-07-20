@@ -2,6 +2,8 @@ package com.maxdemarzi.posts;
 
 import com.maxdemarzi.Exceptions;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,6 +33,8 @@ public class PostValidator {
             String status = (String)input.get(STATUS);
             if (status.equals("")) {
                 throw PostExceptions.emptyStatusParameter;
+            } else {
+                input.put(STATUS, Jsoup.clean(status, Whitelist.simpleText()));
             }
         }
 

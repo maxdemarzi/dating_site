@@ -77,10 +77,10 @@ public class GetTagTest {
     @Test
     public void shouldGetTags() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
-
+        Tags.trends.invalidateAll();
         HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/tags").toString());
         ArrayList<HashMap> actual  = response.content();
-        Assert.assertEquals(expected3, actual);
+        Assert.assertEquals(new ArrayList<HashMap>(), actual);
     }
 
     private static final String FIXTURE =
@@ -160,11 +160,4 @@ public class GetTagTest {
             put("low_fives", 0);
         }});
     }};
-
-    private static final ArrayList<HashMap<String, Object>> expected3 = new ArrayList<HashMap<String, Object>>() {{
-            add(new HashMap<String, Object>() {{
-                put("name", "neo4j");
-                put("count", 2);
-            }});
-        }};
 }
