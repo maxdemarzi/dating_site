@@ -207,6 +207,8 @@ public class Users {
         results.put(HAS, has);
         results.put(WANTS, wants);
         results.put(POSTS, posts);
+        String city = (String)user.getSingleRelationship(RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode().getProperty(FULL_NAME);
+        results.put(CITY, city);
         return results;
     }
 

@@ -61,6 +61,7 @@ public class GetProfileTest {
                     "time: 1490208700})" +
             "CREATE (post3:Post {status:'Doing fine thanks!', " +
                     "time: 1490290191})" +
+            "CREATE (city:City {full_name:'Chicago'})" +
             "CREATE (jexp)-[:POSTED_ON_2017_03_21]->(post1)" +
             "CREATE (max)-[:POSTED_ON_2017_03_22]->(post2)" +
             "CREATE (max)-[:POSTED_ON_2017_03_23]->(post3)" +
@@ -75,11 +76,13 @@ public class GetProfileTest {
             "CREATE (jexp)-[:WANTS {time: 1490140299}]->(fat)" +
             "CREATE (laeg)-[:HAS {time: 1490208700}]->(bald)" +
             "CREATE (max)-[:WANTS {time: 1490209300 }]->(fat)" +
-            "CREATE (max)-[:HAS {time: 1490209400 }]->(bald)";
+            "CREATE (max)-[:HAS {time: 1490209400 }]->(bald)" +
+            "CREATE (max)-[:IN_LOCATION]->(city)";
 
     private static final HashMap expected = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");
         put("name", "Max De Marzi");
+        put("city", "Chicago");
         put("posts", 2);
         put("likes", 1);
         put("hates", 1);
@@ -93,6 +96,7 @@ public class GetProfileTest {
     private static final HashMap expected2 = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");
         put("name", "Max De Marzi");
+        put("city", "Chicago");
         put("posts", 2);
         put("likes", 1);
         put("has", 1);

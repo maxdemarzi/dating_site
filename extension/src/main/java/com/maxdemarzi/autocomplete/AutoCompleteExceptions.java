@@ -6,6 +6,7 @@ import com.maxdemarzi.Exceptions;
 
      static final Exceptions labelNotValid = new Exceptions(400, "Label not Valid.");
      static final Exceptions propertyNotValid = new Exceptions(400, "Property not Valid.");
+     static final Exceptions displayPropertyNotValid = new Exceptions(400, "Display property not Valid.");
 
     AutoCompleteExceptions(int code, String error) {
         super(code, error);

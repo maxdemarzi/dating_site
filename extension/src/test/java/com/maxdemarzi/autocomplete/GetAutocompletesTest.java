@@ -47,10 +47,19 @@ public class GetAutocompletesTest {
     }
 
     @Test
+    public void shouldNotAutocompleteBadDisplayProperty() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/Thing/lowercase_name/java?display_property=badname").toString());
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Display property not Valid.", actual.get("error"));
+    }
+    @Test
     public void shouldNotAutocompleteBadProperty() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/User/password/java").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/autocompletes/Thing/bad_property/java").toString());
         HashMap actual  = response.content();
         Assert.assertEquals(400, response.status());
         Assert.assertEquals("Property not Valid.", actual.get("error"));

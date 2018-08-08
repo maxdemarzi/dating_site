@@ -30,17 +30,18 @@ public class AutoCompletes {
     private static final HashSet<String> labels = new HashSet<String>() {{
         add("Attribute");
         add("City");
-        add("User");
         add("Tag");
         add("Thing");
     }};
 
     private static final HashSet<String> properties = new HashSet<String>() {{
-        add("full_name");
         add("lowercase_full_name");
-        add("username");
-        add("name");
         add("lowercase_name");
+    }};
+
+    private static final HashSet<String> displayProperties = new HashSet<String>() {{
+        add("full_name");
+        add("name");
     }};
 
     @GET
@@ -54,6 +55,12 @@ public class AutoCompletes {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
 
         try (Transaction tx = db.beginTx()) {
+            final String show;
+            if (displayProperty == null) {
+                show = property;
+            } else {
+                show = displayProperty;
+            }
 
             if (!labels.contains(label)) {
                 throw AutoCompleteExceptions.labelNotValid;
@@ -61,16 +68,15 @@ public class AutoCompletes {
             if (!properties.contains(property)) {
                 throw AutoCompleteExceptions.propertyNotValid;
             }
+            if (!displayProperties.contains(show)) {
+                throw AutoCompleteExceptions.displayPropertyNotValid;
+            }
 
             ResourceIterator<Node> nodes = db.findNodes(Label.label(label), property, query, StringSearchMode.PREFIX);
             nodes.forEachRemaining(node -> {
                 HashMap<String, Object> map = new HashMap<>();
                 map.put(ID, node.getId());
-                if (displayProperty != null) {
-                    map.put(displayProperty, node.getProperty(displayProperty));
-                } else {
-                    map.put(property, node.getProperty(property));
-                }
+                map.put(show, node.getProperty(show));
                 results.add(map);
             });
 
