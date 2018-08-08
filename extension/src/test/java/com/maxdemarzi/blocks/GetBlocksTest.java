@@ -62,7 +62,10 @@ public class GetBlocksTest {
                     "name: 'Luke Gannon'," +
                     "hash: '0bd90aeb51d5982062f4f303a62df935'," +
                     "password: 'cuddlefish'})" +
-
+            "CREATE (city:City {full_name:'Chicago'})" +
+            "CREATE (max)-[:IN_LOCATION]->(city)" +
+            "CREATE (laeg)-[:IN_LOCATION]->(city)" +
+            "CREATE (jexp)-[:IN_LOCATION]->(city)" +
             "CREATE (max)-[:BLOCKS {time:1490140299}]->(jexp)" +
             "CREATE (max)-[:BLOCKS {time:1490209400}]->(laeg)";
 
@@ -79,6 +82,7 @@ public class GetBlocksTest {
             put("high_fives", 0);
             put("low_fives", 0);
             put("time", 1490209400);
+            put("city", "Chicago");
         }});
         add(new HashMap<String, Object>() {{
             put("username", "jexp");
@@ -92,6 +96,7 @@ public class GetBlocksTest {
             put("high_fives", 0);
             put("low_fives", 0);
             put("time", 1490140299);
+            put("city", "Chicago");
         }});
     }};
 }

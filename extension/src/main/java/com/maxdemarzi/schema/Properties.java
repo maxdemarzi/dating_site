@@ -28,6 +28,7 @@ public final class Properties {
     public static final String LOW_FIVED = "low_fived";
     public static final String LOW_FIVES = "low_fives";
     public static final String LOWERCASE_NAME = "lowercase_name";
+    public static final String LOWERCASE_FULL_NAME = "lowercase_full_name";
     public static final String HAS = "has";
     public static final String HATED = "hated";
     public static final String HATES = "hates";
