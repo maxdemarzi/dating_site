@@ -24,14 +24,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
@@ -52,6 +47,7 @@ public class Posts {
 
     private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
     private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
+    private static final Comparator<RelationshipType> relTypeComparator = Comparator.comparing((Function<RelationshipType, Object>) RelationshipType::name, reverseOrder());
 
     @GET
     public Response getPosts(@PathParam("username") final String username,
@@ -60,14 +56,11 @@ public class Posts {
                              @QueryParam("username2") final String username2,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        ZonedDateTime dateTime;
         ZonedDateTime latest;
         if (since == null) {
             latest = ZonedDateTime.now(utc);
-            dateTime = ZonedDateTime.now(utc);
         } else {
             latest = ZonedDateTime.parse(since);
-            dateTime = ZonedDateTime.parse(since);
         }
 
         try (Transaction tx = db.beginTx()) {
@@ -86,12 +79,17 @@ public class Posts {
             }
 
             Map userProperties = user.getAllProperties();
-            ZonedDateTime earliest = (ZonedDateTime)userProperties.get(TIME);
             int count = 0;
-            while (count < limit && (dateTime.isAfter(earliest))) {
-                RelationshipType relType = RelationshipType.withName("POSTED_ON_" +
-                        dateTime.format(dateFormatter));
+            ArrayList<RelationshipType> types = new ArrayList<>();
+            user.getRelationshipTypes().forEach(t-> {
+                        if (t.name().startsWith("POSTED_ON")) {
+                            types.add(t);
+                        }
+                    });
+            types.sort(relTypeComparator);
 
+            for (RelationshipType relType : types) {
+                if (count >= limit) { break;}
                 for (Relationship r1 : user.getRelationships(Direction.OUTGOING, relType)) {
                     Node post = r1.getEndNode();
                     Map<String, Object> result = post.getAllProperties();
@@ -110,7 +108,6 @@ public class Posts {
                         count++;
                     }
                 }
-                dateTime = dateTime.minusDays(1);
             }
             tx.success();
         }

@@ -1,5 +1,6 @@
 package com.maxdemarzi.timeline;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.cities.Cities;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
@@ -20,13 +21,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.function.Function;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
@@ -45,31 +46,34 @@ import static java.util.Collections.reverseOrder;
 @Path("/users/{username}/timeline")
 public class Timeline {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-    private static final CoordinateReferenceSystem crs = CoordinateReferenceSystem.Cartesian;
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
 
     @GET
     public Response getTimeline(@PathParam("username") final String username,
                              @QueryParam("limit") @DefaultValue("100") final Integer limit,
-                             @QueryParam("since") final Long since,
+                             @QueryParam("since") final String since,
                              @QueryParam("city") final String city,
                              @QueryParam("state") final String state,
                              @QueryParam("distance") @DefaultValue("40000") Integer distance,
                              @QueryParam("competition") @DefaultValue("false") Boolean competition,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        LocalDateTime dateTime;
+        ZonedDateTime dateTime;
+        ZonedDateTime latest;
         if (since == null) {
-            dateTime = LocalDateTime.now(utc);
+            latest = ZonedDateTime.now(utc);
+            dateTime = ZonedDateTime.now(utc);
         } else {
-            dateTime = LocalDateTime.ofEpochSecond(since, 0, ZoneOffset.UTC);
+            latest = ZonedDateTime.parse(since);
+            dateTime = ZonedDateTime.parse(since);
         }
-        Long latest = dateTime.toEpochSecond(ZoneOffset.UTC);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
-            String is = (String)user.getProperty(IS);
-            HashSet<String> isLookingFor = new HashSet<>(Arrays.asList((String[]) user.getProperty(IS_LOOKING_FOR)));
+            Map userProperties = user.getAllProperties();
+            String is = (String)userProperties.get(IS);
+            HashSet<String> isLookingFor = new HashSet<>(Arrays.asList((String[]) userProperties.get(IS_LOOKING_FOR)));
 
             HashSet<Node> highFived = new HashSet<>();
             HashSet<Node> lowFived = new HashSet<>();
@@ -89,8 +93,8 @@ public class Timeline {
             HashSet<Long> seen = new HashSet<>();
             HashSet<Node> locations = new HashSet<>();
 
-            // Up to 30 days ago
-            LocalDateTime earliest = dateTime.minusDays(30);
+            // Up to the day the user registered
+            ZonedDateTime earliest = (ZonedDateTime)userProperties.get(TIME);
 
             // Get the User Location(s) and Nearby Locations
             if (city == null) {
@@ -106,7 +110,6 @@ public class Timeline {
             }
 
             // Get recent posts
-
             while (seen.size() < limit && (dateTime.isAfter(earliest))) {
                 RelationshipType posted = RelationshipType.withName("POSTED_ON_" +
                         dateTime.format(dateFormatter));
@@ -125,18 +128,17 @@ public class Timeline {
 
                             boolean include;
                             if (competition) {
-                                include = (theyAreLookingFor.stream().filter(isLookingFor::contains).count() > 0) &&
+                                include = (theyAreLookingFor.stream().anyMatch(isLookingFor::contains)) &&
                                         theyAre.equals(is);
                             } else {
                                 include = theyAreLookingFor.contains(is) && isLookingFor.contains(theyAre);
                             }
 
                             if (include && !blocked.contains(person)) {
-
                                 if (seen.add(post.getId())) {
-                                    Long time = (Long) r1.getProperty("time");
+                                    ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
                                     Map<String, Object> posting = r1.getEndNode().getAllProperties();
-                                    if (time < latest) {
+                                    if(time.isBefore(latest)) {
                                         posting.put(TIME, time);
                                         posting.put(USERNAME, properties.get(USERNAME));
                                         posting.put(NAME, properties.get(NAME));
@@ -157,7 +159,7 @@ public class Timeline {
             tx.success();
         }
 
-        results.sort(Comparator.comparing(m -> (Long) m.get("time"), reverseOrder()));
+        results.sort(timedComparator);
 
         return Response.ok().entity(objectMapper.writeValueAsString(
                 results.subList(0, Math.min(results.size(), limit))))

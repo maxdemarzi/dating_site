@@ -23,6 +23,9 @@ public class User {
     private Integer distance;
     private Integer wants;
     private Integer has;
+    private Integer want;
+    private Integer have;
+
     private String city;
 
     public String IsLookingFor() {

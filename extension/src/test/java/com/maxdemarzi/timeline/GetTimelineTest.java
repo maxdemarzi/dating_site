@@ -21,7 +21,7 @@ public class GetTimelineTest {
     public void shouldGetTimeline() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=1525135318").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=2018-05-02T11:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertEquals(expected, actual);
     }
@@ -30,7 +30,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineLimited() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?limit=1&since=1525135318").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?limit=1&since=2018-05-02T11:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -40,7 +40,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineSince() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=1525135308").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?since=2018-05-02T11:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -50,7 +50,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineWithDistance() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?distance=15000&since=1525135318").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?distance=15000&since=2018-05-02T11:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -59,7 +59,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineLocation() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?city=Chicago&state=Illinois&since=1525135318").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?city=Chicago&state=Illinois&since=2018-05-02T11:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertTrue(actual.size() == 1);
         Assert.assertEquals(expected.get(0), actual.get(0));
@@ -69,7 +69,7 @@ public class GetTimelineTest {
     public void shouldGetTimelineCompetition() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?competition=true&since=1525135318").toString());
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/users/maxdemarzi/timeline?competition=true&since=2018-05-02T11:13:00Z").toString());
         ArrayList<HashMap> actual  = response.content();
         Assert.assertEquals(competition, actual);
     }
@@ -81,12 +81,12 @@ public class GetTimelineTest {
                     "name: 'Max De Marzi'," +
                     "is: 'man'," +
                     "is_looking_for: ['woman']," +
-                    "time: 1525048800," +
+                    "time: datetime('2018-03-15T19:41:23Z')," +
                     "password: 'swordfish'})" +
             "CREATE (jexp:User {username:'jexp', " +
                     "email: 'michaela@neo4j.com', " +
                     "hash: 'hash', " +
-                    "time: 1525048800," +
+                    "time: datetime('2018-03-15T19:41:23Z')," +
                     "name: 'Michaela Hunger'," +
                     "is: 'woman'," +
                     "is_looking_for: ['man']," +
@@ -94,7 +94,7 @@ public class GetTimelineTest {
             "CREATE (laeg:User {username:'laexample', " +
                     "email: 'luke@neo4j.com', " +
                     "hash: 'hash', " +
-                    "time: 1525048800," +
+                    "time: datetime('2018-03-15T19:41:23Z')," +
                     "name: 'Luke Gannon'," +
                     "is: 'man'," +
                     "is_looking_for: ['man', 'woman', 'complicated']," +
@@ -106,16 +106,16 @@ public class GetTimelineTest {
             "CREATE (laeg)-[:IN_LOCATION]->(chicago)" +
             "CREATE (jexp)-[:IN_LOCATION]->(chicago)" +
             "CREATE (post1:Post {status:'Hello World!', " +
-                    "time: 1490140299})" +
+                    "time: datetime('2018-05-01T12:00:01Z')})" +
             "CREATE (post2:Post {status:'How are you!', " +
-                    "time: 1490208700})" +
+                    "time: datetime('2018-05-01T13:00:01Z')})" +
             "CREATE (post3:Post {status:'Doing fine!', " +
-                    "time: 1490208800})" +
-            "CREATE (jexp)-[:POSTED_ON_2018_05_01 {time: 1525135307}]->(post1)" +
-            "CREATE (laeg)-[:POSTED_ON_2018_05_01 {time: 1525135317}]->(post2)" +
-            "CREATE (max)-[:POSTED_ON_2018_04_30 {time: 1525048893}]->(post3)"  +
-            "CREATE (laeg)-[:LOW_FIVED {time: 1525135317}]->(post1)" +
-            "CREATE (max)-[:HIGH_FIVED {time: 1525135307}]->(post1)" ;
+                    "time: datetime('2018-04-30T12:00:01Z')})" +
+            "CREATE (jexp)-[:POSTED_ON_2018_05_01 {time: datetime('2018-05-01T12:00:01Z')}]->(post1)" +
+            "CREATE (laeg)-[:POSTED_ON_2018_05_01 {time: datetime('2018-05-01T13:00:01Z')}]->(post2)" +
+            "CREATE (max)-[:POSTED_ON_2018_04_30 {time: datetime('2018-04-30T12:00:01Z')}]->(post3)"  +
+            "CREATE (laeg)-[:LOW_FIVED {time: datetime('2018-05-01T12:00:01Z')}]->(post1)" +
+            "CREATE (max)-[:HIGH_FIVED {time: datetime('2018-05-01T12:00:01Z')}]->(post1)" ;
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
@@ -123,7 +123,7 @@ public class GetTimelineTest {
             put("name", "Michaela Hunger");
             put("hash", "hash");
             put("status", "Hello World!");
-            put("time", 1525135307);
+            put("time", "2018-05-01T12:00:01Z");
             put("high_fives", 1);
             put("low_fives", 1);
             put("high_fived", true);
@@ -137,7 +137,7 @@ public class GetTimelineTest {
             put("name", "Luke Gannon");
             put("hash", "hash");
             put("status", "How are you!");
-            put("time", 1525135317);
+            put("time", "2018-05-01T13:00:01Z");
             put("high_fives", 0);
             put("low_fives", 0);
             put("high_fived", false);
@@ -148,7 +148,7 @@ public class GetTimelineTest {
             put("name", "Max De Marzi");
             put("hash", "hash");
             put("status", "Doing fine!");
-            put("time", 1525048893);
+            put("time", "2018-04-30T12:00:01Z");
             put("high_fives", 0);
             put("low_fives", 0);
             put("high_fived", false);
