@@ -107,7 +107,6 @@ public class Hates {
             }
 
             Relationship hate = user.createRelationshipTo(thing, RelationshipTypes.HATES);
-            LocalDateTime dateTime = LocalDateTime.now(utc);
             hate.setProperty(TIME, ZonedDateTime.now(utc));
             results = thing.getAllProperties();
             results.put(HATED, true);

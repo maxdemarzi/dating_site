@@ -40,6 +40,7 @@ public final class Properties {
     public static final String STATUS = "status";
     public static final String SHARED = "shared";
     public static final String TIME = "time";
+    public static final String TIMEZONE = "timezone";
     public static final String WANT = "want";
     public static final String WANTS = "wants";
 

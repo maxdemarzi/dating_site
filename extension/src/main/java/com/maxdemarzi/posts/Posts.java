@@ -177,8 +177,8 @@ public class Posts {
             results.put(NAME, user.getProperty(NAME));
             results.put(HIGH_FIVED, false);
             results.put(LOW_FIVED, false);
-            results.put(HIGH_FIVES, post.getDegree(RelationshipTypes.HIGH_FIVED ,Direction.INCOMING));
-            results.put(LOW_FIVES, post.getDegree(RelationshipTypes.LOW_FIVED ,Direction.INCOMING));
+            results.put(HIGH_FIVES, post.getDegree(RelationshipTypes.HIGH_FIVED, Direction.INCOMING));
+            results.put(LOW_FIVES, post.getDegree(RelationshipTypes.LOW_FIVED, Direction.INCOMING));
 
             tx.success();
         }

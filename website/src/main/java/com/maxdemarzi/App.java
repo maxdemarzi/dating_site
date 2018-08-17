@@ -124,10 +124,10 @@ public class App extends Jooby {
           if (userResponse.isSuccessful()) {
               User user = userResponse.body();
 
-              Response<List<Post>> timelineResponse = api.getPosts(req.param("username").value()).execute();
+              Response<List<Post>> postsResponse = api.getPosts(req.param("username").value()).execute();
               List<Post> posts = new ArrayList<>();
-              if (timelineResponse.isSuccessful()) {
-                  posts = timelineResponse.body();
+              if (postsResponse.isSuccessful()) {
+                  posts = postsResponse.body();
               }
 
               return views.user.template(authenticated, user, posts, getTags());

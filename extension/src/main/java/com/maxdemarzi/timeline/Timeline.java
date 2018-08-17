@@ -91,12 +91,12 @@ public class Timeline {
             }
 
             HashSet<Long> seen = new HashSet<>();
-            HashSet<Node> locations = new HashSet<>();
 
             // Up to the day the user registered
-            ZonedDateTime earliest = (ZonedDateTime)userProperties.get(TIME);
+            ZonedDateTime earliest = ((ZonedDateTime)userProperties.get(TIME)).minusDays(90);
 
             // Get the User Location(s) and Nearby Locations
+            HashSet<Node> locations = new HashSet<>();
             if (city == null) {
                 for (Relationship inLocation : user.getRelationships(Direction.OUTGOING, RelationshipTypes.IN_LOCATION)) {
                     Node location = inLocation.getEndNode();
