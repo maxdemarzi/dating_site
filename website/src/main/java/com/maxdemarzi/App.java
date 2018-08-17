@@ -5,7 +5,7 @@ import com.maxdemarzi.models.Post;
 import com.maxdemarzi.models.Tag;
 import com.maxdemarzi.models.Thing;
 import com.maxdemarzi.models.User;
-import com.maxdemarzi.routes.AutoCompletes;
+import com.maxdemarzi.routes.*;
 import com.typesafe.config.Config;
 import okhttp3.Credentials;
 import okhttp3.Interceptor;
@@ -107,6 +107,7 @@ public class App extends Jooby {
 
       use(new AutoCompletes());
 
+      // Accessible by public or registered users
       use("*", (req, rsp, chain) -> {
           ProfileManager pm = require(ProfileManager.class);
           CommonProfile profile = (CommonProfile) pm.get(req.ifSession().isPresent()).orElseGet(this::getAnonymous);
@@ -115,119 +116,11 @@ public class App extends Jooby {
           chain.next(req, rsp);
       });
 
-      get("/user/{username}", req -> {
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
-
-          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-          if (userResponse.isSuccessful()) {
-              User user = userResponse.body();
-
-              Response<List<Post>> postsResponse = api.getPosts(req.param("username").value()).execute();
-              List<Post> posts = new ArrayList<>();
-              if (postsResponse.isSuccessful()) {
-                  posts = postsResponse.body();
-              }
-
-              return views.user.template(authenticated, user, posts, getTags());
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
-
-      get("/user/{username}/has", req -> {
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
-
-          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-          if (userResponse.isSuccessful()) {
-              User user = userResponse.body();
-              Integer limit = req.param("limit").intValue(25);
-              Integer offset = req.param("offset").intValue(0);
-
-              Response<List<Attribute>> attributesResponse = api.getHas(user.getUsername(), limit, offset, requested_by).execute();
-              List<Attribute> attributes = new ArrayList<>();
-              if (attributesResponse.isSuccessful()) {
-                  attributes = attributesResponse.body();
-              }
-
-              return views.attributes.template(authenticated, user, attributes);
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
-
-      get("/user/{username}/wants", req -> {
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
-
-          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-          if (userResponse.isSuccessful()) {
-              User user = userResponse.body();
-              Integer limit = req.param("limit").intValue(25);
-              Integer offset = req.param("offset").intValue(0);
-
-              Response<List<Attribute>> attributesResponse = api.getWants(user.getUsername(), limit, offset, requested_by).execute();
-              List<Attribute> attributes = new ArrayList<>();
-              if (attributesResponse.isSuccessful()) {
-                  attributes = attributesResponse.body();
-              }
-
-              return views.attributes.template(authenticated, user, attributes);
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
-
-      get("/user/{username}/likes", req -> {
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
-
-          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-          if (userResponse.isSuccessful()) {
-              User user = userResponse.body();
-              Integer limit = req.param("limit").intValue(25);
-              Integer offset = req.param("offset").intValue(0);
-
-
-              Response<List<Thing>> thingsResponse = api.getLikes(user.getUsername(), limit, offset, requested_by).execute();
-              List<Thing> things = new ArrayList<>();
-              if (thingsResponse.isSuccessful()) {
-                  things = thingsResponse.body();
-              }
-
-              return views.things.template(authenticated, user, things);
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
-
-      get("/user/{username}/hates", req -> {
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
-
-          Response<User> userResponse = api.getProfile(req.param("username").value(), requested_by).execute();
-          if (userResponse.isSuccessful()) {
-              User user = userResponse.body();
-              Integer limit = req.param("limit").intValue(25);
-              Integer offset = req.param("offset").intValue(0);
-
-              Response<List<Thing>> thingsResponse = api.getHates(user.getUsername(), limit, offset, requested_by).execute();
-              List<Thing> things = new ArrayList<>();
-              if (thingsResponse.isSuccessful()) {
-                  things = thingsResponse.body();
-              }
-
-              return views.things.template(authenticated, user, things);
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
+      use(new Wants());
+      use(new Has());
+      use(new Likes());
+      use(new Hates());
+      use(new Users());
 
       get("/tag/{hashtag}", req -> {
           String requested_by = req.get("requested_by");
@@ -270,20 +163,8 @@ public class App extends Jooby {
           return views.home.template(authenticated, authenticated, posts, getTags());
 
       });
-
-//      get("/attributes", req -> {
-//          String requested_by = req.get("requested_by");
-//          if (requested_by.equals("anonymous")) requested_by = null;
-//          User authenticated = getUserProfile(requested_by);
-//
-//          Response<List<Attribute>> attributesResponse = api.getAttributes(0, 25, authenticated.getUsername()).execute();
-//          List<Attribute> attributes = new ArrayList<>();
-//          if (attributesResponse.isSuccessful()) {
-//              attributes = attributesResponse.body();
-//          }
-//          return views.attributes.template();
-//      });
-
+      
+      // Accessible only by registered users
       use(new Pac4j().client(conf -> new FormClient("/", new ServiceAuthenticator())));
 
       get("/home", req -> {
@@ -363,7 +244,7 @@ public class App extends Jooby {
 
   }
 
-    private User getUserProfile(String id) throws java.io.IOException {
+    public static User getUserProfile(String id) throws java.io.IOException {
         User user = null;
         if (id != null) {
             Response<User> userResponse = api.getProfile(id, null).execute();
@@ -376,7 +257,7 @@ public class App extends Jooby {
         return user;
     }
 
-    private List<Tag> getTags() throws java.io.IOException {
+    public static List<Tag> getTags() throws java.io.IOException {
         List<Tag> trends = new ArrayList<>();
         Response<List<Tag>> trendsResponce = api.getTags().execute();
         if (trendsResponce.isSuccessful()) {

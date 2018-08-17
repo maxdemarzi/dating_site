@@ -42,6 +42,5 @@ public class AutoCompletes extends Jooby {
             }
             throw new Err(Status.CONFLICT, "There was a problem autocompleting the thing");
         }).produces("json");
-
     }
 }
