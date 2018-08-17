@@ -2,9 +2,7 @@ package com.maxdemarzi.seed;
 
 import com.maxdemarzi.schema.Labels;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

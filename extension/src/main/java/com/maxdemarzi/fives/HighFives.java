@@ -12,12 +12,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.*;
-import java.util.*;
+import java.util.Map;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
-import static com.maxdemarzi.schema.Properties.TIME;
 import static com.maxdemarzi.users.Users.getPost;
 
 @Path("/users/{username}/high_fives")

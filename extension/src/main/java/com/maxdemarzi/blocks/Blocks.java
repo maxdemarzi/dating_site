@@ -2,33 +2,20 @@ package com.maxdemarzi.blocks;
 
 import com.maxdemarzi.schema.RelationshipTypes;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.ws.rs.*;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
 
-import static com.maxdemarzi.schema.Properties.EMAIL;
-import static com.maxdemarzi.schema.Properties.PASSWORD;
-import static com.maxdemarzi.schema.Properties.TIME;
 import static com.maxdemarzi.Time.getLatestTime;
 import static com.maxdemarzi.Time.utc;
+import static com.maxdemarzi.schema.Properties.*;
 import static com.maxdemarzi.users.Users.findUser;
 import static com.maxdemarzi.users.Users.getUserAttributes;
 import static java.util.Collections.reverseOrder;

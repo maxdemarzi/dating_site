@@ -6,52 +6,19 @@ import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
+import javax.ws.rs.*;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
-import static com.maxdemarzi.schema.Properties.BIO;
-import static com.maxdemarzi.schema.Properties.CITY;
-import static com.maxdemarzi.schema.Properties.DISTANCE;
-import static com.maxdemarzi.schema.Properties.EMAIL;
-import static com.maxdemarzi.schema.Properties.FULL_NAME;
-import static com.maxdemarzi.schema.Properties.HAS;
-import static com.maxdemarzi.schema.Properties.HASH;
-import static com.maxdemarzi.schema.Properties.HATES;
-import static com.maxdemarzi.schema.Properties.HAVE;
-import static com.maxdemarzi.schema.Properties.HIGH_FIVES;
-import static com.maxdemarzi.schema.Properties.IS;
-import static com.maxdemarzi.schema.Properties.IS_LOOKING_FOR;
-import static com.maxdemarzi.schema.Properties.LIKES;
-import static com.maxdemarzi.schema.Properties.LOW_FIVES;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.PASSWORD;
-import static com.maxdemarzi.schema.Properties.POSTS;
-import static com.maxdemarzi.schema.Properties.TIME;
-import static com.maxdemarzi.schema.Properties.USERNAME;
-import static com.maxdemarzi.schema.Properties.WANT;
-import static com.maxdemarzi.schema.Properties.WANTS;
+import static com.maxdemarzi.schema.Properties.*;
 
 @Path("/users")
 public class Users {

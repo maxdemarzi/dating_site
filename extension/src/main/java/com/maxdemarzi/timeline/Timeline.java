@@ -5,42 +5,19 @@ import com.maxdemarzi.cities.Cities;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.values.storable.CoordinateReferenceSystem;
+import org.neo4j.graphdb.*;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
+import javax.ws.rs.*;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.function.Function;
+import java.time.ZonedDateTime;
+import java.util.*;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
-import static com.maxdemarzi.schema.Properties.HASH;
-import static com.maxdemarzi.schema.Properties.HIGH_FIVED;
-import static com.maxdemarzi.schema.Properties.HIGH_FIVES;
-import static com.maxdemarzi.schema.Properties.IS;
-import static com.maxdemarzi.schema.Properties.IS_LOOKING_FOR;
-import static com.maxdemarzi.schema.Properties.LOW_FIVED;
-import static com.maxdemarzi.schema.Properties.LOW_FIVES;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.TIME;
-import static com.maxdemarzi.schema.Properties.USERNAME;
+import static com.maxdemarzi.schema.Properties.*;
 import static java.util.Collections.reverseOrder;
 
 @Path("/users/{username}/timeline")

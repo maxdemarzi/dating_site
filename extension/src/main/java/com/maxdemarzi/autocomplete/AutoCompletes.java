@@ -1,25 +1,14 @@
 package com.maxdemarzi.autocomplete;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Label;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.ResourceIterator;
-import org.neo4j.graphdb.StringSearchMode;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
+import javax.ws.rs.*;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static com.maxdemarzi.schema.Properties.ID;
 

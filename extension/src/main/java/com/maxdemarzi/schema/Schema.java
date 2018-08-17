@@ -11,11 +11,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static com.maxdemarzi.schema.Properties.EMAIL;
-import static com.maxdemarzi.schema.Properties.LOCATION;
-import static com.maxdemarzi.schema.Properties.LOWERCASE_NAME;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.USERNAME;
+import static com.maxdemarzi.schema.Properties.*;
 
 @Path("/schema")
 public class Schema {

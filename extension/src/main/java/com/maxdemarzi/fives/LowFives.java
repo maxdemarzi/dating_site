@@ -17,8 +17,6 @@ import java.util.Map;
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
-import static com.maxdemarzi.schema.Properties.HIGH_FIVES;
-import static com.maxdemarzi.schema.Properties.LOW_FIVES;
 import static com.maxdemarzi.users.Users.getPost;
 
 @Path("/users/{username}/low_fives")

@@ -6,31 +6,16 @@ import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
 import com.maxdemarzi.wants.Wants;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.ResourceIterator;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
 
-import javax.ws.rs.DefaultValue;
-import javax.ws.rs.GET;
+import javax.ws.rs.*;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
-import static com.maxdemarzi.schema.Properties.HAS;
-import static com.maxdemarzi.schema.Properties.HAVE;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.WANT;
-import static com.maxdemarzi.schema.Properties.WANTS;
+import static com.maxdemarzi.schema.Properties.*;
 import static com.maxdemarzi.users.Users.findUser;
 import static java.util.Collections.reverseOrder;
 
