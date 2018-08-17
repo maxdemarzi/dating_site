@@ -8,7 +8,7 @@ public class FiveExceptions extends Exceptions {
     static final Exceptions alreadyLowFivedPost = new Exceptions(400, "Already low fived Post.");
 
     static final Exceptions overHighFiveLimit = new Exceptions(403, "Over high five Limit.");
-    static final Exceptions overLowFiveLimit = new Exceptions(403, "Over low fived Limit.");
+    static final Exceptions overLowFiveLimit = new Exceptions(403, "Over low five Limit.");
 
     FiveExceptions(int code, String error) {
         super(code, error);
