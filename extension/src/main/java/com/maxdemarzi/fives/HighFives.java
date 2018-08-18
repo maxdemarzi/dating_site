@@ -15,10 +15,8 @@ import java.time.*;
 import java.util.ArrayList;
 import java.util.Map;
 
-import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
-import static com.maxdemarzi.users.Users.getPost;
 
 @Path("/users/{username}/high_fives")
 public class HighFives {

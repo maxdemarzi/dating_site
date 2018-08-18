@@ -21,7 +21,6 @@ import java.util.function.Function;
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
-import static com.maxdemarzi.users.Users.getPost;
 import static java.util.Collections.reverseOrder;
 
 @Path("/users/{username}/posts")
@@ -140,17 +139,17 @@ public class Posts {
 
 
     @PUT
-    @Path("/{time}")
+    @Path("/{postId}")
     public Response updatePost(String body,
                                @PathParam("username") final String username,
-                               @PathParam("time") final String time,
+                               @PathParam("postId") final Long postId,
                                @Context GraphDatabaseService db) throws IOException {
         Map<String, Object> results;
         HashMap<String, Object> input = PostValidator.validate(body);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
-            Node post = getPost(user, ZonedDateTime.parse(time));
+            Node post = db.getNodeById(postId);
             post.setProperty(STATUS, input.get(STATUS));
             ZonedDateTime dateTime = (ZonedDateTime)post.getProperty(TIME);
             Tags.createTags(post, input, dateTime, db);
@@ -169,10 +168,10 @@ public class Posts {
     }
 
     @POST
-    @Path("/{username2}/{time}/reply")
+    @Path("/{username2}/{postId}/reply")
     public Response createReply(String body, @PathParam("username") final String username,
                                 @PathParam("username2") final String username2,
-                                @PathParam("time") final String time,
+                                @PathParam("postId") final Long postId,
                                 @Context GraphDatabaseService db) throws IOException {
 
         Map<String, Object> results;
@@ -192,7 +191,7 @@ public class Posts {
             results.put(LOW_FIVES, 0);
 
             Node user2 = Users.findUser(username2, db);
-            Node post2 = getPost(user2, ZonedDateTime.parse(time));
+            Node post2 = db.getNodeById(postId);
             Relationship r2 = post.createRelationshipTo(post2, RelationshipTypes.REPLIED_TO);
             r2.setProperty(TIME, dateTime);
 

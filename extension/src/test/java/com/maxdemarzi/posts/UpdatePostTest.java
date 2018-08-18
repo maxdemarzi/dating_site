@@ -22,7 +22,7 @@ public class UpdatePostTest {
     public void shouldUpdatePost() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.request("PUT", neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/2018-07-19T17:12:56Z").toString(), input);
+        HTTP.Response response = HTTP.request("PUT", neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/2").toString(), input);
         HashMap actual  = response.content();
         Assert.assertEquals(expected, actual);
     }

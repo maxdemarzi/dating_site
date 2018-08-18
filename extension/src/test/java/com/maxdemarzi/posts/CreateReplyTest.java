@@ -22,7 +22,7 @@ public class CreateReplyTest {
     public void shouldCreateReply() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/jexp/2018-07-19T17:12:56Z/reply").toString(), input);
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/maxdemarzi/posts/jexp/2/reply").toString(), input);
         HashMap actual  = response.content();
         expected.put("time", actual.get("time"));
         Assert.assertEquals(expected, actual);
