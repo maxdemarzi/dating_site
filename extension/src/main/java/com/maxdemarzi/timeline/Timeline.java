@@ -116,6 +116,7 @@ public class Timeline {
                                     ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
                                     Map<String, Object> posting = r1.getEndNode().getAllProperties();
                                     if(time.isBefore(latest)) {
+                                        posting.put(ID, post.getId());
                                         posting.put(TIME, time);
                                         posting.put(USERNAME, properties.get(USERNAME));
                                         posting.put(NAME, properties.get(NAME));

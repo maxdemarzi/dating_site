@@ -23,7 +23,7 @@ public class CreateLowFiveTest {
     public void shouldCreateLowFive() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/jexp/low_fives/maxdemarzi/2018-07-19T17:12:56Z").toString());
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/jexp/low_fives/maxdemarzi/3").toString());
         HashMap actual  = response.content();
         Assert.assertTrue((boolean)actual.get(LOW_FIVED));
         Assert.assertEquals(actual.get(LOW_FIVES), 1);
@@ -33,7 +33,7 @@ public class CreateLowFiveTest {
     public void shouldNotCreateLowFiveAlreadyFived() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/jexp/low_fives/maxdemarzi/2018-07-19T18:00:23Z").toString());
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/jexp/low_fives/maxdemarzi/4").toString());
         HashMap actual  = response.content();
         Assert.assertEquals(400, response.status());
         Assert.assertEquals("Already low fived Post.", actual.get("error"));
@@ -45,7 +45,7 @@ public class CreateLowFiveTest {
     public void shouldNotCreateLowFiveOverLimit() {
         HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
 
-        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/laexample/low_fives/maxdemarzi/2018-07-19T18:00:23Z").toString());
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/laexample/low_fives/maxdemarzi/4").toString());
         HashMap actual  = response.content();
         Assert.assertEquals(403, response.status());
         Assert.assertEquals("Over low five Limit.", actual.get("error"));

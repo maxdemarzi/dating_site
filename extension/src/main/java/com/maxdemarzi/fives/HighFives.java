@@ -24,10 +24,10 @@ public class HighFives {
     private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
 
     @POST
-    @Path("/{username2}/{time}")
+    @Path("/{username2}/{postId}")
     public Response createFive(String body, @PathParam("username") final String username,
                                 @PathParam("username2") final String username2,
-                                @PathParam("time") final String time,
+                                @PathParam("postId") final Long postId,
                                 @Context GraphDatabaseService db) throws IOException {
 
         Map<String, Object> results;
@@ -50,7 +50,7 @@ public class HighFives {
                 zoneId = ZoneId.of(tz);
             }
 
-            ZonedDateTime startOfDay = ZonedDateTime.of(dateTime.toLocalDateTime(), zoneId).with(LocalTime.MIN);
+            ZonedDateTime startOfDay = ZonedDateTime.now(zoneId).with(LocalTime.MIN);
 
             // How many high fives did they receive today on posts within the last 5 days?
             int high5received = 0;
@@ -71,8 +71,6 @@ public class HighFives {
             // How many high fives did they give out today?
             int high5given = 0;
             Node user2 = Users.findUser(username2, db);
-            Node post = getPost(user2, ZonedDateTime.parse(time));
-            Long postId = post.getId();
             for (Relationship r : user.getRelationships(RelationshipTypes.HIGH_FIVED, Direction.OUTGOING)) {
                 if (r.getEndNodeId() == postId) {
                     throw FiveExceptions.alreadyHighFivedPost;
@@ -88,6 +86,7 @@ public class HighFives {
                 throw FiveExceptions.overHighFiveLimit;
             }
 
+            Node post = db.getNodeById(postId);
             Relationship r2 = user.createRelationshipTo(post, RelationshipTypes.HIGH_FIVED);
             r2.setProperty(TIME, dateTime);
 

@@ -1,20 +1,11 @@
 package com.maxdemarzi;
 
-import com.maxdemarzi.models.Attribute;
-import com.maxdemarzi.models.Post;
-import com.maxdemarzi.models.Tag;
-import com.maxdemarzi.models.Thing;
-import com.maxdemarzi.models.User;
+import com.maxdemarzi.models.*;
 import com.maxdemarzi.routes.*;
 import com.typesafe.config.Config;
-import okhttp3.Credentials;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
+import okhttp3.*;
 import okhttp3.Request;
-import org.jooby.Err;
-import org.jooby.Jooby;
-import org.jooby.Results;
-import org.jooby.Status;
+import org.jooby.*;
 import org.jooby.json.Jackson;
 import org.jooby.pac4j.Pac4j;
 import org.jooby.rocker.Rockerby;
@@ -29,11 +20,9 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import views.index;
 import views.register;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
-import static java.lang.Thread.sleep;
+import retrofit2.Response;
 
 
 public class App extends Jooby {
@@ -200,6 +189,7 @@ public class App extends Jooby {
       use(new Posts());
       use(new Attributes());
       use(new Things());
+      use(new Fives());
 
   }
 

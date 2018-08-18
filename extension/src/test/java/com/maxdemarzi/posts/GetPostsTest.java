@@ -79,6 +79,7 @@ public class GetPostsTest {
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("status", "How are you!");
+            put("id", 3);
             put("time", "2018-07-19T17:38:57Z");
             put("name", "Max De Marzi");
             put("username", "maxdemarzi");
@@ -90,6 +91,7 @@ public class GetPostsTest {
         }});
         add(new HashMap<String, Object>() {{
             put("status", "Hello World!");
+            put("id", 2);
             put("time", "2018-07-19T17:12:56Z");
             put("name", "Max De Marzi");
             put("username", "maxdemarzi");
@@ -104,6 +106,7 @@ public class GetPostsTest {
     private static final ArrayList<HashMap<String, Object>> expected2 = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("status", "How are you!");
+            put("id", 3);
             put("time", "2018-07-19T17:38:57Z");
             put("name", "Max De Marzi");
             put("username", "maxdemarzi");
@@ -116,6 +119,7 @@ public class GetPostsTest {
         }});
         add(new HashMap<String, Object>() {{
             put("status", "Hello World!");
+            put("id", 2);
             put("time", "2018-07-19T17:12:56Z");
             put("name", "Max De Marzi");
             put("username", "maxdemarzi");

@@ -15,6 +15,7 @@ public class User {
     private String is;
     private List<String> is_looking_for;
     private String time;
+    private String timezone;
     private Integer likes;
     private Integer hates;
     private Integer posts;

@@ -77,6 +77,7 @@ public class Posts {
                     Map<String, Object> result = post.getAllProperties();
                     ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
                     if(time.isBefore(latest)) {
+                        result.put(ID, post.getId());
                         result.put(TIME, time);
                         result.put(USERNAME, username);
                         result.put(NAME, userProperties.get(NAME));

@@ -9,6 +9,7 @@ import java.util.Date;
 
 @Data
 public class Post {
+    private Long id;
     private String status;
     private String name;
     private String username;

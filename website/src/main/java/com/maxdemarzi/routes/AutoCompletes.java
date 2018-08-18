@@ -1,12 +1,8 @@
 package com.maxdemarzi.routes;
 
 import com.maxdemarzi.App;
-import com.maxdemarzi.models.Attribute;
-import com.maxdemarzi.models.City;
-import com.maxdemarzi.models.Thing;
-import org.jooby.Err;
-import org.jooby.Jooby;
-import org.jooby.Status;
+import com.maxdemarzi.models.*;
+import org.jooby.*;
 import retrofit2.Response;
 
 import java.util.List;

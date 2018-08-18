@@ -1,7 +1,6 @@
 package com.maxdemarzi.routes;
 
 import com.maxdemarzi.App;
-import com.maxdemarzi.models.Attribute;
 import com.maxdemarzi.models.Post;
 import org.jooby.*;
 import org.pac4j.core.profile.CommonProfile;
@@ -13,23 +12,29 @@ public class Fives extends Jooby {
     }
 
     {
-
-        post("/five", req -> {
+        post("/high_five", req -> {
             CommonProfile profile = require(CommonProfile.class);
             String username = profile.getUsername();
-            Response<Post> response;
-            if (req.param("high_five_button").isSet()) {
-                response = App.api.createHighFive(username, req.param("username2").value(), req.param("time").value()).execute();
-            } else {
-                response = App.api.createLowFive(username, req.param("username2").value(), req.param("time").value()).execute();
-            }
+            Response<Post> response = App.api.createHighFive(username, req.param("username2").value(), req.param("id").longValue()).execute();
+
             if (response.isSuccessful()) {
-                return Results.redirect(req.header("Referer").value());
+                return response.body();
             } else {
                 throw new Err(Status.BAD_REQUEST);
             }
-        }).produces("json");;
+        }).produces("json");
 
+        post("/low_five", req -> {
+            CommonProfile profile = require(CommonProfile.class);
+            String username = profile.getUsername();
+            Response<Post> response = App.api.createLowFive(username, req.param("username2").value(), req.param("id").longValue()).execute();
+
+            if (response.isSuccessful()) {
+                return response.body();
+            } else {
+                throw new Err(Status.BAD_REQUEST);
+            }
+        }).produces("json");
     }
 
 }

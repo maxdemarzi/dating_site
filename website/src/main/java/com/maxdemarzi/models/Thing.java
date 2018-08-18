@@ -2,11 +2,8 @@ package com.maxdemarzi.models;
 
 import lombok.Data;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Data
 public class Thing {

@@ -120,6 +120,7 @@ public class GetTimelineTest {
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("username", "jexp");
+            put("id", 5);
             put("name", "Michaela Hunger");
             put("hash", "hash");
             put("status", "Hello World!");
@@ -134,6 +135,7 @@ public class GetTimelineTest {
     private static final ArrayList<HashMap<String, Object>> competition = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
             put("username", "laexample");
+            put("id", 6);
             put("name", "Luke Gannon");
             put("hash", "hash");
             put("status", "How are you!");
@@ -145,6 +147,7 @@ public class GetTimelineTest {
         }});
         add(new HashMap<String, Object>() {{
             put("username", "maxdemarzi");
+            put("id", 7);
             put("name", "Max De Marzi");
             put("hash", "hash");
             put("status", "Doing fine!");

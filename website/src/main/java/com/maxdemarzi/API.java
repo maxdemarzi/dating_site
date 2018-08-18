@@ -1,19 +1,8 @@
 package com.maxdemarzi;
 
-import com.maxdemarzi.models.Attribute;
-import com.maxdemarzi.models.City;
-import com.maxdemarzi.models.Post;
-import com.maxdemarzi.models.Tag;
-import com.maxdemarzi.models.Thing;
-import com.maxdemarzi.models.User;
+import com.maxdemarzi.models.*;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
+import retrofit2.http.*;
 
 import java.util.List;
 
@@ -110,25 +99,25 @@ public interface API {
     @GET("users/{username}/low_fives")
     Call<List<Post>> getLowFives(@Path("username") String username);
 
-    @POST("users/{username}/high_fives/{username2}/{time}")
+    @POST("users/{username}/high_fives/{username2}/{id}")
     Call<Post> createHighFive(@Path("username") String username,
                            @Path("username2") String username2,
-                           @Path("time") String time);
+                           @Path("id") Long id);
 
-    @DELETE("users/{username}/high_fives/{username2}/{time}")
+    @DELETE("users/{username}/high_fives/{username2}/{id}")
     Call<Post> removeHighFive(@Path("username") String username,
                            @Path("username2") String username2,
-                           @Path("time") String time);
+                           @Path("id") Long id);
 
-    @POST("users/{username}/low_fives/{username2}/{time}")
+    @POST("users/{username}/low_fives/{username2}/{id}")
     Call<Post> createLowFive(@Path("username") String username,
                               @Path("username2") String username2,
-                              @Path("time") String time);
+                              @Path("id") Long id);
 
-    @DELETE("users/{username}/low_fives/{username2}/{time}")
+    @DELETE("users/{username}/low_fives/{username2}/{id}")
     Call<Post> removeLowFive(@Path("username") String username,
                               @Path("username2") String username2,
-                              @Path("time") String time);
+                              @Path("id") Long id);
 
     @GET("users/{username}/blocks")
     Call<List<Post>> getBlocks(@Path("username") String username);
