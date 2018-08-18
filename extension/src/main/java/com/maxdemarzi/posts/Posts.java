@@ -63,11 +63,11 @@ public class Posts {
             Map userProperties = user.getAllProperties();
             int count = 0;
             ArrayList<RelationshipType> types = new ArrayList<>();
-            user.getRelationshipTypes().forEach(t-> {
-                        if (t.name().startsWith("POSTED_ON")) {
-                            types.add(t);
-                        }
-                    });
+            for (RelationshipType t : user.getRelationshipTypes()) {
+                if (t.name().startsWith("POSTED_ON")) {
+                    types.add(t);
+                }
+            }
             types.sort(relTypeComparator);
 
             for (RelationshipType relType : types) {

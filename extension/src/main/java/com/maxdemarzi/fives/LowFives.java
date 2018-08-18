@@ -12,6 +12,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.*;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.maxdemarzi.Time.dateFormatter;
@@ -52,13 +53,15 @@ public class LowFives {
 
             ZonedDateTime startOfDay = ZonedDateTime.now(zoneId).with(LocalTime.MIN);
 
-            // How many low fives did they receive today on posts within the last 5 days?
+            // How many low fives did their posts receive within the last 5 days?
             int low5received = 0;
-            RelationshipType[] last5days = new RelationshipType[5];
-            for (int i = 0; i < 5; i++) {
-                last5days[i] = RelationshipType.withName("POSTED_ON_" + dateTime.minusDays(i).format(dateFormatter));
+            ArrayList<RelationshipType> types = new ArrayList<>();
+            for (RelationshipType t : user.getRelationshipTypes()) {
+                if (t.name().startsWith("POSTED_ON")) {
+                    types.add(t);
+                }
             }
-            for (Relationship r1 : user.getRelationships(last5days)) {
+            for (Relationship r1 : user.getRelationships(types.toArray(new RelationshipType[0]))) {
                 Node post = r1.getEndNode();
                 for (Relationship r : post.getRelationships(RelationshipTypes.LOW_FIVED, Direction.INCOMING)) {
                     ZonedDateTime when = (ZonedDateTime) r.getProperty(TIME);
