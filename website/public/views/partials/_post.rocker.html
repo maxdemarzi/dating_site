@@ -14,6 +14,8 @@
                 @post.getStatus()
             </p>
             <form id="high_five" action="/five" method="POST" style="display: inline-block;">
+                <input type="hidden" name="username2" value="@post.getUsername()">
+                <input type="hidden" name="time" value="@post.getTime()">
                 <button class="btn btn-outline-danger btn-sm" type="submit" name="high_five_button" value="high_five">
                     <i class="material-icons">pan_tool</i> High Five
                 </button>

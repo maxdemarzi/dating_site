@@ -104,26 +104,31 @@ public interface API {
     Call<Thing> deleteHates(@Path("username") String username,
                             @Path("thing") String thing);
 
+    @GET("users/{username}/high_fives")
+    Call<List<Post>> getHighFives(@Path("username") String username);
+
+    @GET("users/{username}/low_fives")
+    Call<List<Post>> getLowFives(@Path("username") String username);
 
     @POST("users/{username}/high_fives/{username2}/{time}")
     Call<Post> createHighFive(@Path("username") String username,
                            @Path("username2") String username2,
-                           @Path("time") Long time);
+                           @Path("time") String time);
 
     @DELETE("users/{username}/high_fives/{username2}/{time}")
     Call<Post> removeHighFive(@Path("username") String username,
                            @Path("username2") String username2,
-                           @Path("time") Long time);
+                           @Path("time") String time);
 
     @POST("users/{username}/low_fives/{username2}/{time}")
     Call<Post> createLowFive(@Path("username") String username,
                               @Path("username2") String username2,
-                              @Path("time") Long time);
+                              @Path("time") String time);
 
     @DELETE("users/{username}/low_fives/{username2}/{time}")
     Call<Post> removeLowFive(@Path("username") String username,
                               @Path("username2") String username2,
-                              @Path("time") Long time);
+                              @Path("time") String time);
 
     @GET("users/{username}/blocks")
     Call<List<Post>> getBlocks(@Path("username") String username);

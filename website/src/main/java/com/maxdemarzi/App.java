@@ -163,7 +163,7 @@ public class App extends Jooby {
           return views.home.template(authenticated, authenticated, posts, getTags());
 
       });
-      
+
       // Accessible only by registered users
       use(new Pac4j().client(conf -> new FormClient("/", new ServiceAuthenticator())));
 
@@ -197,50 +197,9 @@ public class App extends Jooby {
           return views.home.template(authenticated, authenticated, posts, getTags());
       });
 
-      post("/post", req -> {
-          Post post = req.form(Post.class);
-          CommonProfile profile = require(CommonProfile.class);
-          String username = profile.getUsername();
-
-          Response<Post> response = api.createPost(username, post).execute();
-          if (response.isSuccessful()) {
-              return Results.redirect("/home");
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
-
-      post("/attribute", req -> {
-          CommonProfile profile = require(CommonProfile.class);
-          String username = profile.getUsername();
-          Response<Attribute> response;
-          if (req.param("have_button").isSet()) {
-              response = api.createHas(username, req.param("attribute").value()).execute();
-          } else {
-              response = api.createWants(username, req.param("attribute").value()).execute();
-          }
-          if (response.isSuccessful()) {
-              return Results.redirect(req.header("Referer").value());
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
-
-      post("/thing", req -> {
-          CommonProfile profile = require(CommonProfile.class);
-          String username = profile.getUsername();
-          Response<Thing> response;
-          if (req.param("like_button").isSet()) {
-              response = api.createLikes(username, req.param("attribute").value()).execute();
-          } else {
-              response = api.createHates(username, req.param("attribute").value()).execute();
-          }
-          if (response.isSuccessful()) {
-              return Results.redirect(req.header("Referer").value());
-          } else {
-              throw new Err(Status.BAD_REQUEST);
-          }
-      });
+      use(new Posts());
+      use(new Attributes());
+      use(new Things());
 
   }
 
