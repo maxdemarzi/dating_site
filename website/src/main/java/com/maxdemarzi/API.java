@@ -120,14 +120,14 @@ public interface API {
                               @Path("id") Long id);
 
     @GET("users/{username}/blocks")
-    Call<List<Post>> getBlocks(@Path("username") String username);
+    Call<List<User>> getBlocks(@Path("username") String username);
 
     @POST("users/{username}/blocks/{username2}/")
-    Call<Post> createBlocks(@Path("username") String username,
+    Call<User> createBlocks(@Path("username") String username,
                             @Path("username2") String username2);
 
     @DELETE("users/{username}/blocks/{username2}")
-    Call<Post> removeBlocks(@Path("username") String username,
+    Call<User> removeBlocks(@Path("username") String username,
                             @Path("username2") String username2);
 
     @GET("users/{username}/mentions")

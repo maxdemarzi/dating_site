@@ -1,6 +1,7 @@
 package com.maxdemarzi.fives;
 
 import com.maxdemarzi.CustomObjectMapper;
+import com.maxdemarzi.posts.PostExceptions;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -36,19 +37,7 @@ public class LowFives {
             Node user = Users.findUser(username, db);
 
             // Get user's timezone
-            ZoneId zoneId;
-            String tz = (String)user.getProperty(TIMEZONE, null);
-            if (tz == null) {
-                Node city = user.getSingleRelationship( RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode();
-                Node state = city.getSingleRelationship( RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode();
-                Node timezone = state.getSingleRelationship( RelationshipTypes.IN_TIMEZONE, Direction.OUTGOING).getEndNode();
-                tz = (String)timezone.getProperty(NAME);
-                zoneId = ZoneId.of(tz);
-                user.setProperty(TIMEZONE, tz);
-            } else {
-                zoneId = ZoneId.of(tz);
-            }
-
+            ZoneId zoneId = ZoneId.of((String)user.getProperty(TIMEZONE));
             ZonedDateTime startOfDay = ZonedDateTime.now(zoneId).with(LocalTime.MIN);
 
             // How many low fives did their posts receive within the last 5 days?
@@ -87,7 +76,13 @@ public class LowFives {
                 throw FiveExceptions.overLowFiveLimit;
             }
 
-            Node post = db.getNodeById(postId);
+            Node post;
+            try {
+                post = db.getNodeById(postId);
+            } catch (Exception e) {
+                throw PostExceptions.postNotFound;
+            }
+
             Relationship r2 = user.createRelationshipTo(post, RelationshipTypes.LOW_FIVED);
             r2.setProperty(TIME, dateTime);
 

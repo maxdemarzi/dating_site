@@ -190,6 +190,7 @@ public class App extends Jooby {
       use(new Attributes());
       use(new Things());
       use(new Fives());
+      use(new Blocks());
 
   }
 

@@ -1,5 +1,6 @@
 package com.maxdemarzi.blocks;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.schema.RelationshipTypes;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.neo4j.graphdb.*;
@@ -9,8 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.*;
 
 import static com.maxdemarzi.Time.getLatestTime;
@@ -23,22 +23,28 @@ import static java.util.Collections.reverseOrder;
 @Path("/users/{username}/blocks")
 public class Blocks {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
 
     @GET
     public Response getBlocks(@PathParam("username") final String username,
                               @QueryParam("limit") @DefaultValue("25") final Integer limit,
-                              @QueryParam("since") final Long since,
+                              @QueryParam("since") final String since,
                               @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        Long latest = getLatestTime(since);
+        ZonedDateTime latest;
+        if (since == null) {
+            latest = ZonedDateTime.now(utc);
+        } else {
+            latest = ZonedDateTime.parse(since);
+        }
 
         try (Transaction tx = db.beginTx()) {
             Node user = findUser(username, db);
             for (Relationship r1: user.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
                 Node blocked = r1.getEndNode();
-                Long time = (Long)r1.getProperty("time");
-                if(time < latest) {
+                ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
+                if(time.isBefore(latest)) {
                     Map<String, Object> result = getUserAttributes(blocked);
                     result.put(TIME, time);
                     results.add(result);
@@ -46,7 +52,7 @@ public class Blocks {
             }
             tx.success();
         }
-        results.sort(Comparator.comparing(m -> (Long) m.get(TIME), reverseOrder()));
+        results.sort(timedComparator);
         return Response.ok().entity(objectMapper.writeValueAsString(
                 results.subList(0, Math.min(results.size(), limit))))
                 .build();
@@ -58,7 +64,7 @@ public class Blocks {
     public Response createBlocks(@PathParam("username") final String username,
                                   @PathParam("username2") final String username2,
                                   @Context GraphDatabaseService db) throws IOException {
-        Map<String, Object> results;
+        Map<String, Object> results =  new HashMap<>();
         try (Transaction tx = db.beginTx()) {
             Node user = findUser(username, db);
             Node user2 = findUser(username2, db);
@@ -79,13 +85,9 @@ public class Blocks {
            }
             
             Relationship blocks = user.createRelationshipTo(user2, RelationshipTypes.BLOCKS);
-            LocalDateTime dateTime = LocalDateTime.now(utc);
-            blocks.setProperty(TIME, dateTime.toEpochSecond(ZoneOffset.UTC));
+            blocks.setProperty(TIME, ZonedDateTime.now(utc));
 
-            results = user2.getAllProperties();
-            results.remove(PASSWORD);
-            results.remove(EMAIL);
-
+            results.put(USERNAME, username2);
             tx.success();
         }
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();

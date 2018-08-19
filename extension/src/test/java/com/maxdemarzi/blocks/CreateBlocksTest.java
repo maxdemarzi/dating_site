@@ -66,20 +66,18 @@ public class CreateBlocksTest {
                     "email: 'mark@neo4j.com', " +
                     "name: 'Mark Needham'," +
                     "password: 'jellyfish'})" +
-            "CREATE (max)-[:FOLLOWS {time:1490140299}]->(jexp)" +
-            "CREATE (max)-[:BLOCKS {time:1490140299}]->(laeg)" +
-            "CREATE (laeg)-[:BLOCKS {time:1490140299}]->(mark)" +
-            "CREATE (jexp)-[:BLOCKS {time:1490140299}]->(mark)" +
-            "CREATE (laeg)-[:FOLLOWS {time:1490140299}]->(mark)" +
-            "CREATE (jexp)-[:FOLLOWS {time:1490140299}]->(mark)";
+            "CREATE (max)-[:FOLLOWS {time: datetime('2018-05-01T12:00:01Z')}]->(jexp)" +
+            "CREATE (max)-[:BLOCKS {time: datetime('2018-05-01T12:00:01Z')}]->(laeg)" +
+            "CREATE (laeg)-[:BLOCKS {time: datetime('2018-05-01T12:00:01Z')}]->(mark)" +
+            "CREATE (jexp)-[:BLOCKS {time: datetime('2018-05-01T12:00:01Z')}]->(mark)" +
+            "CREATE (laeg)-[:FOLLOWS {time: datetime('2018-05-01T12:00:01Z')}]->(mark)" +
+            "CREATE (jexp)-[:FOLLOWS {time: datetime('2018-05-01T12:00:01Z')}]->(mark)";
 
     private static final HashMap<String, Object> expected = new HashMap<String, Object>() {{
         put("username", "jexp");
-        put("name", "Michael Hunger");
     }};
 
     private static final HashMap<String, Object> expected2 = new HashMap<String, Object>() {{
         put("username", "markhneedham");
-        put("name", "Mark Needham");
     }};
 }

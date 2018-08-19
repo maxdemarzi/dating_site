@@ -1,6 +1,7 @@
 package com.maxdemarzi.fives;
 
 import com.maxdemarzi.CustomObjectMapper;
+import com.maxdemarzi.posts.PostExceptions;
 import com.maxdemarzi.schema.RelationshipTypes;
 import com.maxdemarzi.users.Users;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -19,15 +20,15 @@ import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
 
 @Path("/users/{username}/high_fives")
-public class HighFives {
-    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+        public class HighFives {
+            private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
 
-    @POST
-    @Path("/{username2}/{postId}")
-    public Response createFive(String body, @PathParam("username") final String username,
-                                @PathParam("username2") final String username2,
-                                @PathParam("postId") final Long postId,
-                                @Context GraphDatabaseService db) throws IOException {
+            @POST
+            @Path("/{username2}/{postId}")
+            public Response createFive(String body, @PathParam("username") final String username,
+                                       @PathParam("username2") final String username2,
+                                       @PathParam("postId") final Long postId,
+                                       @Context GraphDatabaseService db) throws IOException {
 
         Map<String, Object> results;
         ZonedDateTime dateTime = ZonedDateTime.now(utc);
@@ -36,19 +37,7 @@ public class HighFives {
             Node user = Users.findUser(username, db);
 
             // Get user's timezone
-            ZoneId zoneId;
-            String tz = (String)user.getProperty(TIMEZONE, null);
-            if (tz == null) {
-                Node city = user.getSingleRelationship( RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode();
-                Node state = city.getSingleRelationship( RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode();
-                Node timezone = state.getSingleRelationship( RelationshipTypes.IN_TIMEZONE, Direction.OUTGOING).getEndNode();
-                tz = (String)timezone.getProperty(NAME);
-                zoneId = ZoneId.of(tz);
-                user.setProperty(TIMEZONE, tz);
-            } else {
-                zoneId = ZoneId.of(tz);
-            }
-
+            ZoneId zoneId = ZoneId.of((String)user.getProperty(TIMEZONE));
             ZonedDateTime startOfDay = ZonedDateTime.now(zoneId).with(LocalTime.MIN);
 
             // How many high fives did their posts receive within the last 5 days?
@@ -86,8 +75,13 @@ public class HighFives {
             if (high5given - 5 >= high5received) {
                 throw FiveExceptions.overHighFiveLimit;
             }
+            Node post;
+            try {
+                post = db.getNodeById(postId);
+            } catch (Exception e) {
+                throw PostExceptions.postNotFound;
+            }
 
-            Node post = db.getNodeById(postId);
             Relationship r2 = user.createRelationshipTo(post, RelationshipTypes.HIGH_FIVED);
             r2.setProperty(TIME, dateTime);
 

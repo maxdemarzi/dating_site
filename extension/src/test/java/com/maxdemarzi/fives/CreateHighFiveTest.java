@@ -54,16 +54,31 @@ public class CreateHighFiveTest {
         Assert.assertFalse(actual.containsKey(TIME));
     }
 
+    @Test
+    public void shouldNotCreateHighFivePostNotFound() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.POST(neo4j.httpURI().resolve("/v1/users/jexp/high_fives/maxdemarzi/400").toString());
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("Post not Found.", actual.get("error"));
+        Assert.assertFalse(actual.containsKey(STATUS));
+        Assert.assertFalse(actual.containsKey(TIME));
+    }
+
     private static final String FIXTURE =
             "CREATE (max:User {username:'maxdemarzi', " +
                     "email: 'maxdemarzi@hotmail.com', " +
+                    "timezone: 'America/Chicago'," +
                     "name: 'Max De Marzi'," +
                     "password: 'swordfish'})" +
             "CREATE (jexp:User {username:'jexp', " +
                     "email: 'michael@neo4j.com', " +
+                    "timezone: 'America/Chicago'," +
                     "name: 'Michael Hunger'," +
                     "password: 'tunafish'})" +
             "CREATE (laeg:User {username:'laexample', " +
+                    "timezone: 'America/Chicago'," +
                     "email: 'luke@neo4j.com', " +
                     "name: 'Luke Gannon'," +
                     "password: 'cuddlefish'})" +

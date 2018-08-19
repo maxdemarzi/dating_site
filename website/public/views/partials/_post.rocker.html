@@ -2,13 +2,13 @@
 
 @args (Post post)
 
-<li class="media list-group-item p-4">
+<li class="media list-group-item p-4" id="post_@post.getId()">
     <a href="/user/@post.getUsername()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@post.getHash()?s=200&d=retro"></a>
     <div class="media-body">
         <div class="media-body-text">
             <div class="media-heading">
                 <small class="float-right text-muted">@post.humanTime()</small>
-                <h6><a href="/user/@post.getUsername()">@post.getName()</a> <a href="/user/@post.getUsername()">@@@post.getUsername()</a></h6>
+                <h6><a href="/user/@post.getUsername()">@post.getName()</a><a href="/user/@post.getUsername()"> <span class="text-grey">@@@post.getUsername()</span></a></h6>
             </div>
             <p>
                 @post.getStatus()
@@ -23,19 +23,26 @@
                 <i class="material-icons icon-upside-down">pan_tool</i> Low Fived
                 }
                 @if(!post.isHigh_fived() && !post.isLow_fived()) {
-                <button class="btn btn-outline-danger btn-sm" id="high_five_button_@post.getId()" value="high_five" onclick="highFive(@post.getId())">
-                    <i class="material-icons">pan_tool</i> High Five
-                </button>
-                <button class="btn btn-outline-danger btn-sm" id="low_five_button_@post.getId()" value="low_five" onclick="lowFive(@post.getId())">
-                    <i class="material-icons icon-upside-down">pan_tool</i> Low Five
-                </button>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="High Five">
+                    <button class="btn btn-love btn-sm" id="high_five_button_@post.getId()" value="high_five">
+                        <i class="material-icons">pan_tool</i> @post.getHigh_fives()
+                    </button>
+                </span>
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Low Five">
+                    <button class="btn btn-love btn-sm" id="low_five_button_@post.getId()" value="low_five" onclick="lowFive(@post.getId())">
+                        <i class="material-icons icon-upside-down">pan_tool</i> @post.getLow_fives()
+                    </button>
+                </span>
                 }
 
             </form>
-            <form id="block" action="/block" method="POST" style="display: inline-block; float: right;">
-                <button class="btn btn-outline-danger btn-sm" type="submit" name="block_user_button" value="block_user">
-                    <i class="material-icons">highlight_off</i> Block User
-                </button>
+            <form id="block_@post.getId()" style="display: inline-block; float: right;">
+                <input type="hidden" name="username2" value="@post.getUsername()">
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Block User">
+                    <button class="btn btn-love btn-sm" type="submit" name="block_user_button" value="block_user" onclick="block(@post.getId())">
+                        <i class="material-icons">highlight_off</i>
+                    </button>
+                </span>
             </form>
         </div>
     </div>

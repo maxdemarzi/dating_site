@@ -89,3 +89,30 @@ strong {
 .app-brand img {
     width: 100%;
 }
+
+/* username text */
+.text-grey {
+     color: #6c757d82 !important;
+ }
+
+h6 a:hover {
+    text-decoration: none;
+}
+
+/* buttons */
+.btn-love {
+    font-weight: 400;
+    color: #d4dbe0;
+    background-color: transparent; }
+.btn-love:hover {
+    color: #d9534f;
+    text-decoration: none;
+    background-color: transparent;
+    border-color: transparent; }
+.btn-love:focus, .btn-love.focus {
+    text-decoration: none;
+    border-color: transparent;
+    -webkit-box-shadow: none;
+    box-shadow: none; }
+.btn-love:disabled, .btn-love.disabled {
+    color: #6c757d; }
