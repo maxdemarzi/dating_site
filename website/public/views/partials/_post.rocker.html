@@ -17,14 +17,18 @@
                 <input type="hidden" name="username2" value="@post.getUsername()">
                 <input type="hidden" name="id" value="@post.getId()">
                 @if(post.isHigh_fived()) {
-                <i class="material-icons">pan_tool</i> High Fived
+                <span class="text-red">
+                    <i class="material-icons">pan_tool</i> High Fived
+                </span>
                 }
                 @if(post.isLow_fived()) {
-                <i class="material-icons icon-upside-down">pan_tool</i> Low Fived
+                <span class="text-red">
+                    <i class="material-icons icon-upside-down">pan_tool</i> Low Fived
+                </span>
                 }
                 @if(!post.isHigh_fived() && !post.isLow_fived()) {
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="High Five">
-                    <button class="btn btn-love btn-sm" id="high_five_button_@post.getId()" value="high_five">
+                    <button class="btn btn-love btn-sm" id="high_five_button_@post.getId()" value="high_five" onclick="highFive(@post.getId())">
                         <i class="material-icons">pan_tool</i> @post.getHigh_fives()
                     </button>
                 </span>

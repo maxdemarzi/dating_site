@@ -90,10 +90,14 @@ strong {
     width: 100%;
 }
 
-/* username text */
+/* text */
 .text-grey {
      color: #6c757d82 !important;
  }
+
+.text-red {
+    color: #d9534f !important;
+}
 
 h6 a:hover {
     text-decoration: none;
