@@ -1,0 +1,40 @@
+@import com.maxdemarzi.models.Post
+
+@args (Post post, String fived)
+<li class="media list-group-item p-4" id="post_@post.getId()">
+    <a href="/user/@post.getUsername2()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@post.getHash2()?s=200&d=retro"></a>
+    <div class="media-body">
+        <div class="media-body-text">
+            <div class="media-heading">
+                <small class="float-right text-muted">expires @post.expires()</small>
+                <h6><a href="/user/@post.getUsername2()">@post.getName2()</a><a href="/user/@post.getUsername2()"> <span class="text-grey">@@@post.getUsername2()</span></a> @fived fived: </h6>
+            </div>
+            <ul class="media-list mb-2">
+                <li class="media mb-3">
+                    <img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@post.getHash()?s=50&d=retro">
+                    <div class="media-body">
+                        <strong>@post.getName() <span class="text-grey">@@@post.getUsername()</span> </strong>
+                        <p>
+                            @post.getStatus()
+                        </p>
+                    </div>
+                </li>
+            </ul>
+            <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Send Message">
+                <button class="btn btn-love btn-sm">
+                    <i class="material-icons">chat</i>
+                </button>
+            </span>
+            <form id="block_@post.getId()" style="display: inline-block; float: right;">
+                <input type="hidden" name="username2" value="@post.getUsername2()">
+                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Block User">
+                    <button class="btn btn-love btn-sm" type="submit" name="block_user_button" value="block_user" onclick="block(@post.getId())">
+                        <i class="material-icons">highlight_off</i>
+                    </button>
+                </span>
+            </form>
+        </div>
+    </div>
+</li>
+
+

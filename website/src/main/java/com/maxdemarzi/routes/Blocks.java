@@ -1,7 +1,6 @@
 package com.maxdemarzi.routes;
 
 import com.maxdemarzi.App;
-import com.maxdemarzi.models.Post;
 import com.maxdemarzi.models.User;
 import org.jooby.*;
 import org.pac4j.core.profile.CommonProfile;

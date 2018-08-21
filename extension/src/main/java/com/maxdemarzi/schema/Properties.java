@@ -16,6 +16,7 @@ public final class Properties {
     public static final String FULL_NAME = "full_name";
     public static final String GEONAME_ID = "geoname_id";
     public static final String HASH = "hash";
+    public static final String HASH2 = "hash2";
     public static final String HIGH_FIVED = "high_fived";
     public static final String HIGH_FIVES = "high_fives";
     public static final String ID = "id";
@@ -34,9 +35,11 @@ public final class Properties {
     public static final String HATES = "hates";
     public static final String HAVE = "have";
     public static final String NAME = "name";
+    public static final String NAME2 = "name2";
     public static final String PASSWORD = "password";
     public static final String POSTS = "posts";
     public static final String USERNAME = "username";
+    public static final String USERNAME2 = "username2";
     public static final String STATUS = "status";
     public static final String SHARED = "shared";
     public static final String TIME = "time";

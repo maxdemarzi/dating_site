@@ -13,16 +13,84 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.*;
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
+import static java.util.Collections.reverseOrder;
 
 @Path("/users/{username}/low_fives")
 public class LowFives {
     private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
+    private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
 
+    @GET
+    public Response getFives(@PathParam("username") final String username,
+                             @QueryParam("limit") @DefaultValue("25") final Integer limit,
+                             @QueryParam("since") final String since,
+                             @Context GraphDatabaseService db) throws IOException {
+        ArrayList<Map<String, Object>> results = new ArrayList<>();
+        ZonedDateTime latest;
+        if (since == null) {
+            latest = ZonedDateTime.now(utc);
+        } else {
+            latest = ZonedDateTime.parse(since);
+        }
+
+        try (Transaction tx = db.beginTx()) {
+            Node user = Users.findUser(username, db);
+            Map userProperties = user.getAllProperties();
+
+            HashSet<Node> blocked = new HashSet<>();
+            for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
+                blocked.add(r1.getEndNode());
+            }
+
+            // Get user's timezone
+            ZoneId zoneId = ZoneId.of((String) user.getProperty(TIMEZONE));
+            ZonedDateTime startOfFiveDays = ZonedDateTime.now(zoneId).with(LocalTime.MIN).minusDays(5);
+
+            // How many low fives did their posts receive within the last 5 days?
+            ArrayList<RelationshipType> types = new ArrayList<>();
+            for (RelationshipType t : user.getRelationshipTypes()) {
+                if (t.name().startsWith("POSTED_ON")) {
+                    types.add(t);
+                }
+            }
+
+            for (Relationship r1 : user.getRelationships(types.toArray(new RelationshipType[0]))) {
+                Node post = r1.getEndNode();
+                Map<String, Object> result = post.getAllProperties();
+                for (Relationship r : post.getRelationships(RelationshipTypes.LOW_FIVED, Direction.INCOMING)) {
+                    ZonedDateTime when = (ZonedDateTime) r.getProperty(TIME);
+                    if (when.isAfter(startOfFiveDays) && when.isBefore(latest)) {
+                        Node user2 = r.getStartNode();
+                        if (!blocked.contains(user2)) {
+                            Map<String, Object> user2Properties = user2.getAllProperties();
+                            result.put(ID, post.getId());
+                            result.put(TIME, when);
+                            result.put(USERNAME, username);
+                            result.put(USERNAME2, user2Properties.get(USERNAME));
+                            result.put(NAME, userProperties.get(NAME));
+                            result.put(NAME2, user2Properties.get(NAME));
+                            result.put(HASH, userProperties.get(HASH));
+                            result.put(HASH2, user2Properties.get(HASH));
+                            result.put(HIGH_FIVES, post.getDegree(RelationshipTypes.HIGH_FIVED, Direction.INCOMING));
+                            result.put(LOW_FIVES, post.getDegree(RelationshipTypes.LOW_FIVED, Direction.INCOMING));
+
+                            results.add(result);
+                        }
+                    }
+                }
+            }
+            tx.success();
+        }
+        results.sort(timedComparator);
+
+        return Response.ok().entity(objectMapper.writeValueAsString(
+                results.subList(0, Math.min(results.size(), limit))))
+                .build();
+    }
     @POST
     @Path("/{username2}/{postId}")
     public Response createFive(String body, @PathParam("username") final String username,

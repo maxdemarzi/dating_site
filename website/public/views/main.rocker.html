@@ -63,7 +63,7 @@
                     <a class="nav-link" href="/low_fives">Low Fives</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="modal" href="#msgModal">Messages</a>
+                    <a class="nav-link" href="/messages">Messages</a>
                 </li>
                 <li class="nav-item d-md-none">
                     <a class="nav-link" href="/notifications">Notifications</a>
@@ -94,14 +94,17 @@
                 <li class="nav-item ml-2">
                     <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover">
                         <img class="rounded-circle" src="https://www.gravatar.com/avatar/@user.getHash()?s=64&d=retro" >
-                        <span class="text-light"> @user.getUsername()</span>
                     </button>
                 </li>
             </ul>
 
             <ul class="nav navbar-nav d-none" id="js-popoverContent">
                 <li class="nav-item">
-                    <a class="nav-link" href="/user/@user.getUsername()">Profile</a>
+                    <a class="nav-link disabled" href="#">@user.getName()</a>
+                </li>
+                <div class="dropdown-divider"></div>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/@user.getUsername()">@user.getUsername()</a>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
             </ul>

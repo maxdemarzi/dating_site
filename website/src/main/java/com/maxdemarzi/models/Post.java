@@ -12,8 +12,11 @@ public class Post {
     private Long id;
     private String status;
     private String name;
+    private String name2;
     private String username;
+    private String username2;
     private String hash;
+    private String hash2;
     private String time;
     private Integer low_fives;
     private boolean low_fived;
@@ -30,4 +33,9 @@ public class Post {
     public String humanTime() {
         return Humanize.naturalTime(Date.from(ZonedDateTime.parse(time).toInstant()));
     }
+
+    public String expires() {
+        return Humanize.naturalTime(Date.from(ZonedDateTime.parse(time).plusDays(5).toInstant()));
+    }
+
 }

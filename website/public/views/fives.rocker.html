@@ -1,0 +1,25 @@
+@import java.util.List
+@import com.maxdemarzi.models.User
+@import com.maxdemarzi.models.Post
+@import com.maxdemarzi.models.Tag
+
+@args (User authenticated, List<Post> posts, String fived)
+
+    @views.main.template("Home", authenticated) -> {
+
+    <div class="container-fluid container pt-5">
+        <div class="row">
+            @views.partials._user.template(authenticated)
+            <div class="col-lg-6">
+                <ul class="list-group media-list media-list-stream mb-4">
+                    @for (post: posts) {
+                        @views.partials._five.template(post, fived)
+                    }
+                </ul>
+            </div>
+            <div class="col-lg-3">
+
+            </div>
+        </div>
+    </div>
+    }

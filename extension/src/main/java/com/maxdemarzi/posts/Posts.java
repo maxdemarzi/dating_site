@@ -190,7 +190,6 @@ public class Posts {
             results.put(HIGH_FIVES, 0);
             results.put(LOW_FIVES, 0);
 
-            Node user2 = Users.findUser(username2, db);
             Node post2 = db.getNodeById(postId);
             Relationship r2 = post.createRelationshipTo(post2, RelationshipTypes.REPLIED_TO);
             r2.setProperty(TIME, dateTime);
