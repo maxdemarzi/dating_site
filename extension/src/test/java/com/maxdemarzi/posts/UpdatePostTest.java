@@ -1,9 +1,7 @@
 package com.maxdemarzi.posts;
 
 import com.maxdemarzi.schema.Schema;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.neo4j.harness.junit.Neo4jRule;
 import org.neo4j.test.server.HTTP;
 

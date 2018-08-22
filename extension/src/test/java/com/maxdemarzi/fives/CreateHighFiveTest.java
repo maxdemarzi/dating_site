@@ -10,8 +10,6 @@ import java.util.HashMap;
 
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
-import static com.maxdemarzi.schema.Properties.STATUS;
-import static com.maxdemarzi.schema.Properties.TIME;
 
 public class CreateHighFiveTest {
 

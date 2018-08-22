@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.maxdemarzi.Time.dateFormatter;
+import static com.maxdemarzi.Time.getLatestTime;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
 import static java.util.Collections.reverseOrder;
@@ -36,15 +37,8 @@ public class Timeline {
                              @QueryParam("competition") @DefaultValue("false") Boolean competition,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        ZonedDateTime dateTime;
-        ZonedDateTime latest;
-        if (since == null) {
-            latest = ZonedDateTime.now(utc);
-            dateTime = ZonedDateTime.now(utc);
-        } else {
-            latest = ZonedDateTime.parse(since);
-            dateTime = ZonedDateTime.parse(since);
-        }
+        ZonedDateTime dateTime = getLatestTime(since);
+        ZonedDateTime latest = getLatestTime(since);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);

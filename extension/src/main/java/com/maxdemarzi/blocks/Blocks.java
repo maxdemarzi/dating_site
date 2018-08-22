@@ -32,12 +32,7 @@ public class Blocks {
                               @QueryParam("since") final String since,
                               @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        ZonedDateTime latest;
-        if (since == null) {
-            latest = ZonedDateTime.now(utc);
-        } else {
-            latest = ZonedDateTime.parse(since);
-        }
+        ZonedDateTime latest = getLatestTime(since);
 
         try (Transaction tx = db.beginTx()) {
             Node user = findUser(username, db);

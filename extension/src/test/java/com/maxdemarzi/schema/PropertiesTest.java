@@ -1,6 +1,5 @@
 package com.maxdemarzi.schema;
 
-import com.maxdemarzi.schema.Properties;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -8,12 +7,7 @@ import org.junit.rules.ExpectedException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import static com.maxdemarzi.schema.Properties.EMAIL;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.PASSWORD;
-import static com.maxdemarzi.schema.Properties.STATUS;
-import static com.maxdemarzi.schema.Properties.TIME;
-import static com.maxdemarzi.schema.Properties.USERNAME;
+import static com.maxdemarzi.schema.Properties.*;
 import static org.junit.Assert.assertEquals;
 
 public class PropertiesTest {

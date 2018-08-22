@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.maxdemarzi.Time.dateFormatter;
+import static com.maxdemarzi.Time.getLatestTime;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.posts.Posts.getAuthor;
 import static com.maxdemarzi.schema.Properties.*;
@@ -39,15 +40,8 @@ public class Mentions {
                                 @QueryParam("username2") final String username2,
                                 @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        ZonedDateTime dateTime;
-        ZonedDateTime latest;
-        if (since == null) {
-            latest = ZonedDateTime.now(utc);
-            dateTime = ZonedDateTime.now(utc);
-        } else {
-            latest = ZonedDateTime.parse(since);
-            dateTime = ZonedDateTime.parse(since);
-        }
+        ZonedDateTime dateTime = getLatestTime(since);
+        ZonedDateTime latest = getLatestTime(since);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);

@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.time.*;
 import java.util.*;
 
+import static com.maxdemarzi.Time.getLatestTime;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
 import static java.util.Collections.reverseOrder;
@@ -30,12 +31,7 @@ public class LowFives {
                              @QueryParam("since") final String since,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
-        ZonedDateTime latest;
-        if (since == null) {
-            latest = ZonedDateTime.now(utc);
-        } else {
-            latest = ZonedDateTime.parse(since);
-        }
+        ZonedDateTime latest = getLatestTime(since);
 
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);

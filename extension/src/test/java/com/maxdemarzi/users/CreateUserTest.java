@@ -1,19 +1,13 @@
 package com.maxdemarzi.users;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.neo4j.harness.junit.Neo4jRule;
 import org.neo4j.test.server.HTTP;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.maxdemarzi.schema.Properties.EMAIL;
-import static com.maxdemarzi.schema.Properties.NAME;
-import static com.maxdemarzi.schema.Properties.PASSWORD;
-import static com.maxdemarzi.schema.Properties.TIME;
-import static com.maxdemarzi.schema.Properties.USERNAME;
+import static com.maxdemarzi.schema.Properties.*;
 
 public class CreateUserTest {
     @Rule

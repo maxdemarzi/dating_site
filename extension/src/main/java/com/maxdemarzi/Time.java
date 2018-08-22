@@ -13,13 +13,13 @@ public class Time {
             .withZone(utc);
 
 
-    public static Long getLatestTime(@QueryParam("since") Long since) {
-        LocalDateTime dateTime;
+    public static ZonedDateTime getLatestTime(@QueryParam("since") String since) {
+        ZonedDateTime latest;
         if (since == null) {
-            dateTime = LocalDateTime.now(utc);
+            latest = ZonedDateTime.now(utc);
         } else {
-            dateTime = LocalDateTime.ofEpochSecond(since, 0, ZoneOffset.UTC);
+            latest = ZonedDateTime.parse(since);
         }
-        return dateTime.toEpochSecond(ZoneOffset.UTC);
+        return latest;
     }
 }
