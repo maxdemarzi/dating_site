@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 
 import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.getLatestTime;
-import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.posts.Posts.getAuthor;
 import static com.maxdemarzi.schema.Properties.*;
 import static java.util.Collections.reverseOrder;

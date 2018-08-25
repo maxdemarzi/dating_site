@@ -21,9 +21,11 @@
                 </li>
             </ul>
             <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Send Message">
-                <button class="btn btn-love btn-sm">
-                    <i class="material-icons">chat</i>
-                </button>
+                <a href="/messages/@post.getUsername2()">
+                    <button class="btn btn-love btn-sm">
+                        <i class="material-icons">chat</i>
+                    </button>
+                </a>
             </span>
             <form id="block_@post.getId()" style="display: inline-block; float: right;">
                 <input type="hidden" name="username2" value="@post.getUsername2()">

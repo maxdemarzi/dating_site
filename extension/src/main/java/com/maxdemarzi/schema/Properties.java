@@ -6,6 +6,7 @@ public final class Properties {
         throw new IllegalAccessError("Utility class");
     }
 
+    public static final String AUTHOR = "author";
     public static final String BIO = "bio";
     public static final String CITY = "city";
     public static final String CODE = "code";

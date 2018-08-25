@@ -32,6 +32,15 @@ public class GetCityTest {
         Assert.assertEquals(expected, actual);
     }
 
+    @Test
+    public void shouldNotGetCityByCityAndStateNotFound() {
+        HTTP.POST(neo4j.httpURI().resolve("/v1/schema/create").toString());
+
+        HTTP.Response response = HTTP.GET(neo4j.httpURI().resolve("/v1/cities/NotChicago/Illinois").toString());
+        HashMap actual  = response.content();
+        Assert.assertEquals(400, response.status());
+        Assert.assertEquals("City not Found.", actual.get("error"));
+    }
 
     @Test
     public void shouldNotGetCityNotFound() {

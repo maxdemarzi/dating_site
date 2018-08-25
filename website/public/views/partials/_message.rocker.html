@@ -1,0 +1,34 @@
+@import com.maxdemarzi.models.User
+@import com.maxdemarzi.models.Message
+
+@args (User authenticated, User user, Message message)
+
+@if(message.getAuthor().equals(authenticated.getUsername())) {
+<li class="media media-current-user mb-4">
+    <div class="media-body">
+        <div class="media-body-text">
+            @message.getStatus()
+        </div>
+        <div class="media-footer">
+            <small class="text-muted">
+                <a href="/user/@authenticated.getUsername()">@authenticated.getName()</a> at @message.humanTime()
+            </small>
+        </div>
+    </div>
+    <img class="rounded-circle media-object ml-3" src="https://www.gravatar.com/avatar/@authenticated.getHash()?s=200&d=retro">
+</li>
+} else {
+<li class="media mb-4">
+    <img class="rounded-circle media-object mr-3" src="https://www.gravatar.com/avatar/@user.getHash()?s=200&d=retro">
+    <div class="media-body">
+        <div class="media-body-text">
+            @message.getStatus()
+        </div>
+        <div class="media-footer">
+            <small class="text-muted">
+                <a href="/user/@user.getUsername()">@user.getName()</a> at @message.humanTime()
+            </small>
+        </div>
+    </div>
+</li>
+}

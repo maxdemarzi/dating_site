@@ -1,5 +1,6 @@
 package com.maxdemarzi.cities;
 
+import com.maxdemarzi.CustomObjectMapper;
 import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -18,7 +19,7 @@ import static org.neo4j.helpers.collection.MapUtil.map;
 
 @Path("/cities")
 public class Cities {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
 
     public static Node findCity(String geoname_id, @Context GraphDatabaseService db) {
         if (geoname_id == null) { return null; }

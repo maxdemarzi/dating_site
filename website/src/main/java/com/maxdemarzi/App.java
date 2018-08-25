@@ -191,6 +191,7 @@ public class App extends Jooby {
       use(new Things());
       use(new Fives());
       use(new Blocks());
+      use(new Messages());
 
   }
 

@@ -119,6 +119,18 @@ public interface API {
                               @Path("username2") String username2,
                               @Path("id") Long id);
 
+    @GET("users/{username}/conversations")
+    Call<List<Conversation>> getConversations(@Path("username") String username);
+
+    @GET("users/{username}/conversations/{username2}")
+    Call<List<Message>> getConversation(@Path("username") String username,
+                                       @Path("username2") String username2);
+
+    @POST("users/{username}/conversations/{username2}")
+    Call<Message> createMessage(@Path("username") String username,
+                                @Path("username2") String username2,
+                                @Body Message message);
+
     @GET("users/{username}/blocks")
     Call<List<User>> getBlocks(@Path("username") String username);
 

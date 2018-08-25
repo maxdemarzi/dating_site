@@ -18,9 +18,7 @@ import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.maxdemarzi.Time.dateFormatter;
-import static com.maxdemarzi.Time.getLatestTime;
-import static com.maxdemarzi.Time.utc;
+import static com.maxdemarzi.Time.*;
 import static com.maxdemarzi.schema.Properties.*;
 import static java.util.Collections.reverseOrder;
 
@@ -70,7 +68,7 @@ public class Posts {
                 for (Relationship r1 : user.getRelationships(Direction.OUTGOING, relType)) {
                     Node post = r1.getEndNode();
                     Map<String, Object> result = post.getAllProperties();
-                    ZonedDateTime time = (ZonedDateTime)r1.getProperty("time");
+                    ZonedDateTime time = (ZonedDateTime)r1.getProperty(TIME);
                     if(time.isBefore(latest)) {
                         result.put(ID, post.getId());
                         result.put(TIME, time);
@@ -123,7 +121,7 @@ public class Posts {
 
     private Node createPost(@Context GraphDatabaseService db, HashMap input, Node user, ZonedDateTime dateTime) {
         Node post = db.createNode(Labels.Post);
-        post.setProperty(STATUS, input.get("status"));
+        post.setProperty(STATUS, input.get(STATUS));
         post.setProperty(TIME, dateTime);
         Relationship r1 = user.createRelationshipTo(post, RelationshipType.withName("POSTED_ON_" +
                         dateTime.format(dateFormatter)));

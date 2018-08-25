@@ -10,12 +10,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.time.*;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.maxdemarzi.Time.getLatestTime;
 import static com.maxdemarzi.Time.utc;
-import static com.maxdemarzi.schema.Properties.*;
+import static com.maxdemarzi.schema.Properties.TIME;
+import static com.maxdemarzi.schema.Properties.USERNAME;
 import static com.maxdemarzi.users.Users.findUser;
 import static com.maxdemarzi.users.Users.getUserAttributes;
 import static java.util.Collections.reverseOrder;

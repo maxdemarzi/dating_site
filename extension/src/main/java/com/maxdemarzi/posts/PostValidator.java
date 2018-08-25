@@ -13,7 +13,7 @@ import static com.maxdemarzi.schema.Properties.STATUS;
 public class PostValidator {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    static HashMap<String, Object> validate(String body) throws IOException {
+    public static HashMap<String, Object> validate(String body) throws IOException {
         HashMap<String, Object> input;
 
         if ( body == null) {
