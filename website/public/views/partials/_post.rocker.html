@@ -14,7 +14,9 @@
                 @post.getStatus()
             </p>
             @if(post.hasFile()) {
-                <img src="https://fives.b-cdn.net/@post.getFilename()" width="100%">
+                <p>
+                    <img src="https://fives.b-cdn.net/@post.getFilename()" style="max-width: 100%" class="rounded">
+                </p>
             }
             <form id="five_@post.getId()" style="display: inline-block;">
                 <input type="hidden" name="username2" value="@post.getUsername()">

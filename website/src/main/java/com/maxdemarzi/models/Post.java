@@ -2,7 +2,6 @@ package com.maxdemarzi.models;
 
 import humanize.Humanize;
 import lombok.Data;
-import org.jooby.Upload;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

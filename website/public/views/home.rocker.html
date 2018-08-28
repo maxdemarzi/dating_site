@@ -12,8 +12,9 @@
                 @views.partials._user.template(user)
             <div class="col-lg-6">
                 <ul class="list-group media-list media-list-stream mb-4">
-                    @views.partials._new_post.template()
-
+                    @if (user != null) {
+                        @views.partials._new_post.template()
+                    }
                     @for (post: posts) {
                         @views.partials._post.template(post)
                     }
