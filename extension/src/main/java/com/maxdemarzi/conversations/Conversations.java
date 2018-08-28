@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.time.*;
 import java.util.*;
+import java.util.function.Function;
 
 import static com.maxdemarzi.Time.getLatestTime;
 import static com.maxdemarzi.Time.utc;
@@ -25,6 +26,7 @@ import static java.util.Collections.reverseOrder;
 public class Conversations {
     private static final ObjectMapper objectMapper = CustomObjectMapper.getInstance();
     private static final Comparator<Map<String, Object>> timedComparator = Comparator.comparing(m -> (ZonedDateTime) m.get(TIME), reverseOrder());
+    private static final Comparator<RelationshipType> relTypeComparator = Comparator.comparing((Function<RelationshipType, Object>) RelationshipType::name, reverseOrder());
 
     @GET
     @Path("/{username2}")
@@ -39,6 +41,15 @@ public class Conversations {
         try (Transaction tx = db.beginTx()) {
             Node user = Users.findUser(username, db);
             Node user2 = Users.findUser(username2, db);
+
+            // Are they blocking us?
+            HashSet<Node> blocked = new HashSet<>();
+            for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
+                blocked.add(r1.getEndNode());
+            }
+            if (blocked.contains(user)) {
+                throw ConversationExceptions.conversationNotAllowed;
+            }
 
             // Find the conversation between these two users
             Node conversation = null;
@@ -85,27 +96,44 @@ public class Conversations {
             Node user = Users.findUser(username, db);
             Node user2 = Users.findUser(username2, db);
 
+            // Are they blocking us?
+            HashSet<Node> blocked = new HashSet<>();
+            for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
+                blocked.add(r1.getEndNode());
+            }
+            if (blocked.contains(user)) {
+                throw ConversationExceptions.conversationNotAllowed;
+            }
+
             // Find the conversation between these two users
             Node conversation = null;
-            outerloop:
-            for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.PART_OF)) {
-                conversation = r1.getEndNode();
-                for (Relationship r2 : conversation.getRelationships(Direction.INCOMING, RelationshipTypes.PART_OF)) {
-                    if (user2.equals(r2.getStartNode())) {
-                        break outerloop;
+
+            // Query Optimization, traverse the user with the least amount of PART_OF relationships
+            if (user.getDegree(RelationshipTypes.PART_OF, Direction.OUTGOING) < user2.getDegree(RelationshipTypes.PART_OF, Direction.OUTGOING)) {
+                outerloop:
+                for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.PART_OF)) {
+                    conversation = r1.getEndNode();
+                    for (Relationship r2 : conversation.getRelationships(Direction.INCOMING, RelationshipTypes.PART_OF)) {
+                        if (user2.equals(r2.getStartNode())) {
+                            break outerloop;
+                        }
+                    }
+                }
+            } else {
+                outerloop:
+                for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.PART_OF)) {
+                    conversation = r1.getEndNode();
+                    for (Relationship r2 : conversation.getRelationships(Direction.INCOMING, RelationshipTypes.PART_OF)) {
+                        if (user.equals(r2.getStartNode())) {
+                            break outerloop;
+                        }
                     }
                 }
             }
+
+
             // Are we allowed to have a conversation with this user?
             if (conversation == null) {
-                // Are they blocking us?
-                HashSet<Node> blocked = new HashSet<>();
-                for (Relationship r1 : user2.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
-                    blocked.add(r1.getEndNode());
-                }
-                if (blocked.contains(user)) {
-                    throw ConversationExceptions.conversationNotAllowed;
-                }
 
                 // Do we have a recent high five from them?
                 // Get their time zone first
@@ -119,6 +147,9 @@ public class Conversations {
                         types.add(t);
                     }
                 }
+
+                types.sort(relTypeComparator);
+
                 // Check their posts for a high five from user2
                 boolean allowed = false;
                 outerloop:
@@ -169,8 +200,8 @@ public class Conversations {
             Node user = Users.findUser(username, db);
 
             HashSet<Node> blocked = new HashSet<>();
-            for (Relationship r1 : user.getRelationships(Direction.OUTGOING, RelationshipTypes.BLOCKS)) {
-                blocked.add(r1.getEndNode());
+            for (Relationship r1 : user.getRelationships(RelationshipTypes.BLOCKS)) {
+                blocked.add(r1.getOtherNode(user));
             }
 
             int count = 0;

@@ -2,6 +2,7 @@ package com.maxdemarzi.models;
 
 import humanize.Humanize;
 import lombok.Data;
+import org.jooby.Upload;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +16,7 @@ public class Post {
     private String name2;
     private String username;
     private String username2;
+    private String filename;
     private String hash;
     private String hash2;
     private String time;
@@ -36,6 +38,10 @@ public class Post {
 
     public String expires() {
         return Humanize.naturalTime(Date.from(ZonedDateTime.parse(time).plusDays(5).toInstant()));
+    }
+
+    public boolean hasFile() {
+        return filename != null;
     }
 
 }

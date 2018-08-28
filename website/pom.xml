@@ -113,6 +113,7 @@
       <artifactId>humanize-emoji</artifactId>
       <version>${humanize.version}</version>
     </dependency>
+
     <!-- logging -->
     <dependency>
       <groupId>ch.qos.logback</groupId>

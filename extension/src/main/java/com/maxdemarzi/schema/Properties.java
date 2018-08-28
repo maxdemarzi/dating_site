@@ -14,6 +14,7 @@ public final class Properties {
     public static final String DISTANCE = "distance";
     public static final String EMAIL = "email";
     public static final String EXPIRES = "expires";
+    public static final String FILENAME = "filename";
     public static final String FULL_NAME = "full_name";
     public static final String GEONAME_ID = "geoname_id";
     public static final String HASH = "hash";

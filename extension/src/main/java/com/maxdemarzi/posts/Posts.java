@@ -113,7 +113,6 @@ public class Posts {
             results.put(LOW_FIVED, false);
             results.put(HIGH_FIVES, 0);
             results.put(LOW_FIVES, 0);
-
             tx.success();
         }
         return Response.ok().entity(objectMapper.writeValueAsString(results)).build();
@@ -123,6 +122,9 @@ public class Posts {
         Node post = db.createNode(Labels.Post);
         post.setProperty(STATUS, input.get(STATUS));
         post.setProperty(TIME, dateTime);
+        if (input.containsKey(FILENAME)) {
+            post.setProperty(FILENAME, input.get(FILENAME));
+        }
         Relationship r1 = user.createRelationshipTo(post, RelationshipType.withName("POSTED_ON_" +
                         dateTime.format(dateFormatter)));
         r1.setProperty(TIME, dateTime);

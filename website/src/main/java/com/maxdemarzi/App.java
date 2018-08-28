@@ -20,6 +20,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import views.index;
 import views.register;
 
+import java.io.IOException;
 import java.util.*;
 
 import retrofit2.Response;
@@ -27,6 +28,7 @@ import retrofit2.Response;
 
 public class App extends Jooby {
     public static API api;
+    public static BunnyCDN bunny;
   {
 
       // Debug friendly error messages
@@ -45,19 +47,14 @@ public class App extends Jooby {
 
       // Setup API
       onStart(registry -> {
-
           Config conf = require(Config.class);
 
-          // Define the interceptor, add authentication headers
+          // Add authentication headers
           String credentials = Credentials.basic(conf.getString("neo4j.username"), conf.getString("neo4j.password"));
-          Interceptor interceptor = chain -> {
-              Request newRequest = chain.request().newBuilder().addHeader("Authorization", credentials).build();
-              return chain.proceed(newRequest);
-          };
 
           // Add the interceptor to OkHttpClient
           OkHttpClient.Builder builder = new OkHttpClient.Builder();
-          builder.interceptors().add(interceptor);
+          builder.addInterceptor(chain -> chain.proceed(chain.request().newBuilder().addHeader("Authorization", credentials).build()));
           OkHttpClient client = builder.build();
 
           Retrofit retrofit = new Retrofit.Builder()
@@ -67,6 +64,23 @@ public class App extends Jooby {
                   .build();
 
           api = retrofit.create(API.class);
+
+          // Add AccessKey header
+          OkHttpClient.Builder builder2 = new OkHttpClient.Builder();
+          builder2.addInterceptor(chain -> chain.proceed(
+                  chain.request().newBuilder()
+                          .addHeader("AccessKey", conf.getString("bunny.key"))
+                          .addHeader("Content-Type", "application/octet-stream")
+                          .build()));
+          OkHttpClient client2 = builder2.build();
+
+          Retrofit retrofit2 = new Retrofit.Builder()
+                  .client(client2)
+                  .baseUrl("https://storage.bunnycdn.com/")
+                  .addConverterFactory(JacksonConverterFactory.create())
+                  .build();
+
+          bunny = retrofit2.create(BunnyCDN.class);
       });
 
       // Configure public static files
