@@ -12,12 +12,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import retrofit2.Response;
 
+import javax.inject.Provider;
 import java.io.IOException;
-
-import static com.maxdemarzi.App.api;
 
 public class ServiceAuthenticator implements Authenticator<UsernamePasswordCredentials> {
     private static final Logger logger = LoggerFactory.getLogger(ServiceAuthenticator.class);
+    private final Provider<API> api;
+
+    public ServiceAuthenticator(Provider<API> api) {
+        this.api = api;
+    }
 
     @Override
     public void validate(UsernamePasswordCredentials credentials, WebContext webContext) throws HttpAction, CredentialsException {
@@ -38,7 +42,7 @@ public class ServiceAuthenticator implements Authenticator<UsernamePasswordCrede
 
         Response<User> response;
         try {
-            response = api.getUser(username).execute();
+            response = api.get().getUser(username).execute();
             User user = response.body();
             if (user == null || !BCrypt.checkpw(credentials.getPassword(), user.getPassword())){
                 String message = "Bad credentials for: " + username;

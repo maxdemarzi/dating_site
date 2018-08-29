@@ -1,6 +1,8 @@
 package com.maxdemarzi.routes;
 
+import com.maxdemarzi.API;
 import com.maxdemarzi.App;
+import com.maxdemarzi.BunnyCDN;
 import com.maxdemarzi.models.Post;
 import okhttp3.*;
 import okhttp3.MediaType;
@@ -16,12 +18,9 @@ import java.time.format.DateTimeFormatter;
 public class Posts extends Jooby {
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss_SSS");
 
-    public Posts() {
-        super("posts");
-    }
-
     {
         post("/post", req -> {
+            API api = require(API.class);
             CommonProfile profile = require(CommonProfile.class);
             String username = profile.getUsername();
 
@@ -33,13 +32,13 @@ public class Posts extends Jooby {
 
             String time = dateFormat.format(ZonedDateTime.now()) + getFileExtension(upload.name());
 
-            Response<ResponseBody> bunnyResponse =
-                    App.bunny.upload("fives", username, time, body).execute();
+            BunnyCDN bunny = require(BunnyCDN.class);
+            Response<ResponseBody> bunnyResponse = bunny.upload("fives", username, time, body).execute();
             if (bunnyResponse.isSuccessful()) {
                 Post post = new Post();
                 post.setStatus(status);
                 post.setFilename(username + "/" + time);
-                Response<Post> response = App.api.createPost(username, post).execute();
+                Response<Post> response = api.createPost(username, post).execute();
                 if (response.isSuccessful()) {
                     return Results.redirect("/user/" + username);
                 }

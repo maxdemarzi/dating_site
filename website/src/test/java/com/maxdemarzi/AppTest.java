@@ -3,9 +3,11 @@ package com.maxdemarzi;
 import static io.restassured.RestAssured.get;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.stringContainsInOrder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import com.fizzed.rocker.runtime.DefaultRockerModel;
 import org.jooby.test.JoobyRule;
 import org.jooby.test.MockRouter;
 import org.junit.ClassRule;
@@ -23,21 +25,23 @@ public class AppTest {
   @ClassRule
   public static JoobyRule app = new JoobyRule(new App());
 
+  /**
+   * Simple test that hits the default route.
+   */
   @Test
-  public void integrationTest() {
+  public void indexPageIntegration() {
     get("/")
         .then()
         .assertThat()
         .statusCode(200)
-        .contentType("text/html;charset=UTF-8");
+        .contentType("text/html;charset=UTF-8")
+        .content("html.head.title", equalTo("Five and Sex"));
   }
 
   @Test
-  public void unitTest() throws Throwable {
-    Object result = new MockRouter(new App())
-        .get("/");
-
-    assertNotNull(result);
+  public void indexPage() throws Throwable {
+    DefaultRockerModel index = new MockRouter(new App()).get("/");
+    assertNotNull(index);
   }
 
 }

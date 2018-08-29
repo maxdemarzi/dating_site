@@ -1,9 +1,14 @@
 package com.maxdemarzi;
 
 import com.maxdemarzi.models.*;
+import org.jooby.Err;
+import org.jooby.Status;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.*;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface API {
@@ -22,6 +27,19 @@ public interface API {
     @GET("users/{username}/profile")
     Call<User> getProfile(@Path("username") String username,
                           @Query("username2") String username2);
+
+    default User getUserProfile(String id) throws java.io.IOException {
+        User user = null;
+        if (id != null) {
+            Response<User> userResponse = getProfile(id, null).execute();
+            if (userResponse.isSuccessful()) {
+                user = userResponse.body();
+            } else {
+              throw new Err(Status.BAD_REQUEST);
+            }
+        }
+        return user;
+    }
 
     @POST("users")
     Call<User> createUser(@Body User user);
@@ -151,6 +169,15 @@ public interface API {
 
     @GET("tags")
     Call<List<Tag>> getTags();
+
+    default List<Tag> getTagList() throws IOException {
+      List<Tag> trends = new ArrayList<>();
+      Response<List<Tag>> trendsResponce = getTags().execute();
+      if (trendsResponce.isSuccessful()) {
+        trends = trendsResponce.body();
+      }
+      return trends;
+    }
 
     @GET("tags/{tag}")
     Call<List<Post>> getTag(@Path("tag") String tag,

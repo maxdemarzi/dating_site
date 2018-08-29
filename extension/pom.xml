@@ -131,7 +131,6 @@
                                     <exclude>io.dropwizard.metrics:*</exclude>
                                     <exclude>org.slf4j:*</exclude>
                                     <exclude>io.prometheus:*</exclude>
-                                    <exclude>org.apache.shiro:*</exclude>
                                     <exclude>commons-beanutils:*</exclude>
                                     <exclude>commons-collections:*</exclude>
                                     <exclude>com.github.ben-manes.caffeine:*</exclude>
