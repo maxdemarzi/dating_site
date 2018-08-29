@@ -15,20 +15,12 @@ import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.http.client.indirect.FormClient;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 import views.index;
 import views.register;
 
-import java.io.IOException;
 import java.util.*;
 
-import retrofit2.Response;
-
-
 public class App extends Jooby {
-    public static API api;
-    public static BunnyCDN bunny;
   {
 
       // Debug friendly error messages
@@ -46,42 +38,8 @@ public class App extends Jooby {
       use(new Rockerby());
 
       // Setup API
-      onStart(registry -> {
-          Config conf = require(Config.class);
-
-          // Add authentication headers
-          String credentials = Credentials.basic(conf.getString("neo4j.username"), conf.getString("neo4j.password"));
-
-          // Add the interceptor to OkHttpClient
-          OkHttpClient.Builder builder = new OkHttpClient.Builder();
-          builder.addInterceptor(chain -> chain.proceed(chain.request().newBuilder().addHeader("Authorization", credentials).build()));
-          OkHttpClient client = builder.build();
-
-          Retrofit retrofit = new Retrofit.Builder()
-                  .client(client)
-                  .baseUrl("http://" + conf.getString("neo4j.url") + conf.getString("neo4j.prefix") +  "/")
-                  .addConverterFactory(JacksonConverterFactory.create())
-                  .build();
-
-          api = retrofit.create(API.class);
-
-          // Add AccessKey header
-          OkHttpClient.Builder builder2 = new OkHttpClient.Builder();
-          builder2.addInterceptor(chain -> chain.proceed(
-                  chain.request().newBuilder()
-                          .addHeader("AccessKey", conf.getString("bunny.key"))
-                          .addHeader("Content-Type", "application/octet-stream")
-                          .build()));
-          OkHttpClient client2 = builder2.build();
-
-          Retrofit retrofit2 = new Retrofit.Builder()
-                  .client(client2)
-                  .baseUrl("https://storage.bunnycdn.com/")
-                  .addConverterFactory(JacksonConverterFactory.create())
-                  .build();
-
-          bunny = retrofit2.create(BunnyCDN.class);
-      });
+      use(new Neo4jApi());
+      use(new BunnyApi());
 
       // Configure public static files
       assets("/assets/**");
@@ -97,12 +55,13 @@ public class App extends Jooby {
       // Publicly Accessible
       get("/", index::template);
       get("/register", register::template);
-      post("/register", (req, rsp) -> {
+      post("/register", req -> {
+          API api = require(API.class);
           User user = req.form(User.class);
           user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
           Response<User> response = api.createUser(user).execute();
           if (response.isSuccessful()) {
-              Results.redirect("/");
+              return Results.redirect("/");
           } else {
               throw new Err(Status.CONFLICT, "There was a problem with your registration.");
           }
@@ -126,22 +85,24 @@ public class App extends Jooby {
       use(new Users());
 
       get("/tag/{hashtag}", req -> {
+          API api = require(API.class);
           String requested_by = req.get("requested_by");
           if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
+          User authenticated = api.getUserProfile(requested_by);
 
           Response<List<Post>> tagResponse = api.getTag(req.param("hashtag").value(), requested_by).execute();
           List<Post> posts = new ArrayList<>();
           if (tagResponse.isSuccessful()) {
               posts = tagResponse.body();
           }
-          return views.home.template(authenticated, authenticated, posts, getTags());
+          return views.home.template(authenticated, authenticated, posts, api.getTagList());
       });
 
       post("/search", req -> {
+        API api = require(API.class);
           String requested_by = req.get("requested_by");
           if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
+          User authenticated = api.getUserProfile(requested_by);
 
           Response<List<Post>> searchResponse = api.getSearch(req.param("q").value(), requested_by).execute();
           List<Post> posts = new ArrayList<>();
@@ -149,13 +110,14 @@ public class App extends Jooby {
               posts = searchResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, getTags());
+          return views.home.template(authenticated, authenticated, posts, api.getTagList());
       });
 
       get("/explore", req -> {
+          API api = require(API.class);
           String requested_by = req.get("requested_by");
           if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = getUserProfile(requested_by);
+          User authenticated = api.getUserProfile(requested_by);
 
           Response<List<Post>> searchResponse = api.getLatest(requested_by).execute();
           List<Post> posts = new ArrayList<>();
@@ -163,18 +125,19 @@ public class App extends Jooby {
               posts = searchResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, getTags());
+          return views.home.template(authenticated, authenticated, posts, api.getTagList());
 
       });
 
       // Accessible only by registered users
-      use(new Pac4j().client(conf -> new FormClient("/", new ServiceAuthenticator())));
+      use(new Pac4j().client(conf -> new FormClient("/", new ServiceAuthenticator(() -> require(API.class)))));
 
       get("/home", req -> {
+          API api = require(API.class);
           // TODO: 4/27/18 Allow anonymous to view home?
           CommonProfile profile = require(CommonProfile.class);
           String username = profile.getUsername();
-          User authenticated = getUserProfile(username);
+          User authenticated = api.getUserProfile(username);
 
           Response<List<Post>> timelineResponse = api.getTimeline(username, false).execute();
           List<Post> posts = new ArrayList<>();
@@ -182,14 +145,15 @@ public class App extends Jooby {
               posts = timelineResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, getTags());
+          return views.home.template(authenticated, authenticated, posts, api.getTagList());
       });
 
       get("/competition", req -> {
+          API api = require(API.class);
           // TODO: 4/27/18 Allow anonymous to view competition?
           CommonProfile profile = require(CommonProfile.class);
           String username = profile.getUsername();
-          User authenticated = getUserProfile(username);
+          User authenticated = api.getUserProfile(username);
 
           Response<List<Post>> timelineResponse = api.getTimeline(username, true).execute();
           List<Post> posts = new ArrayList<>();
@@ -197,7 +161,7 @@ public class App extends Jooby {
               posts = timelineResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, getTags());
+          return views.home.template(authenticated, authenticated, posts, api.getTagList());
       });
 
       use(new Posts());
@@ -208,28 +172,6 @@ public class App extends Jooby {
       use(new Messages());
 
   }
-
-    public static User getUserProfile(String id) throws java.io.IOException {
-        User user = null;
-        if (id != null) {
-            Response<User> userResponse = api.getProfile(id, null).execute();
-            if (userResponse.isSuccessful()) {
-                user = userResponse.body();
-            } else {
-                throw new Err(Status.BAD_REQUEST);
-            }
-        }
-        return user;
-    }
-
-    public static List<Tag> getTags() throws java.io.IOException {
-        List<Tag> trends = new ArrayList<>();
-        Response<List<Tag>> trendsResponce = api.getTags().execute();
-        if (trendsResponce.isSuccessful()) {
-            trends = trendsResponce.body();
-        }
-        return trends;
-    }
 
     private CommonProfile getAnonymous() {
         CommonProfile anonymous = new CommonProfile();
