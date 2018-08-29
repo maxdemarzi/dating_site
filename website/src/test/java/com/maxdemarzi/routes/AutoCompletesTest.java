@@ -10,8 +10,7 @@ import org.jooby.Request;
 import org.jooby.json.Jackson;
 import org.jooby.test.JoobyRule;
 import org.jooby.test.MockRouter;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import retrofit2.Call;
@@ -32,8 +31,9 @@ public class AutoCompletesTest {
       .use(new Neo4jApi())
   );
 
+  @Ignore
   @Test
-  public void autoCompleteCity() {
+  public void autoCompleteCityIntegrationTest() {
     get("/autocomplete/city/Chicago")
         .then()
         .assertThat()
