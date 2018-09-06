@@ -153,6 +153,6 @@ public class Recommended {
         clone.retainAll(s2);
         final int intersection = clone.size();
         if (sa + sb - intersection == 0) { return 0.0D; }
-        return 1d / (sa + sb - intersection) * intersection;
+        return 1.0D * intersection / ( sa + sb - intersection);
     }
 }
