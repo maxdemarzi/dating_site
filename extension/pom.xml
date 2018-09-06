@@ -156,6 +156,7 @@
                                     <exclude>org.bouncycastle:*</exclude>
                                     <exclude>junit:*</exclude>
                                     <exclude>org.hamcrest:*</exclude>
+                                    <exclude>org.apache.shiro:*</exclude>
                                 </excludes>
                             </artifactSet>
                         </configuration>

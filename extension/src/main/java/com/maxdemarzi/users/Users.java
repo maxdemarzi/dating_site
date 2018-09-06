@@ -1,7 +1,6 @@
 package com.maxdemarzi.users;
 
 import com.maxdemarzi.CustomObjectMapper;
-import com.maxdemarzi.posts.PostExceptions;
 import com.maxdemarzi.schema.Labels;
 import com.maxdemarzi.schema.RelationshipTypes;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.*;
 
-import static com.maxdemarzi.Time.dateFormatter;
 import static com.maxdemarzi.Time.utc;
 import static com.maxdemarzi.schema.Properties.*;
 
@@ -178,22 +176,4 @@ public class Users {
         results.put(CITY, city);
         return results;
     }
-
-    public static Node getPost(Node author, ZonedDateTime time) {
-        RelationshipType original = RelationshipType.withName("POSTED_ON_" +
-                time.format(dateFormatter));
-        Node post = null;
-        for(Relationship r1 : author.getRelationships(Direction.OUTGOING, original)) {
-            Node potential = r1.getEndNode();
-            if (time.equals(potential.getProperty(TIME))) {
-                post = potential;
-                break;
-            }
-        }
-        if(post == null) { throw PostExceptions.postNotFound; };
-
-        return post;
-    }
-
-
 }

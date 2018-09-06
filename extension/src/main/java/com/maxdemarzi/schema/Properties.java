@@ -39,6 +39,7 @@ public final class Properties {
     public static final String NAME = "name";
     public static final String NAME2 = "name2";
     public static final String PASSWORD = "password";
+    public static final String POINTS = "points";
     public static final String POSTS = "posts";
     public static final String USERNAME = "username";
     public static final String USERNAME2 = "username2";

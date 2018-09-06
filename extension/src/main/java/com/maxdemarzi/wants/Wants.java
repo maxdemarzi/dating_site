@@ -104,7 +104,7 @@ public class Wants {
 
     @DELETE
     @Path("/{name}")
-    public Response removeHas(@PathParam("username") final String username,
+    public Response removeWants(@PathParam("username") final String username,
                                @PathParam("name") final String name,
                                @Context GraphDatabaseService db) throws IOException {
         boolean wants = false;

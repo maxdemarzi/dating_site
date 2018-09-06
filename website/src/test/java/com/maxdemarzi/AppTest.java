@@ -13,9 +13,6 @@ import org.jooby.test.MockRouter;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-/**
- * @author jooby generator
- */
 public class AppTest {
 
   /**
@@ -35,7 +32,7 @@ public class AppTest {
         .assertThat()
         .statusCode(200)
         .contentType("text/html;charset=UTF-8")
-        .content("html.head.title", equalTo("Five and Sex"));
+        .content("html.head.title", equalTo("Fives"));
   }
 
   @Test
