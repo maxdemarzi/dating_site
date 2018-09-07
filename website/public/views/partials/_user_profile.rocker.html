@@ -1,0 +1,35 @@
+@import com.maxdemarzi.models.User
+
+@args (User user)
+
+@if (user != null) {
+    <div class="card card-profile mb-4">
+        <div class="card-header" style="background-image: url(/assets/img/iceland.jpg);"></div>
+        <div class="card-body text-center">
+            <a href="/user/@user.getUsername()">
+                <img class="card-profile-img" src="https://www.gravatar.com/avatar/@user.getHash()?s=200&d=retro">
+            </a>
+
+            <h6 class="card-title">
+                <a class="text-inherit" href="/user/@user.getUsername()">@user.getName() <br/>@@@user.getUsername()</a>
+            </h6>
+
+            <ul class="list-unstyled list-spaced text-left">
+                <li><span class="text-muted icon icon-magnifying-glass mr-3"></span>@user.getIs() looking for @user.IsLookingFor()</li>
+                <li><span class="text-muted icon icon-emoji-flirt mr-3"></span>@user.getBio()</li>
+                <li><span class="text-muted icon icon-location-pin mr-3"></span>From @user.getCity()</li>
+            </ul>
+
+            <ul class="card-menu counts">
+                <li class="text-left">
+                    <a href="/user/@user.getUsername()"><i class="material-icons">record_voice_over</i><span> @user.getPosts()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/likes"><i class="material-icons">thumb_up</i><span> @user.getLikes()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/hates"><i class="material-icons">thumb_down</i><span> @user.getHates()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/wants"><i class="material-icons">check_box_outline_blank</i><span> @user.getWants()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/has"><i class="material-icons">check_box</i><span> @user.getHas() </span></a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+}

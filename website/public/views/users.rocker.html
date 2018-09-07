@@ -1,0 +1,51 @@
+@import java.util.List
+@import java.util.stream.Collectors;
+@import java.util.stream.IntStream;
+@import com.maxdemarzi.models.User
+@import com.maxdemarzi.models.Post
+@import com.maxdemarzi.models.Tag
+
+@args (User authenticated, List<User> users)
+
+    @views.main.template("Home", authenticated) -> {
+
+    <div class="container-fluid container pt-5">
+        <div class="row">
+            @views.partials._user.template(authenticated)
+            <div class="col-lg-3">
+                @for ((i, user) : users) {
+                    @if(i.index() % 2 == 0) {
+                        @views.partials._user_profile.template(user)
+                    }
+                }
+            </div>
+            <div class="col-lg-3">
+                @for ((i, user) : users) {
+                    @if(i.index() % 2 == 1) {
+                        @views.partials._user_profile.template(user)
+                    }
+                }
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-4 d-none d-lg-block">
+                    <div class="card-body">
+                        <h6 class="mb-3">Sponsored</h6>
+                        <div data-grid="images" data-target-height="150"><img class="media-object" data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_2.jpg" style="width: 239px; height: 225px; margin-bottom: 10px; margin-right: 0px; display: inline-block; vertical-align: bottom;"></div>
+                        <p><strong>It might be time to visit Iceland.</strong> Iceland is so chill, and everything looks cool here. Also, we heard the people are pretty nice. What are you waiting for?</p>
+                        <button class="btn btn-outline-primary btn-sm">Buy a ticket</button>
+                    </div>
+                </div>
+                <div class="card card-link-list">
+                    <div class="card-body">
+                        © 2018 Fives
+                        <a href="#">About</a>
+                        <a href="#">Help</a>
+                        <a href="#">Terms</a>
+                        <a href="#">Privacy</a>
+                        <a href="#">Cookies</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }

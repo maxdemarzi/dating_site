@@ -170,6 +170,7 @@ public class App extends Jooby {
       use(new Fives());
       use(new Blocks());
       use(new Messages());
+      use(new Recommended());
 
   }
 

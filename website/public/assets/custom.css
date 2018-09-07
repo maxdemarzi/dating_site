@@ -103,6 +103,24 @@ h6 a:hover {
     text-decoration: none;
 }
 
+.counts {
+    margin-bottom: 0;
+}
+
+.counts a {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.counts a:hover {
+    text-decoration: none;
+}
+
+.counts span {
+    vertical-align:top;
+}
+
+
 /* buttons */
 .btn-love {
     font-weight: 400;

@@ -167,6 +167,9 @@ public interface API {
     Call<List<Post>> getTimeline(@Path("username") String username,
                                  @Query("competition") Boolean competition);
 
+    @GET("users/{username}/recommended")
+    Call<List<User>> getRecommended(@Path("username") String username);
+
     @GET("tags")
     Call<List<Tag>> getTags();
 

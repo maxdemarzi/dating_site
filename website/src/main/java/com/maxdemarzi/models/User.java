@@ -26,6 +26,7 @@ public class User {
     private Integer has;
     private Integer want;
     private Integer have;
+    private Double points;
 
     private String city;
 
