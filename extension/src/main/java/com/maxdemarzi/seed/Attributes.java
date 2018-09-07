@@ -555,7 +555,6 @@ public class Attributes {
         add("Sober");
         add("Sociable");
         add("Soft");
-        add("Soft");
         add("Softheaded");
         add("Solemn");
         add("Solid");
