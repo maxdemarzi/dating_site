@@ -310,7 +310,11 @@ public class CreateUserTest {
                     "email: 'michael@neo4j.com', " +
                     "name: 'Michael Hunger'," +
                     "password: 'tunafish'})" +
-            "CREATE (chicago:City {name:'Chicago', geoname_id:'1234', full_name:'Chicago, IL'})";
+            "CREATE (chicago:City {name:'Chicago', geoname_id:'1234', full_name:'Chicago, IL'})" +
+            "CREATE (illinois:State {name:'Illinois'})" +
+            "CREATE (america:Timezone {name:'America/Chicago'})" +
+            "CREATE (chicago)-[:IN_LOCATION]->(illinois)" +
+            "CREATE (illinois)-[:IN_TIMEZONE]->(america)";
 
     private static final HashMap input = new HashMap<String, Object>() {{
         put("username", "maxdemarzi");
@@ -471,5 +475,6 @@ public class CreateUserTest {
         put("is", "man");
         put("is_looking_for", new ArrayList<String>(){{add("woman");}});
         put("distance", 10000);
+        put("timezone", "America/Chicago");
     }};
 }

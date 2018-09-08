@@ -1,5 +1,7 @@
-# dating_site
+# Dating Site
 Example Dating Site with Neo4j
+
+Follow along with the development at http://maxdemarzi.com
 
 [![Build Status](https://travis-ci.org/maxdemarzi/dating_site.svg?branch=master)](https://travis-ci.org/maxdemarzi/dating_site)
 
@@ -9,67 +11,54 @@ Example Dating Site with Neo4j
 Setup
 ====
 
-We need the Import Max Mind stored procedure from https://github.com/maxdemarzi/import_maxmind_sproc follow the readme instructions.
+Let's start with Wikipedia to import Things:
 
-We also need the extension, follow the readme.
+	git clone https://github.com/maxdemarzi/graphipedia
+	cd graphipedia
+	mvn clean package
+	cd ..
+	wget https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2
+	bzip2 -dc enwiki-latest-pages-articles.xml.bz2 | java -classpath ./graphipedia/graphipedia-dataimport/target/graphipedia-dataimport.jar org.graphipedia.dataimport.ExtractLinks - enwiki-links.xml
+	java -Xmx20G -classpath ./graphipedia/graphipedia-dataimport/target/graphipedia-dataimport.jar org.graphipedia.dataimport.neo4j.ImportGraph enwiki-links.xml graph.db
 
+Move the graph.db folder in to your `<neo4j dir>\data\databases` directory and start Neo4j.
 
-Notes
-====
+Delete duplicates:
 
-People are motivated:
-
-- to seek pleasure and avoid pain
-- to seek hope and avoid fear
-- to seek social acceptance and avoid rejection
-
-
-- What habits does your business model require?
-
-	Checking who "high fived" post created by user.
-	Checking who replied to a conversation.
-
-- What problems are users turning to your product to solve?
-
-	Finding a date.
-
-- How do users currently solve that problem and why does it need a solution?
-
-	By finding dates on other dating sites, but the sites are not a great experience for the majority of the users.
-
-- How frequently do you expect users to engage with your product?
-
-	Multiple times a day on a variable schedule.
-
-- What user behavior do you want to make into a habit?
-
-	Checking the app on every notification.
-
-- Who is your product's user?
-
-	People looking for a date that are not getting what they need from other dating sites.
-
-- What is the user doing right before your intended habit?
-
-	Going about their day, feeling a bit lonely maybe, or just looking for instant gratification and validation of worth.
-
-- Come up with 3 internal triggers that could cue your user to action.
-
-	a.
-	b.
-	c.
-
-- Which internal trigger does your user experience most frequently?
+	MATCH (thing:Thing)
+	WITH thing.name AS name, count(*) as cnt, COLLECT(ID(thing)) as ids
+	WHERE cnt > 1
+	WITH name, cnt, last(ids) AS nodeIds
+	WITH COLLECT(nodeIds) AS collection
+	MATCH (n) WHERE id(n) IN collection
+	DETACH DELETE n
 
 
-- Finish this narrative using the most frequent internal trigger and the habit you are designing:
+We need the Import Max Mind stored procedure from https://github.com/maxdemarzi/import_maxmind_sproc follow these instructions.
 
-	"Every time the user ___internal trigger_____, they ___first action of habit_____"
+	mvn clean package
+	cp target/importer-1.0-SNAPSHOT.jar to <neo4j dir>/plugins/.
 
-- What might be places and times to send an external trigger?
+	CALL com.maxdemarzi.schema.generate;
+	CALL com.maxdemarzi.import.locations("/home/maxdemarzi/GeoLite2-City-CSV_20180905/GeoLite2-City-Locations-en.csv");
+	CALL com.maxdemarzi.import.ip4("/home/maxdemarzi/GeoLite2-City-CSV_20180905/GeoLite2-City-Blocks-IPv4.csv");
 
-	Every time any interaction toward them happens. High Five, Low Five, Message.
+Delete the Metro Areas:
 
-- How can you couple an external trigger as closely as possible to when the user's internal trigger fires?
+	MATCH (n:Metro) DETACH DELETE n
 
-- What are 3 ways to trigger your user with current technology?
+Delete `importer-1.0-SNAPSHOT.jar` from `<neo4j dir>/plugins/.`.
+
+We also need the extension, follow the readme in the extension directory.
+
+Replace this line in your conf/application.conf:
+
+	bunny.key="your bunny key"
+
+Build it:
+
+	mvn clean package
+
+Run it:
+
+	    java -jar ./target/website-1.0-SNAPSHOT.jar prod

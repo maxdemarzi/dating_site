@@ -101,6 +101,9 @@ public class Users {
 
                     Node city = db.findNode(Labels.City, FULL_NAME, parameters.get(CITY));
                     user.createRelationshipTo(city, RelationshipTypes.IN_LOCATION);
+                    Node state = city.getSingleRelationship(RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode();
+                    Node timezone = state.getSingleRelationship(RelationshipTypes.IN_TIMEZONE, Direction.OUTGOING).getEndNode();
+                    user.setProperty(TIMEZONE, timezone.getProperty(NAME));
 
                     results = user.getAllProperties();
                 } else {
@@ -133,6 +136,10 @@ public class Users {
                     Node city = db.findNode(Labels.City, FULL_NAME, parameters.get(CITY));
                     user.getSingleRelationship(RelationshipTypes.IN_LOCATION, Direction.OUTGOING).delete();
                     user.createRelationshipTo(city, RelationshipTypes.IN_LOCATION);
+
+                    Node state = city.getSingleRelationship(RelationshipTypes.IN_LOCATION, Direction.OUTGOING).getEndNode();
+                    Node timezone = state.getSingleRelationship(RelationshipTypes.IN_TIMEZONE, Direction.OUTGOING).getEndNode();
+                    user.setProperty(TIMEZONE, timezone.getProperty(NAME));
                 }
 
                 results = user.getAllProperties();
