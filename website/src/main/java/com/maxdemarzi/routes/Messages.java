@@ -16,10 +16,9 @@ public class Messages  extends Jooby {
             String username = profile.getUsername();
             User authenticated = api.getUserProfile(username);
 
-            Integer limit = req.param("limit").intValue(25);
-            Integer offset = req.param("offset").intValue(0);
+            Integer limit = req.param("limit").intValue(100);
 
-            Response<List<Conversation>> conversationResponse = api.getConversations(username).execute();
+            Response<List<Conversation>> conversationResponse = api.getConversations(username, limit).execute();
             if (conversationResponse.isSuccessful()) {
                 List<Conversation> conversations = conversationResponse.body();
                 return views.messages.template(authenticated, conversations);

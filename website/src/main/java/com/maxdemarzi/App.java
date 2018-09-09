@@ -92,13 +92,14 @@ public class App extends Jooby {
           String requested_by = req.get("requested_by");
           if (requested_by.equals("anonymous")) requested_by = null;
           User authenticated = api.getUserProfile(requested_by);
+          String tag = req.param("hashtag").value();
 
           Response<List<Post>> tagResponse = api.getTag(req.param("hashtag").value(), requested_by).execute();
           List<Post> posts = new ArrayList<>();
           if (tagResponse.isSuccessful()) {
               posts = tagResponse.body();
           }
-          return views.home.template(authenticated, authenticated, posts, api.getTagList());
+          return views.tag.template(authenticated, tag, posts, api.getTagList());
       });
 
       post("/search", req -> {
@@ -106,14 +107,15 @@ public class App extends Jooby {
           String requested_by = req.get("requested_by");
           if (requested_by.equals("anonymous")) requested_by = null;
           User authenticated = api.getUserProfile(requested_by);
+          String search = req.param("q").value();
 
-          Response<List<Post>> searchResponse = api.getSearch(req.param("q").value(), requested_by).execute();
+          Response<List<Post>> searchResponse = api.getSearch(search, requested_by).execute();
           List<Post> posts = new ArrayList<>();
           if (searchResponse.isSuccessful()) {
               posts = searchResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, api.getTagList());
+          return views.search.template(authenticated, search, posts, api.getTagList());
       });
 
       get("/explore", req -> {
@@ -122,14 +124,13 @@ public class App extends Jooby {
           if (requested_by.equals("anonymous")) requested_by = null;
           User authenticated = api.getUserProfile(requested_by);
 
-          Response<List<Post>> searchResponse = api.getLatest(requested_by).execute();
+          Response<List<Post>> searchResponse = api.getLatest().execute();
           List<Post> posts = new ArrayList<>();
           if (searchResponse.isSuccessful()) {
               posts = searchResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, api.getTagList());
-
+          return views.explore.template(authenticated, posts, api.getTagList());
       });
 
       // Accessible only by registered users
@@ -137,7 +138,6 @@ public class App extends Jooby {
 
       get("/home", req -> {
           API api = require(API.class);
-          // TODO: 4/27/18 Allow anonymous to view home?
           CommonProfile profile = require(CommonProfile.class);
           String username = profile.getUsername();
           User authenticated = api.getUserProfile(username);
@@ -148,12 +148,22 @@ public class App extends Jooby {
               posts = timelineResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, api.getTagList());
+          Response<List<Conversation>> conversationResponse = api.getConversations(username, 5).execute();
+          List<Conversation> conversations = new ArrayList<>();;
+          if (conversationResponse.isSuccessful()) {
+              conversations = conversationResponse.body();
+          }
+
+          Response<List<Post>> fivesResponse = api.getHighFives(username, 5).execute();
+          List<Post> fives = new ArrayList<>();
+          if (fivesResponse.isSuccessful()) {
+              fives = fivesResponse.body();
+          }
+          return views.home.template(authenticated, authenticated, posts, conversations, fives, api.getTagList());
       });
 
       get("/competition", req -> {
           API api = require(API.class);
-          // TODO: 4/27/18 Allow anonymous to view competition?
           CommonProfile profile = require(CommonProfile.class);
           String username = profile.getUsername();
           User authenticated = api.getUserProfile(username);
@@ -164,7 +174,7 @@ public class App extends Jooby {
               posts = timelineResponse.body();
           }
 
-          return views.home.template(authenticated, authenticated, posts, api.getTagList());
+          return views.competition.template(authenticated, authenticated, posts, api.getTagList());
       });
 
       use(new Posts());

@@ -6,7 +6,10 @@
 @args (User authenticated, List<Post> posts, String fived)
 
     @views.main.template("Home", authenticated) -> {
-        @views.partials._user.template(authenticated)
+        <div class="col-lg-3">
+            @views.partials._user_profile.template(authenticated)
+        </div>
+
         <div class="col-lg-6">
             <ul class="list-group media-list media-list-stream mb-4">
                 @for (post: posts) {

@@ -23,4 +23,7 @@ public class Conversation {
         return status.substring(0, Math.min(status.length(), 40));
     }
 
+    public String headerImage() {
+        return "http://cdn.fives.love/unsplash/unsplash-" + String.valueOf(username.hashCode() % 80)+ ".jpg";
+    }
 }

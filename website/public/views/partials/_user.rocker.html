@@ -1,6 +1,9 @@
+@import java.util.List
+@import com.maxdemarzi.models.Conversation
+@import com.maxdemarzi.models.Post
 @import com.maxdemarzi.models.User
 
-@args (User user)
+@args (User user, List<Conversation> conversations, List<Post> fives)
 
 @if (user != null) {
 
@@ -18,86 +21,38 @@
 
             <p class="mb-4">@user.getIs() looking for @user.IsLookingFor() </p>
 
-            <ul class="card-menu">
-                <li class="card-menu-item">
-                    <a href="#userModal" class="text-inherit" data-toggle="modal">
-                        Posts
-                        <h6 class="my-0"><a href="/user/@user.getUsername()">@user.getPosts()</a></h6>
-                    </a>
+            <ul class="card-menu counts">
+                <li class="text-left">
+                    <a href="/user/@user.getUsername()"><i data-toggle="tooltip" title="Posts" class="material-icons">record_voice_over</i><span> @user.getPosts()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/likes"><i data-toggle="tooltip" title="Likes" class="material-icons">thumb_up</i><span> @user.getLikes()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/hates"><i data-toggle="tooltip" title="Hates" class="material-icons">thumb_down</i><span> @user.getHates()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/wants"><i data-toggle="tooltip" title="Wants" class="material-icons">check_box_outline_blank</i><span> @user.getWants()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/has"><i data-toggle="tooltip" title="Has" class="material-icons">check_box</i><span> @user.getHas() </span></a>
                 </li>
             </ul>
-            <ul class="card-menu">
-                <li class="card-menu-item">
-                    <a href="#userModal" class="text-inherit" data-toggle="modal">
-                        Has
-                        <h6 class="my-0"><a href="/user/@user.getUsername()/has">@user.getHas()</a></h6>
-                    </a>
-                </li>
 
-                <li class="card-menu-item">
-                    <a href="#userModal" class="text-inherit" data-toggle="modal">
-                        Wants
-                        <h6 class="my-0"><a href="/user/@user.getUsername()/wants">@user.getWants()</a></h6>
-                    </a>
-                </li>
-            </ul>
-            <ul class="card-menu">
-                <li class="card-menu-item">
-                    <a href="#userModal" class="text-inherit" data-toggle="modal">
-                        Likes
-                        <h6 class="my-0"><a href="/user/@user.getUsername()/likes">@user.getLikes()</a></h6>
-                    </a>
-                </li>
-
-                <li class="card-menu-item">
-                    <a href="#userModal" class="text-inherit" data-toggle="modal">
-                        Hates
-                        <h6 class="my-0"><a href="/user/@user.getUsername()/hates">@user.getHates()</a></h6>
-                    </a>
-                </li>
-            </ul>
         </div>
     </div>
-
-    <div class="card d-md-block d-lg-block mb-4">
-        <div class="card-body">
-            <h6 class="mb-3">About <small>· <a href="#">Edit</a></small></h6>
-            <ul class="list-unstyled list-spaced">
-                <li><span class="text-muted icon icon-emoji-flirt mr-3"></span>@user.getBio()</li>
-                <li><span class="text-muted icon icon-location-pin mr-3"></span>From @user.getCity()</li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="card d-md-block d-lg-block mb-4">
-        <div class="card-body">
-            <h6 class="mb-3">Photos <small>· <a href="#">Edit</a></small></h6>
-            <div data-grid="images" data-target-height="150">
-                <div>
-                    <img data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_5.jpg">
-                </div>
-
-                <div>
-                    <img data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_6.jpg">
-                </div>
-
-                <div>
-                    <img data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_7.jpg">
-                </div>
-
-                <div>
-                    <img data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_8.jpg">
-                </div>
-
-                <div>
-                    <img data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_9.jpg">
-                </div>
-
-                <div>
-                    <img data-width="640" data-height="640" data-action="zoom" src="/assets/img/instagram_10.jpg">
-                </div>
+    @if (conversations.size() > 0) {
+        <div class="card d-md-block d-lg-block mb-4">
+            <div class="card-body">
+                <h6 class="mb-3"><a href="/messages">Latest Messages</a></h6>
+                @for (conversation: conversations) {
+                    @views.partials._conversation_preview.template(user, conversation)
+                }
             </div>
         </div>
-    </div>
+    }
+    @if (fives.size() > 0) {
+        <div class="card d-md-block d-lg-block mb-4">
+            <div class="card-body">
+                <h6 class="mb-3"><a href="/messages">High Fives</a></h6>
+                @for (five: fives) {
+                    @views.partials._five_preview.template(five)
+                }
+
+            </div>
+        </div>
+    }
 </div>
 }

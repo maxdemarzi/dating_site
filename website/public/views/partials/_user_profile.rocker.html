@@ -3,6 +3,7 @@
 @args (User user)
 
 @if (user != null) {
+
     <div class="card card-profile mb-4">
         <div class="card-header" style="background-image: url(@user.headerImage());"></div>
         <div class="card-body text-center">
@@ -22,11 +23,11 @@
 
             <ul class="card-menu counts">
                 <li class="text-left">
-                    <a href="/user/@user.getUsername()"><i class="material-icons">record_voice_over</i><span> @user.getPosts()</span></a>&nbsp;
-                    <a href="/user/@user.getUsername()/likes"><i class="material-icons">thumb_up</i><span> @user.getLikes()</span></a>&nbsp;
-                    <a href="/user/@user.getUsername()/hates"><i class="material-icons">thumb_down</i><span> @user.getHates()</span></a>&nbsp;
-                    <a href="/user/@user.getUsername()/wants"><i class="material-icons">check_box_outline_blank</i><span> @user.getWants()</span></a>&nbsp;
-                    <a href="/user/@user.getUsername()/has"><i class="material-icons">check_box</i><span> @user.getHas() </span></a>
+                    <a href="/user/@user.getUsername()"><i data-toggle="tooltip" title="Posts" class="material-icons">record_voice_over</i><span> @user.getPosts()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/likes"><i data-toggle="tooltip" title="Likes" class="material-icons">thumb_up</i><span> @user.getLikes()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/hates"><i data-toggle="tooltip" title="Hates" class="material-icons">thumb_down</i><span> @user.getHates()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/wants"><i data-toggle="tooltip" title="Wants" class="material-icons">check_box_outline_blank</i><span> @user.getWants()</span></a>&nbsp;
+                    <a href="/user/@user.getUsername()/has"><i data-toggle="tooltip" title="Has" class="material-icons">check_box</i><span> @user.getHas() </span></a>
                 </li>
             </ul>
 

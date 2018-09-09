@@ -1,0 +1,5 @@
+@import com.maxdemarzi.models.Post
+
+@args (Post post)
+<small class="float-right text-muted">expires @post.expires()</small>
+<h6><a href="/user/@post.getUsername2()">@post.getName2()</a><a href="/user/@post.getUsername2()"> <span class="text-grey">@@@post.getUsername2()</span></a> High Fived your Post! </h6>

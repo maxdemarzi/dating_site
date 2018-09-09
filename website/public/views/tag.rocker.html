@@ -1,14 +1,24 @@
 @import java.util.List
+@import com.maxdemarzi.models.Conversation
 @import com.maxdemarzi.models.User
 @import com.maxdemarzi.models.Post
 @import com.maxdemarzi.models.Tag
 
-@args (User authenticated, User user, List<Post> posts, List<Tag> trends)
+@args (User authenticated, String hashtag, List<Post> posts, List<Tag> trends)
 
-@views.main.template(user.getUsername(), authenticated) -> {
+    @views.main.template(hashtag, authenticated) -> {
+
     <div class="col-lg-3">
-        @views.partials._user_profile.template(user)
+        <div class="card-body">
+            <h6 class="mb-3">Trending Tags</h6>
+            <ul class="list-unstyled list-spaced">
+                @for (tag: trends) {
+                    @views.partials._tag.template(tag)
+                }
+            </ul>
+        </div>
     </div>
+
     <div class="col-lg-6">
         <ul class="list-group media-list media-list-stream mb-4">
             @if(authenticated != null) {
@@ -19,4 +29,4 @@
             }
         </ul>
     </div>
-}
+    }

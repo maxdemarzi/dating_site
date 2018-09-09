@@ -112,7 +112,8 @@ public interface API {
                             @Path("thing") String thing);
 
     @GET("users/{username}/high_fives")
-    Call<List<Post>> getHighFives(@Path("username") String username);
+    Call<List<Post>> getHighFives(@Path("username") String username,
+                                  @Query("limit") Integer limit);
 
     @GET("users/{username}/low_fives")
     Call<List<Post>> getLowFives(@Path("username") String username);
@@ -138,7 +139,8 @@ public interface API {
                               @Path("id") Long id);
 
     @GET("users/{username}/conversations")
-    Call<List<Conversation>> getConversations(@Path("username") String username);
+    Call<List<Conversation>> getConversations(@Path("username") String username,
+                                              @Query("limit") int limit);
 
     @GET("users/{username}/conversations/{username2}")
     Call<List<Message>> getConversation(@Path("username") String username,
@@ -229,6 +231,6 @@ public interface API {
     Call<List<Post>> getSearch(@Query("q") String q,
                                @Query("username") String username);
 
-    @GET("search/latest")
-    Call<List<Post>> getLatest(@Query("username") String username);
+    @GET("latest")
+    Call<List<Post>> getLatest();
 }

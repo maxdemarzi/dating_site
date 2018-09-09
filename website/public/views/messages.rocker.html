@@ -6,7 +6,10 @@
 
 @views.main.template("Home", authenticated) -> {
 
-    @views.partials._user.template(authenticated)
+    <div class="col-lg-3">
+        @views.partials._user_profile.template(authenticated)
+    </div>
+
     <div class="col-lg-6">
         <div class="media-list media-list-users list-group js-msgGroup">
             @for (conversation: conversations) {

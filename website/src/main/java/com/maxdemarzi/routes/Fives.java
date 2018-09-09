@@ -17,7 +17,9 @@ public class Fives extends Jooby {
             String username = profile.getUsername();
             User authenticated = api.getUserProfile(username);
 
-            Response<List<Post>> response = api.getHighFives(username).execute();
+            Integer limit = req.param("limit").intValue(100);
+
+            Response<List<Post>> response = api.getHighFives(username, limit).execute();
             List<Post> posts;
             if (response.isSuccessful()) {
                 posts = response.body();

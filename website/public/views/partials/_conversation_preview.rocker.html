@@ -7,7 +7,7 @@
     <div class="media">
         <img class="rounded-circle media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@conversation.getHash()?s=42&d=retro">
         <div class="media-body">
-            <strong>@conversation.getName()</strong><small class="float-right text-muted">@conversation.humanTime()</small>
+            <strong>@conversation.getName()</strong>
             <div class="media-body-secondary">
                 @if(conversation.getAuthor().equals(authenticated.getUsername())) {
                 you: @conversation.preview()
