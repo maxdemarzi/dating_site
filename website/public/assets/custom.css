@@ -99,6 +99,15 @@ strong {
     color: #d9534f !important;
 }
 
+.text-red a {
+    color: #d9534f !important;
+}
+
+.text-red a:hover {
+    color: #d9534f !important;
+}
+
+
 h6 a:hover {
     text-decoration: none;
 }
@@ -127,7 +136,7 @@ h6 a:hover {
     color: #d4dbe0;
     background-color: transparent; }
 .btn-love:hover {
-    color: #d9534f;
+    /*color: #d9534f; */
     text-decoration: none;
     background-color: transparent;
     border-color: transparent; }

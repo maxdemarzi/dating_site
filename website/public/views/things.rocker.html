@@ -5,46 +5,39 @@
 
     @views.main.template("Things", authenticated) -> {
 
-    <div class="container-fluid container pt-5">
-        <div class="row">
-            @views.partials._user.template(user)
-            <div class="col-lg-6">
-                @if (authenticated != null) {
-                <form id="status" action="/thing" method="POST">
-                    <div class="input-group card-outline-info">
-                        <div class="typeahead__container">
-                            <div class="typeahead__field">
-                                <span class="typeahead__query">
-                                    <input type="text" class="typeahead form-control" id="thing" placeholder="Thing" name="attribute" autocomplete="off" autofocus>
-                                </span>
-                            </div>
+        @views.partials._user.template(user)
+        <div class="col-lg-6">
+            @if (authenticated != null) {
+            <form id="status" action="/thing" method="POST">
+                <div class="input-group card-outline-info">
+                    <div class="typeahead__container">
+                        <div class="typeahead__field">
+                            <span class="typeahead__query">
+                                <input type="text" class="typeahead form-control" id="thing" placeholder="Thing" name="attribute" autocomplete="off" autofocus>
+                            </span>
                         </div>
-                        <div class="invalid-feedback" style="width: 100%;">
-                            A thing is required.
-                        </div>
-                        &nbsp;
-                        <span class="input-group-btn">
-                            <button class="btn btn-outline-danger" type="submit" name="like_button" value="like">
-                                <span class="icon icon-thumbs-up">&nbsp;like</span>
-                            </button>
-                            <button class="btn btn-outline-danger" type="submit" name="hate_button" value="hate">
-                                <span class="icon icon-thumbs-down">&nbsp;hate</span>
-                            </button>
-                        </span>
                     </div>
-                </form>
-                <br/>
+                    <div class="invalid-feedback" style="width: 100%;">
+                        A thing is required.
+                    </div>
+                    &nbsp;
+                    <span class="input-group-btn">
+                        <button class="btn btn-outline-danger" type="submit" name="like_button" value="like">
+                            <span class="icon icon-thumbs-up">&nbsp;like</span>
+                        </button>
+                        <button class="btn btn-outline-danger" type="submit" name="hate_button" value="hate">
+                            <span class="icon icon-thumbs-down">&nbsp;hate</span>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <br/>
+            }
+            <ul class="list-group media-list media-list-stream mb-4">
+                @for (it: things) {
+                @views.partials._thing.template(it)
                 }
-                <ul class="list-group media-list media-list-stream mb-4">
-                    @for (it: things) {
-                    @views.partials._thing.template(it)
-                    }
 
-                </ul>
-            </div>
-            <div class="col-lg-3">
-
-            </div>
+            </ul>
         </div>
-    </div>
     }

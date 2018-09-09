@@ -6,43 +6,36 @@
 
 @views.main.template("Home", authenticated) -> {
 
-<div class="container-fluid container pt-5">
-    <div class="row">
-        @views.partials._user.template(authenticated)
-        <div class="col-lg-6">
-            <ul class="list-group media-list media-list-stream mb-4">
-                <li class="media list-group-item p-4">
-                <a href="/user/@user.getUsername()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@user.getHash()?s=200&d=retro"></a>
-                <div class="media-body">
-                    <div class="media-body-text">
-                        <div class="media-heading">
-                            <h6><a href="/user/@user.getUsername()">@user.getName()</a><a href="/user/@user.getUsername()"> <span class="text-grey">@@@user.getUsername()</span></a></h6>
-                        </div>
+    @views.partials._user.template(authenticated)
+    <div class="col-lg-6">
+        <ul class="list-group media-list media-list-stream mb-4">
+            <li class="media list-group-item p-4">
+            <a href="/user/@user.getUsername()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@user.getHash()?s=200&d=retro"></a>
+            <div class="media-body">
+                <div class="media-body-text">
+                    <div class="media-heading">
+                        <h6><a href="/user/@user.getUsername()">@user.getName()</a><a href="/user/@user.getUsername()"> <span class="text-grey">@@@user.getUsername()</span></a></h6>
                     </div>
                 </div>
-                </li>
-                <li class="media list-group-item p-4">
-                    <form id="status" action="/messages/@user.getUsername()" method="POST" style="width: 100%">
-                        <div class="input-group">
-                            <input name="status" type="text" class="form-control" placeholder="Message" autofocus>
-                            <div class="input-group-btn">
-                                <button type="button" class="btn btn-secondary align-self-stretch">
-                                    <span class="icon icon-camera"></span>
-                                </button>
-                            </div>
+            </div>
+            </li>
+            <li class="media list-group-item p-4">
+                <form id="status" action="/messages/@user.getUsername()" method="POST" style="width: 100%">
+                    <div class="input-group">
+                        <input name="status" type="text" class="form-control" placeholder="Message" autofocus>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-secondary align-self-stretch">
+                                <span class="icon icon-camera"></span>
+                            </button>
                         </div>
-                    </form>
-                </li>
-                <ul class="list-group-item media-list-conversation c-w-md">
-                        @for (message: messages) {
-                        @views.partials._message.template(authenticated, user, message)
-                        }
-                </ul>
+                    </div>
+                </form>
+            </li>
+            <ul class="list-group-item media-list-conversation c-w-md">
+                    @for (message: messages) {
+                    @views.partials._message.template(authenticated, user, message)
+                    }
             </ul>
-        </div>
-        <div class="col-lg-3">
-
-        </div>
+        </ul>
     </div>
-</div>
 }

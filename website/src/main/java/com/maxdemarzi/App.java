@@ -58,6 +58,9 @@ public class App extends Jooby {
       post("/register", req -> {
           API api = require(API.class);
           User user = req.form(User.class);
+          if (user.getUsername().equals("anonymous")) {
+              throw new Err(Status.CONFLICT, "You cannot register with that username.");
+          }
           user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
           Response<User> response = api.createUser(user).execute();
           if (response.isSuccessful()) {

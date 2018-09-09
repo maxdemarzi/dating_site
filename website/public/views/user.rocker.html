@@ -6,21 +6,15 @@
 @args (User authenticated, User user, List<Post> posts, List<Tag> trends)
 
 @views.main.template(user.getUsername(), authenticated) -> {
-    <div class="container-fluid container pt-5">
-        <div class="row">
-            @views.partials._user.template(user)
-            <div class="col-lg-6">
-                <ul class="list-group media-list media-list-stream mb-4">
-                    @views.partials._new_post.template()
-
-                    @for (post: posts) {
-                        @views.partials._post.template(post)
-                    }
-                </ul>
-            </div>
-            <div class="col-lg-3">
-
-            </div>
-        </div>
+    @views.partials._user.template(user)
+    <div class="col-lg-6">
+        <ul class="list-group media-list media-list-stream mb-4">
+            @if(authenticated != null) {
+                @views.partials._new_post.template()
+            }
+            @for (post: posts) {
+                @views.partials._post.template(post, authenticated)
+            }
+        </ul>
     </div>
 }

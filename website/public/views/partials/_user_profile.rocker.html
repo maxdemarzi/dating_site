@@ -4,7 +4,7 @@
 
 @if (user != null) {
     <div class="card card-profile mb-4">
-        <div class="card-header" style="background-image: url(/assets/img/iceland.jpg);"></div>
+        <div class="card-header" style="background-image: url(@user.headerImage());"></div>
         <div class="card-body text-center">
             <a href="/user/@user.getUsername()">
                 <img class="card-profile-img" src="https://www.gravatar.com/avatar/@user.getHash()?s=200&d=retro">

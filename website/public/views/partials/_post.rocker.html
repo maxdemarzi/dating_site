@@ -1,6 +1,7 @@
 @import com.maxdemarzi.models.Post
+@import com.maxdemarzi.models.User
 
-@args (Post post)
+@args (Post post, User authenticated)
 
 <li class="media list-group-item p-4" id="post_@post.getId()">
     <a href="/user/@post.getUsername()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@post.getHash()?s=200&d=retro"></a>
@@ -22,16 +23,16 @@
                 <input type="hidden" name="username2" value="@post.getUsername()">
                 <input type="hidden" name="id" value="@post.getId()">
                 @if(post.isHigh_fived()) {
-                <span class="text-red">
+                <span>
                     <i class="material-icons">pan_tool</i> High Fived
                 </span>
                 }
                 @if(post.isLow_fived()) {
-                <span class="text-red">
+                <span>
                     <i class="material-icons icon-upside-down">pan_tool</i> Low Fived
                 </span>
                 }
-                @if(!post.isHigh_fived() && !post.isLow_fived()) {
+                @if(!post.isHigh_fived() && !post.isLow_fived() && authenticated != null) {
                 <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="High Five">
                     <button class="btn btn-love btn-sm" id="high_five_button_@post.getId()" value="high_five" onclick="highFive(@post.getId())">
                         <i class="material-icons">pan_tool</i> @post.getHigh_fives()
@@ -44,14 +45,16 @@
                 </span>
                 }
             </form>
-            <form id="block_@post.getId()" style="display: inline-block; float: right;">
-                <input type="hidden" name="username2" value="@post.getUsername()">
-                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Block User">
-                    <button class="btn btn-love btn-sm" type="submit" name="block_user_button" value="block_user" onclick="block(@post.getId())">
-                        <i class="material-icons">highlight_off</i>
-                    </button>
-                </span>
-            </form>
+            @if(authenticated != null) {
+                <form id="block_@post.getId()" style="display: inline-block; float: right;">
+                    <input type="hidden" name="username2" value="@post.getUsername()">
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Block User">
+                        <button class="btn btn-love btn-sm" type="submit" name="block_user_button" value="block_user" onclick="block(@post.getId())">
+                            <i class="material-icons">highlight_off</i>
+                        </button>
+                    </span>
+                </form>
+            }
         </div>
     </div>
 </li>

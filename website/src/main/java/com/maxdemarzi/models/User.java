@@ -33,4 +33,9 @@ public class User {
     public String IsLookingFor() {
         return String.join(",", is_looking_for).replaceAll("man", "men");
     }
+
+    public String headerImage() {
+        return "http://cdn.fives.love/unsplash/unsplash-" + String.valueOf(username.hashCode() % 80)+ ".jpg";
+    }
+
 }

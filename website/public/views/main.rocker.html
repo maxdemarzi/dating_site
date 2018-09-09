@@ -29,7 +29,7 @@
 
 <div class="growl" id="app-growl"></div>
 
-<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-danger app-navbar">
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark app-navbar">
 
     <a class="navbar-brand" href="/home">
         <img src="/assets/img/logo.png" alt="brand">
@@ -48,8 +48,8 @@
 
     <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="/home">Home</a>
             </li>
 
             @if (user != null) {
@@ -69,7 +69,7 @@
                     <a class="nav-link" href="/messages">Messages</a>
                 </li>
                 <li class="nav-item d-md-none">
-                    <a class="nav-link" href="/notifications">Notifications</a>
+                    <a class="nav-link" href="#">Notifications</a>
                 </li>
                 <li class="nav-item d-md-none">
                     <a class="nav-link" data-action="growl">Growl</a>
@@ -115,17 +115,13 @@
     </div>
 </nav>
 
-@content
-
-<div class="card card-link-list">
-    <div class="card-body">
-        © 2018 Fives
-
-        <a href="/about">About</a>
-        <a href="/help">Help</a>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/cookies">Cookies</a>
+<div class="container-fluid container pt-5">
+    <div class="row">
+        @content
+        <div class="col-lg-3">
+            @views.partials._sponsor.template()
+            @views.partials._footer.template()
+        </div>
     </div>
 </div>
 
