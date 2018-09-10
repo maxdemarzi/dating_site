@@ -19,7 +19,11 @@
                 <a class="text-inherit" href="/user/@user.getUsername()">@user.getName() <br/>@@@user.getUsername()</a>
             </h6>
 
-            <p class="mb-4">@user.getIs() looking for @user.IsLookingFor() </p>
+            <ul class="list-unstyled list-spaced text-left">
+                <li><span class="text-muted icon icon-magnifying-glass mr-3"></span>@user.getIs() looking for @user.IsLookingFor()</li>
+                <li><span class="text-muted icon icon-emoji-flirt mr-3"></span>@user.getBio()</li>
+                <li><span class="text-muted icon icon-location-pin mr-3"></span>From @user.getCity()</li>
+            </ul>
 
             <ul class="card-menu counts">
                 <li class="text-left">
