@@ -87,18 +87,16 @@ public class Timeline {
                 for (Node location : locations) {
                     for (Relationship inLocation : location.getRelationships(Direction.INCOMING, RelationshipTypes.IN_LOCATION)) {
                         Node person = inLocation.getStartNode();
-
+                        Map<String, Object> properties = null;
                         Boolean include = null;
                         for (Relationship r1 : person.getRelationships(Direction.OUTGOING, posted)) {
                             Node post = r1.getEndNode();
-                            Map<String, Object> properties = null;
 
                             // Before adding post to timeline, check for compatibility or competition
                             if (include == null) {
                                 properties = person.getAllProperties();
                                 String theyAre = (String) properties.get(IS);
                                 HashSet<String> theyAreLookingFor = new HashSet<>(Arrays.asList((String[]) properties.get(IS_LOOKING_FOR)));
-
 
                                 if (competition) {
                                     include = (theyAreLookingFor.stream().anyMatch(isLookingFor::contains)) &&

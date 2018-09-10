@@ -37,9 +37,11 @@
         <div class="card d-md-block d-lg-block mb-4">
             <div class="card-body">
                 <h6 class="mb-3"><a href="/messages">Latest Messages</a></h6>
-                @for (conversation: conversations) {
-                    @views.partials._conversation_preview.template(user, conversation)
-                }
+                <ul class="media-list media-list-stream">
+                    @for (conversation: conversations) {
+                        @views.partials._conversation_preview.template(user, conversation)
+                    }
+                </ul>
             </div>
         </div>
     }

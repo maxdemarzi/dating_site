@@ -26,24 +26,39 @@ public class Posts extends Jooby {
 
             Upload upload = req.file("file");
             String status = req.param("status").value();
-            File file = upload.file();
-            RequestBody body = RequestBody.create(MediaType.parse("application/octet"),
-                    Files.readAllBytes(file.toPath()));
-
-            String time = dateFormat.format(ZonedDateTime.now()) + getFileExtension(upload.name());
-
-            BunnyCDN bunny = require(BunnyCDN.class);
-            Response<ResponseBody> bunnyResponse = bunny.upload("fives", username, time, body).execute();
-            if (bunnyResponse.isSuccessful()) {
+            if (upload.name().isEmpty()) {
                 Post post = new Post();
                 post.setStatus(status);
-                post.setFilename(username + "/" + time);
                 Response<Post> response = api.createPost(username, post).execute();
                 if (response.isSuccessful()) {
                     return Results.redirect("/user/" + username);
+                } else {
+                    throw new Err(Status.BAD_REQUEST);
                 }
+            } else {
+                File file = upload.file();
+
+                RequestBody body = RequestBody.create(MediaType.parse("application/octet"),
+                        Files.readAllBytes(file.toPath()));
+
+                String time = dateFormat.format(ZonedDateTime.now()) + getFileExtension(upload.name());
+
+                BunnyCDN bunny = require(BunnyCDN.class);
+                Response<ResponseBody> bunnyResponse = bunny.upload("fives", username, time, body).execute();
+
+                if (bunnyResponse.isSuccessful()) {
+                    Post post = new Post();
+                    post.setStatus(status);
+                    post.setFilename(username + "/" + time);
+                    Response<Post> response = api.createPost(username, post).execute();
+                    if (response.isSuccessful()) {
+                        return Results.redirect("/user/" + username);
+                    }
+                } else {
+                    throw new Err(Status.BAD_REQUEST);
+                }
+                return Results.redirect("/user/" + username);
             }
-            throw new Err(Status.BAD_REQUEST);
         });
     }
 

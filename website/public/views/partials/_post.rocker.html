@@ -19,33 +19,38 @@
                     <img src="https://fives.b-cdn.net/@post.getFilename()" style="max-width: 100%" class="rounded">
                 </p>
             }
-            <form id="five_@post.getId()" style="display: inline-block;">
-                <input type="hidden" name="username2" value="@post.getUsername()">
-                <input type="hidden" name="id" value="@post.getId()">
-                @if(post.isHigh_fived()) {
-                <span>
-                    <i class="material-icons">pan_tool</i> High Fived
-                </span>
-                }
-                @if(post.isLow_fived()) {
-                <span>
-                    <i class="material-icons icon-upside-down">pan_tool</i> Low Fived
-                </span>
-                }
-                @if(!post.isHigh_fived() && !post.isLow_fived() && authenticated != null) {
-                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="High Five">
-                    <button class="btn btn-love btn-sm" id="high_five_button_@post.getId()" value="high_five" onclick="highFive(@post.getId())">
-                        <i class="material-icons">pan_tool</i> @post.getHigh_fives()
-                    </button>
-                </span>
-                <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Low Five">
-                    <button class="btn btn-love btn-sm" id="low_five_button_@post.getId()" value="low_five" onclick="lowFive(@post.getId())">
-                        <i class="material-icons icon-upside-down">pan_tool</i> @post.getLow_fives()
-                    </button>
-                </span>
-                }
-            </form>
-            @if(authenticated != null) {
+            @if(authenticated != null && authenticated.getUsername().equals(post.getUsername())) {
+                <span><i class="material-icons">pan_tool</i> @post.getHigh_fives()</span>
+                <span><i class="material-icons icon-upside-down">pan_tool</i> @post.getLow_fives()</span>
+            } else {
+                <form id="five_@post.getId()" style="display: inline-block;">
+                    <input type="hidden" name="username2" value="@post.getUsername()">
+                    <input type="hidden" name="id" value="@post.getId()">
+                    @if(post.isHigh_fived()) {
+                    <span>
+                        <i class="material-icons">pan_tool</i> High Fived
+                    </span>
+                    }
+                    @if(post.isLow_fived()) {
+                    <span>
+                        <i class="material-icons icon-upside-down">pan_tool</i> Low Fived
+                    </span>
+                    }
+                    @if(!post.isHigh_fived() && !post.isLow_fived() && authenticated != null) {
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="High Five">
+                        <button class="btn btn-love btn-sm" id="high_five_button_@post.getId()" value="high_five" onclick="highFive(@post.getId())">
+                            <i class="material-icons">pan_tool</i> @post.getHigh_fives()
+                        </button>
+                    </span>
+                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Low Five">
+                        <button class="btn btn-love btn-sm" id="low_five_button_@post.getId()" value="low_five" onclick="lowFive(@post.getId())">
+                            <i class="material-icons icon-upside-down">pan_tool</i> @post.getLow_fives()
+                        </button>
+                    </span>
+                    }
+                </form>
+            }
+            @if(authenticated != null && authenticated.getUsername().equals(post.getUsername())) {
                 <form id="block_@post.getId()" style="display: inline-block; float: right;">
                     <input type="hidden" name="username2" value="@post.getUsername()">
                     <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Block User">

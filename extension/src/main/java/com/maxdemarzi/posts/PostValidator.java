@@ -8,6 +8,7 @@ import org.jsoup.safety.Whitelist;
 import java.io.IOException;
 import java.util.HashMap;
 
+import static com.maxdemarzi.schema.Properties.FILENAME;
 import static com.maxdemarzi.schema.Properties.STATUS;
 
 public class PostValidator {
@@ -38,6 +39,11 @@ public class PostValidator {
             }
         }
 
+        if (input.containsKey(FILENAME)) {
+            if (input.get(FILENAME) == null) {
+                input.remove(FILENAME);
+            }
+        }
         return input;
     }
 }

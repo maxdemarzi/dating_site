@@ -171,7 +171,8 @@ public class Users {
         Integer has = user.getDegree(RelationshipTypes.HAS, Direction.OUTGOING);
         Integer wants = user.getDegree(RelationshipTypes.WANTS, Direction.OUTGOING);
         Integer locations = user.getDegree(RelationshipTypes.IN_LOCATION, Direction.OUTGOING);
-        Integer posts = user.getDegree(Direction.OUTGOING) - likes - hates - highFives - lowFives - has - wants - locations;
+        Integer conversations = user.getDegree(RelationshipTypes.PART_OF, Direction.OUTGOING);
+        Integer posts = user.getDegree(Direction.OUTGOING) - likes - hates - highFives - lowFives - has - wants - locations - conversations;
         results.put(LIKES, likes);
         results.put(HATES, hates);
         results.put(LOW_FIVES, lowFives);

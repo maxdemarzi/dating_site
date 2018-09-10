@@ -3,18 +3,17 @@
 
 @args (User authenticated, Conversation conversation)
 
-<a href="/messages/@conversation.getUsername()" class="list-group-item list-group-item-action">
-    <div class="media">
-        <img class="rounded-circle media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@conversation.getHash()?s=42&d=retro">
-        <div class="media-body">
-            <strong>@conversation.getName()</strong>
-            <div class="media-body-secondary">
-                @if(conversation.getAuthor().equals(authenticated.getUsername())) {
-                you: @conversation.preview()
-                } else {
-                @conversation.preview()
-                }
-            </div>
+
+<li class="media mb-2">
+    <a href="/messages/@conversation.getUsername()"><img class="media-object d-flex align-self-start mr-3" src="https://www.gravatar.com/avatar/@conversation.getHash()?s=42&d=retro"></a>
+    <div class="media-body">
+        <a href="/messages/@conversation.getUsername()"><strong>@conversation.getName()</strong></a>
+        <div class="media-body-secondary">
+            @if(conversation.getAuthor().equals(authenticated.getUsername())) {
+            you: @conversation.preview()
+            } else {
+            @conversation.preview()
+            }
         </div>
     </div>
-</a>
+</li>
