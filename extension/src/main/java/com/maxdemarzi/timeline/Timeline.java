@@ -32,7 +32,7 @@ public class Timeline {
                              @QueryParam("since") final String since,
                              @QueryParam("city") final String city,
                              @QueryParam("state") final String state,
-                             @QueryParam("distance") @DefaultValue("40000") Integer distance,
+                             @QueryParam("distance") @DefaultValue("40000") Long distance,
                              @QueryParam("competition") @DefaultValue("false") Boolean competition,
                              @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();

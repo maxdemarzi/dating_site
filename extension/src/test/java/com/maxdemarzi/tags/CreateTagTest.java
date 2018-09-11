@@ -57,6 +57,7 @@ public class CreateTagTest {
     private static final ArrayList<HashMap<String, Object>> expected2 = new ArrayList<HashMap<String, Object>>() {
         {
             add(new HashMap<String, Object>() {{
+                put("id", 1);
                 put("username", "maxdemarzi");
                 put("name", "Max De Marzi");
                 put("hash", "0bd90aeb51d5982062f4f303a62df935");

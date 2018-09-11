@@ -29,7 +29,7 @@ public class Recommended {
                                 @QueryParam("limit") @DefaultValue("100") final Integer limit,
                                 @QueryParam("city") final String city,
                                 @QueryParam("state") final String state,
-                                @QueryParam("distance") @DefaultValue("40000") Integer distance,
+                                @QueryParam("distance") @DefaultValue("40000") Long distance,
                                 @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
 
@@ -70,7 +70,7 @@ public class Recommended {
                 for (Relationship inLocation : user.getRelationships(Direction.OUTGOING, RelationshipTypes.IN_LOCATION)) {
                     Node location = inLocation.getEndNode();
                     locations.add(location);
-                    locations.addAll(Cities.findCitiesNearby(location, (Integer)userProperties.getOrDefault(DISTANCE, distance), db));
+                    locations.addAll(Cities.findCitiesNearby(location, (Long)userProperties.getOrDefault(DISTANCE, distance), db));
                 }
             } else {
                 Node location = Cities.findCity(city, state, db);

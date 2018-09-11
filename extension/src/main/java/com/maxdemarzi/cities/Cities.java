@@ -42,7 +42,7 @@ public class Cities {
         throw CityExceptions.cityNotFound;
     }
 
-    public static HashSet<Node> findCitiesNearby(Node city, Integer distance, @Context GraphDatabaseService db) {
+    public static HashSet<Node> findCitiesNearby(Node city, Long distance, @Context GraphDatabaseService db) {
         HashSet<Node> cities = new HashSet<>();
         Result executionResult = db.execute(
              "MATCH (c:City), (c2:City)" +

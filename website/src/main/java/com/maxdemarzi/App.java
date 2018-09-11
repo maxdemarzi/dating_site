@@ -86,21 +86,7 @@ public class App extends Jooby {
       use(new Likes());
       use(new Hates());
       use(new Users());
-
-      get("/tag/{hashtag}", req -> {
-          API api = require(API.class);
-          String requested_by = req.get("requested_by");
-          if (requested_by.equals("anonymous")) requested_by = null;
-          User authenticated = api.getUserProfile(requested_by);
-          String tag = req.param("hashtag").value();
-
-          Response<List<Post>> tagResponse = api.getTag(req.param("hashtag").value(), requested_by).execute();
-          List<Post> posts = new ArrayList<>();
-          if (tagResponse.isSuccessful()) {
-              posts = tagResponse.body();
-          }
-          return views.tag.template(authenticated, tag, posts, api.getTagList());
-      });
+      use(new Tags());
 
       post("/search", req -> {
         API api = require(API.class);

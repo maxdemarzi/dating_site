@@ -6,6 +6,8 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Data
 public class Post {
@@ -25,6 +27,7 @@ public class Post {
     private boolean high_fived;
 
     private static final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final Pattern hashtagPattern = Pattern.compile("#(\\S+)");
 
     public String when() {
         ZonedDateTime dateTime = ZonedDateTime.parse(time);
@@ -45,14 +48,26 @@ public class Post {
 
     public String lowStatus() {
         if (low_fives > 0) {
-            String[] splitStr = status.split("\\s+");
+            String[] splitStr = annotatedStatus().split("\\s+");
             int inc = 6 - Math.min(5, low_fives);
             for(int i = 0; i < splitStr.length; i+= inc) {
                 splitStr[i] = splitStr[i].replaceAll(".", "&#9608;");
             }
             return String.join(" ", splitStr);
         }
-        return status;
+        return annotatedStatus();
+    }
+
+    public String annotatedStatus() {
+        String[] splitStr = status.split("\\s+");
+        for(int i = 0; i < splitStr.length; i++) {
+            Matcher mat = hashtagPattern.matcher(splitStr[i].toLowerCase());
+            if(mat.find()){
+                String tag = mat.group(1);
+                splitStr[i] = "<a href=\"/tag/" + tag + "\">" + splitStr[i] + "</a>";
+            }
+        }
+        return String.join(" ", splitStr);
     }
 
     public String overlay() {

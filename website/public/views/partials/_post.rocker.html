@@ -12,7 +12,7 @@
                 <h6><a href="/user/@post.getUsername()">@post.getName()</a><a href="/user/@post.getUsername()"> <span class="text-grey">@@@post.getUsername()</span></a></h6>
             </div>
             <p>
-                @post.getStatus()
+                @raw(post.lowStatus())
             </p>
             @if(post.hasFile()) {
                 <div class="@post.overlay()">

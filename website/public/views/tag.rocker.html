@@ -9,13 +9,15 @@
     @views.main.template(hashtag, authenticated) -> {
 
     <div class="col-lg-3">
-        <div class="card-body">
-            <h6 class="mb-3">Trending Tags</h6>
-            <ul class="list-unstyled list-spaced">
-                @for (tag: trends) {
-                    @views.partials._tag.template(tag)
-                }
-            </ul>
+        <div class="card card-profile mb-4">
+            <div class="card-body">
+                <h6 class="mb-3">Trending Tags</h6>
+                <ul class="list-unstyled list-spaced">
+                    @for (tag: trends) {
+                        @views.partials._tag.template(tag)
+                    }
+                </ul>
+            </div>
         </div>
     </div>
 

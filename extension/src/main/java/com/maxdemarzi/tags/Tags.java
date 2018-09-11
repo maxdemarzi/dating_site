@@ -51,12 +51,14 @@ public class Tags {
         LocalDateTime dateTime = LocalDateTime.now(utc);
         RelationshipType tagged = RelationshipType.withName("TAGGED_ON_" +
                 dateTime.format(dateFormatter));
+        RelationshipType tagged2 = RelationshipType.withName("TAGGED_ON_" +
+                dateTime.minusDays(1).format(dateFormatter));
         try (Transaction tx = db.beginTx()) {
             ResourceIterator<Node> tags = db.findNodes(Labels.Tag);
             while (tags.hasNext()) {
                 Node tag = tags.next();
-                int taggings = tag.getDegree(tagged, Direction.INCOMING);
-                if ( taggings > 0) {
+                int taggings = tag.getDegree(tagged, Direction.INCOMING) + tag.getDegree(tagged2, Direction.INCOMING);
+                if (taggings > 0) {
                     HashMap<String, Object> result = new HashMap<>();
                     result.put(NAME, tag.getProperty(NAME));
                     result.put(COUNT, taggings);
@@ -119,6 +121,7 @@ public class Tags {
                         if (count < limit && time.isBefore(latest) ) {
                             Node author = getAuthor(post, time);
                             Map userProperties = author.getAllProperties();
+                            result.put(ID, post.getId());
                             result.put(USERNAME, userProperties.get(USERNAME));
                             result.put(NAME, userProperties.get(NAME));
                             result.put(HASH, userProperties.get(HASH));

@@ -107,6 +107,7 @@ public class GetTagTest {
 
     private static final ArrayList<HashMap<String, Object>> expected = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
+            put("id", 4);
             put("username", "laexample");
             put("name", "Luke Gannon");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
@@ -118,6 +119,7 @@ public class GetTagTest {
             put("low_fives", 1);
         }});
         add(new HashMap<String, Object>() {{
+            put("id", 3);
             put("username", "jexp");
             put("name", "Michael Hunger");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
@@ -132,6 +134,7 @@ public class GetTagTest {
 
     private static final ArrayList<HashMap<String, Object>> expected2 = new ArrayList<HashMap<String, Object>>() {{
         add(new HashMap<String, Object>() {{
+            put("id", 4);
             put("username", "laexample");
             put("name", "Luke Gannon");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
@@ -144,6 +147,7 @@ public class GetTagTest {
 
         }});
         add(new HashMap<String, Object>() {{
+            put("id", 3);
             put("username", "jexp");
             put("name", "Michael Hunger");
             put("hash", "0bd90aeb51d5982062f4f303a62df935");
