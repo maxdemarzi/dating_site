@@ -102,7 +102,7 @@ public class GetRecommendedTest {
             put("high_fives", 0);
             put("low_fives", 1);
             put("time", "2018-03-15T19:41:23Z");
-            put("points", 2.5);
+            put("points", 4.0);
         }});
         add(new HashMap<String, Object>() {{
             put("username", "jexp");
@@ -119,7 +119,7 @@ public class GetRecommendedTest {
             put("high_fives", 0);
             put("low_fives", 0);
             put("time", "2018-03-15T19:41:23Z");
-            put("points", 0.33333333333333326);
+            put("points", 0.6666666666666665);
         }});
     }};
 }

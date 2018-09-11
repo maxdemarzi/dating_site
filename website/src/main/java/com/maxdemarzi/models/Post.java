@@ -43,4 +43,20 @@ public class Post {
         return filename != null;
     }
 
+    public String lowStatus() {
+        if (low_fives > 0) {
+            String[] splitStr = status.split("\\s+");
+            int inc = 6 - Math.min(5, low_fives);
+            for(int i = 0; i < splitStr.length; i+= inc) {
+                splitStr[i] = splitStr[i].replaceAll(".", "&#9608;");
+            }
+            return String.join(" ", splitStr);
+        }
+        return status;
+    }
+
+    public String overlay() {
+        return "overlay" + Math.min(5, low_fives);
+    }
+
 }

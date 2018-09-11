@@ -15,9 +15,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.*;
 
-import static com.maxdemarzi.schema.Properties.IS;
-import static com.maxdemarzi.schema.Properties.IS_LOOKING_FOR;
-import static com.maxdemarzi.schema.Properties.POINTS;
+import static com.maxdemarzi.schema.Properties.*;
 import static com.maxdemarzi.users.Users.getUserAttributes;
 import static java.util.Collections.reverseOrder;
 
@@ -29,11 +27,9 @@ public class Recommended {
     @GET
     public Response getRecommended(@PathParam("username") final String username,
                                 @QueryParam("limit") @DefaultValue("100") final Integer limit,
-                                @QueryParam("since") final String since,
                                 @QueryParam("city") final String city,
                                 @QueryParam("state") final String state,
                                 @QueryParam("distance") @DefaultValue("40000") Integer distance,
-                                @QueryParam("competition") @DefaultValue("false") Boolean competition,
                                 @Context GraphDatabaseService db) throws IOException {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
 
@@ -74,7 +70,7 @@ public class Recommended {
                 for (Relationship inLocation : user.getRelationships(Direction.OUTGOING, RelationshipTypes.IN_LOCATION)) {
                     Node location = inLocation.getEndNode();
                     locations.add(location);
-                    locations.addAll(Cities.findCitiesNearby(location, distance, db));
+                    locations.addAll(Cities.findCitiesNearby(location, (Integer)userProperties.getOrDefault(DISTANCE, distance), db));
                 }
             } else {
                 Node location = Cities.findCity(city, state, db);
@@ -96,8 +92,6 @@ public class Recommended {
                     boolean include =  theyAreLookingFor.contains(is) && isLookingFor.contains(theyAre) && !blocked.contains(person);
 
                     if (include) {
-                        // todo use floats and weight things differently
-
                         double points = 0.0;
                         Set<Long> theyHave = new HashSet<>();
                         Set<Long> theyWant = new HashSet<>();
@@ -116,8 +110,8 @@ public class Recommended {
                             theyHate.add(r1.getEndNodeId());
                         }
 
-                        points += jaccardSimilarity(want, theyHave);
-                        points += jaccardSimilarity(have, theyWant);
+                        points += 2.0 * jaccardSimilarity(want, theyHave);
+                        points += 2.0 * jaccardSimilarity(have, theyWant);
                         points += jaccardSimilarity(like, theyLike);
                         points += jaccardSimilarity(hate, theyHate);
                         // lose points for the opposite

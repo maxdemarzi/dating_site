@@ -15,9 +15,11 @@
                 @post.getStatus()
             </p>
             @if(post.hasFile()) {
-                <p>
-                    <img src="https://fives.b-cdn.net/@post.getFilename()" style="max-width: 100%" class="rounded">
-                </p>
+                <div class="@post.overlay()">
+                    <span>
+                        <img src="https://fives.b-cdn.net/@post.getFilename()" style="max-width: 100%" class="rounded">
+                    </span>
+                </div>
             }
             @if(authenticated != null && authenticated.getUsername().equals(post.getUsername())) {
                 <span><i class="material-icons">pan_tool</i> @post.getHigh_fives()</span>
