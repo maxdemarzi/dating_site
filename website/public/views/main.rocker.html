@@ -69,9 +69,6 @@
                     <a class="nav-link" href="/messages">Messages</a>
                 </li>
                 <li class="nav-item d-md-none">
-                    <a class="nav-link" href="#">Notifications</a>
-                </li>
-                <li class="nav-item d-md-none">
                     <a class="nav-link" data-action="growl">Growl</a>
                 </li>
                 <li class="nav-item d-md-none">
@@ -89,12 +86,7 @@
         </form>
         @if (user != null) {
             <ul id="#js-popoverContent" class="nav navbar-nav float-right mr-0 d-none d-md-flex">
-                <li class="nav-item">
-                    <a class="app-notifications nav-link" href="/notifications">
-                        <span class="icon icon-bell"></span>
-                    </a>
-                </li>
-                <li class="nav-item ml-2">
+                <li class="nav-item ml-4">
                     <button class="btn btn-default navbar-btn navbar-btn-avatar" data-toggle="popover">
                         <img class="rounded-circle" src="https://www.gravatar.com/avatar/@user.getHash()?s=64&d=retro" >
                     </button>
