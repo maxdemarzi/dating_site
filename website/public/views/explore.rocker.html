@@ -4,18 +4,20 @@
 @import com.maxdemarzi.models.Post
 @import com.maxdemarzi.models.Tag
 
-@args (User authenticated, List<Post> posts, List<Tag> trends)
+@args (User authenticated, String city, List<Post> posts, List<Tag> trends)
 
     @views.main.template("Latest", authenticated) -> {
 
     <div class="col-lg-3">
-        <div class="card-body">
-            <h6 class="mb-3">Trending Tags</h6>
-            <ul class="list-unstyled list-spaced">
-                @for (tag: trends) {
-                @views.partials._tag.template(tag)
-                }
-            </ul>
+        <div class="card card-profile mb-4">
+            <div class="card-body">
+                <h6 class="mb-3">Trending Tags</h6>
+                <ul class="list-unstyled list-spaced">
+                    @for (tag: trends) {
+                    @views.partials._tag.template(tag)
+                    }
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -25,7 +27,7 @@
                 <div class="media-body">
                     <div class="media-body-text">
                         <div class="media-heading">
-                            <h4>Latest</h4>
+                            <h4>Latest in @city</h4>
                         </div>
                     </div>
                 </div>

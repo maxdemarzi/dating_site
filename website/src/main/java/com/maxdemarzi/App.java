@@ -2,9 +2,6 @@ package com.maxdemarzi;
 
 import com.maxdemarzi.models.*;
 import com.maxdemarzi.routes.*;
-import com.typesafe.config.Config;
-import okhttp3.*;
-import okhttp3.Request;
 import org.jooby.*;
 import org.jooby.json.Jackson;
 import org.jooby.pac4j.Pac4j;
@@ -37,9 +34,10 @@ public class App extends Jooby {
       // Setup Template Engine
       use(new Rockerby());
 
-      // Setup API
+      // Setup APIs
       use(new Neo4jApi());
       use(new BunnyApi());
+      use(new MaxMindApi());
 
       // Configure public static files
       assets("/assets/**");
@@ -76,7 +74,6 @@ public class App extends Jooby {
       use("*", (req, rsp, chain) -> {
           ProfileManager pm = require(ProfileManager.class);
           CommonProfile profile = (CommonProfile) pm.get(req.ifSession().isPresent()).orElseGet(this::getAnonymous);
-
           req.set("requested_by", profile.getUsername());
           chain.next(req, rsp);
       });
@@ -107,16 +104,18 @@ public class App extends Jooby {
       get("/explore", req -> {
           API api = require(API.class);
           String requested_by = req.get("requested_by");
+          HashMap<String, String> city = MaxMindApi.getId(req.ip());
           if (requested_by.equals("anonymous")) requested_by = null;
+
           User authenticated = api.getUserProfile(requested_by);
 
-          Response<List<Post>> searchResponse = api.getLatest().execute();
+          Response<List<Post>> searchResponse = api.getLatest(city.get("id"), requested_by).execute();
           List<Post> posts = new ArrayList<>();
           if (searchResponse.isSuccessful()) {
               posts = searchResponse.body();
           }
 
-          return views.explore.template(authenticated, posts, api.getTagList());
+          return views.explore.template(authenticated, city.get("name"), posts, api.getTagList());
       });
 
       // Accessible only by registered users

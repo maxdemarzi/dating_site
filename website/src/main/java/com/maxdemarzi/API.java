@@ -232,5 +232,5 @@ public interface API {
                                @Query("username") String username);
 
     @GET("latest")
-    Call<List<Post>> getLatest();
+    Call<List<Post>> getLatest(@Query("geoid") String geoid, @Query("username") String username);
 }

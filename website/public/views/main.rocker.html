@@ -54,6 +54,9 @@
 
             @if (user != null) {
                 <li class="nav-item">
+                    <a class="nav-link" href="/explore">Explore</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="/competition">Competition</a>
                 </li>
                 <li class="nav-item">
@@ -77,7 +80,9 @@
             } else {
             <li><a class="btn btn-primary" href="/" role="button">Login</a></li>
             <li>&nbsp;</li>
-            <li><a class="btn btn-secondary" href="/register" role="button">Register</a></li>
+            <li><a class="btn btn-secondary" href="/register" role="button">Sign up</a></li>
+            <li>&nbsp;</li>
+            <li><a class="btn btn-danger" href="/explore" role="button">Explore</a></li>
             }
 
         </ul>
