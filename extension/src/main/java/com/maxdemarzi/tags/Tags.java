@@ -106,7 +106,7 @@ public class Tags {
 
             Node tag = db.findNode(Labels.Tag, NAME, hashtag.toLowerCase());
             if (tag != null) {
-                ZonedDateTime earliestTag = (ZonedDateTime)tag.getProperty(TIME);
+                ZonedDateTime earliestTag = ((ZonedDateTime)tag.getProperty(TIME)).minusDays(1);
 
                 int count = 0;
                 while (count < limit && (dateTime.isAfter(earliestTag))) {
