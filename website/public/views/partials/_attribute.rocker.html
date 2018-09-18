@@ -7,25 +7,21 @@
             <div class="media-heading">
                 <small class="float-right text-muted">added it on @attribute.when()</small>
                 <h6>@attribute.getName()</h6>
+                <ul class="card-menu counts">
+                    <li class="text-left">
+                        @if(attribute.getWant()) {
+                        <i data-toggle="tooltip" title="Wants" class="material-icons true">check_box_outline_blank</i><span> @attribute.getWants()</span>&nbsp;
+                        } else {
+                        <i data-toggle="tooltip" title="Wants" class="material-icons blue">check_box_outline_blank</i><span> @attribute.getWants()</span>&nbsp;
+                        }
+                        @if(attribute.getHave()) {
+                        <i data-toggle="tooltip" title="Has" class="material-icons true">check_box</i><span> @attribute.getHas() </span>
+                        } else {
+                        <i data-toggle="tooltip" title="Has" class="material-icons blue">check_box</i><span> @attribute.getHas() </span>
+                        }
+                    </li>
+                </ul>
             </div>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Wants:
-                    <span class="badge badge-primary badge-pill">@attribute.getWants()</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Has:
-                    <span class="badge badge-primary badge-pill">@attribute.getHas()</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Want:
-                    <span class="badge badge-primary badge-pill">@attribute.getWant()</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Have:
-                    <span class="badge badge-primary badge-pill">@attribute.getHave()</span>
-                </li>
-            </ul>
         </div>
     </div>
 </li>

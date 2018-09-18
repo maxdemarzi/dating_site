@@ -7,25 +7,21 @@
             <div class="media-heading">
                 <small class="float-right text-muted">added it on @thing.when()</small>
                 <h6>@thing.getName()</h6>
+                <ul class="card-menu counts">
+                    <li class="text-left">
+                        @if(thing.getLiked()) {
+                        <i data-toggle="tooltip" title="Wants" class="material-icons true">thumb_up</i><span> @thing.getLikes()</span>&nbsp;
+                        } else {
+                        <i data-toggle="tooltip" title="Wants" class="material-icons blue">thumb_up</i><span> @thing.getLikes()</span>&nbsp;
+                        }
+                        @if(thing.getHated()) {
+                        <i data-toggle="tooltip" title="Has" class="material-icons true">thumb_down</i><span> @thing.getHates() </span>
+                        } else {
+                        <i data-toggle="tooltip" title="Has" class="material-icons blue">thumb_down</i><span> @thing.getHates() </span>
+                        }
+                    </li>
+                </ul>
             </div>
-            <ul class="list-group">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Likes:
-                    <span class="badge badge-primary badge-pill">@thing.getLikes()</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Hates:
-                    <span class="badge badge-primary badge-pill">@thing.getHates()</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Liked:
-                    <span class="badge badge-primary badge-pill">@thing.getLiked()</span>
-                </li>
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    Hated:
-                    <span class="badge badge-primary badge-pill">@thing.getHated()</span>
-                </li>
-            </ul>
         </div>
     </div>
 </li>

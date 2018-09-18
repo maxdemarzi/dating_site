@@ -9,6 +9,16 @@
     -ms-transform: scaleY(-1);
 }
 
+.material-icons.true {
+    color: #1a5e78;
+}
+
+.material-icons.blue {
+    color: #3097D1;
+}
+
+
+
 /*
  * Application level styles
  * (things that dont make sense in a toolkit :)
